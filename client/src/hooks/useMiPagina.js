@@ -1,114 +1,113 @@
-import React, { useState, useEffect } from "react";
+// src/hooks/useMiPagina.js
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import axios from "axios"
+import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const API_URL = "http://localhost:5000/api/categorias/categorias";
 const API_URL2 = "http://localhost:5000/api/productos/productos";
-const API_EMPRESA = "http://localhost:5000/api/empresa/empresaPublic"
-// Extraccion del token y decodificación
+const API_URL3 = "http://localhost:5000/api/complementos/salsas";
+const API_URL4 = "http://localhost:5000/api/complementos/gaseosas";
+const API_EMPRESA = "http://localhost:5000/api/empresa/empresaPublic";
+
 
 export const useMiPagina = () => {
+  const [categorias, setCategorias] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [empresaId, setEmpresaId] = useState(null);
+  const [empresaNombre, setEmpresaNombre] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [salsas, setSalsas] = useState([]);
+  const [gaseosas, setGaseosas ] = useState([]);
 
-    const [categorias, setCategorias] = useState([]);
-    const [productos, setProductos] = useState([]);
-    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(1);
-    const [empresaId, setEmpresaId] = useState(null);
-    const [empresaNombre, setEmpresaNombre] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const { empresaSlug } = useParams();
+  const { empresaSlug } = useParams();
 
-    const VisualizarCategoriasMenu = async () => {
-        try {
+  const VisualizarCategoriasMenu = async () => {
+    try {
+      if (!empresaId) return;
+      const res = await axios.get(API_URL, { params: { empresaId } });
+      setCategorias(res.data);
+    } catch (error) {
+      console.error("Error en categorías:", error);
+      Swal.fire("Error", "Error al cargar las categorías", "error");
+    }
+  };
 
-            if (!empresaId) return
+  const cargarProductos = async () => {
+    try {
+      if (!empresaId) return;
+      const res = await axios.get(API_URL2, { params: { empresaId } });
+      setProductos(res.data);
+    } catch (error) {
+      console.error("Error en productos:", error);
+      Swal.fire("Error", "Error al cargar productos", "error");
+    }
+  };
 
-            const res = await axios.get(API_URL, {
-                params: {
-                    empresaId
-                }
-            })
+  const cargarSalsas = async () => {
+    try {
+      const res = await axios.get(API_URL3, { params: { empresaId } });
+      setSalsas(res.data.salsas);
+    } catch (error) {
+      console.error("Error al cargar las salsas");
+      Swal.fire("Error", "Error al cargar salsas", "error");
+    }
+  }
+  
+  const cargarGaseosas = async () => {
+    try {
+      const res = await axios.get(API_URL4, { params: { empresaId } });
+      setGaseosas(res.data.gaseosas);
+    } catch (error) {
+      console.error("Error al cargar las gaseosas");
+      Swal.fire("Error", "Error al cargar gaseosas", "error");
+    }
+  }
 
-            setCategorias(res.data)
-        } catch (error) {
-            console.error("Error al cargar categorías:", error);
-            Swal.fire("Error", "Error al cargar las categorías", "error");
-        }
+  // Obtener empresa por slug
+  useEffect(() => {
+    if (!empresaSlug) {
+      setError("No se proporcionó el identificador de empresa");
+      setLoading(false);
+      return;
     }
 
-    const cargarProductos = async () => {
-        try {
+    const obtenerEmpresa = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${API_EMPRESA}/${empresaSlug}`);
+        setEmpresaId(res.data.empresaId);
+        setEmpresaNombre(res.data.nombre);
+        setError(null);
+      } catch (error) {
+        console.error("Error empresa:", error);
+        setError("Empresa no encontrada");
+        Swal.fire("Empresa no encontrada", "La página no existe", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-            if (!empresaId) return
+    obtenerEmpresa();
+  }, [empresaSlug]);
 
-            const res = await axios.get(API_URL2,
-                {
-                    params: {
-                        empresaId
-                    }
-                })
-
-            setProductos(res.data)
-        } catch (error) {
-            console.error("Error al cargar los productos")
-            Swal.fire("Error", "Error al cargar los productos", "error");
-        }
+  useEffect(() => {
+    if (empresaId) {
+      VisualizarCategoriasMenu();
+      cargarProductos();
+      cargarSalsas();
+      cargarGaseosas();
     }
+  }, [empresaId]);
 
-    useEffect(() => {
-
-        if (!empresaSlug) {
-            setError("No se proporcionó el identificador de la empresa");
-            setLoading(false);
-            return;
-        }
-
-        const obtenerEmpresa = async () => {
-            try {
-
-                setLoading(true);
-
-                console.log('🔍 Buscando empresa con slug:', empresaSlug);
-
-
-                const res = await axios.get(`${API_EMPRESA}/${empresaSlug}`);
-
-                console.log('✅ Empresa encontrada:', res.data);
-                setEmpresaId(res.data.empresaId);
-                setEmpresaNombre(res.data.nombre);
-                setError(null)
-
-            } catch (error) {
-                console.error("❌ Error al obtener empresa:", error);
-                setError("No se pudo encontrar la empresa");
-                Swal.fire({
-                    icon: "error",
-                    title: "Empresa no encontrada",
-                    text: "La página que buscas no existe o no está disponible"
-                });
-            } finally {
-                setLoading(false);
-            }
-        }
-        obtenerEmpresa()
-    }, [empresaSlug]);
-
-
-    useEffect(() => {
-        if (empresaId) {
-            VisualizarCategoriasMenu();
-            cargarProductos();
-        }
-    }, [empresaId]);
-
-    return {
-        categorias,
-        productos,
-        setCategoriaSeleccionada,
-        categoriaSeleccionada,
-        empresaNombre,
-        loading,
-        error,
-    }
-}
+  return {
+    categorias,
+    productos,
+    salsas,
+    gaseosas,
+    empresaNombre,
+    loading,
+    error,
+  };
+};

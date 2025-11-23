@@ -85,6 +85,7 @@ const ComplementosCompletos = () => {
                             {dataComplementoGaseosa.map((gaseosa) => (
                                 <tr className="tabladashb_tbody_tr" key={gaseosa.id}>
                                     <td className="tabladashb_tbody_tr_td">{gaseosa.nombreGaseosa}</td>
+                                    <td className="tabladashb_tbody_tr_td">{gaseosa.precioGaseosa}</td>
                                     <td className="tabladashb_tbody_tr_td">{gaseosa.estadoGaseosa}</td>
                                     <td className="tabladashb_tbody_tr_td" >
                                         <button

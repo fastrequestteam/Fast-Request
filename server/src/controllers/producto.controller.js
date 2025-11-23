@@ -48,7 +48,7 @@ exports.VisualizarProductosPublicos = async (req, res) => {
                 EstadoProducto: 'activo',
                 EmpresaId: empresaId
             },
-            attributes: ['id', 'NombreProducto', 'PrecioProducto', 'DescripcionProducto', 'IdCategoria'],
+            attributes: ['id', 'NombreProducto', 'PrecioProducto', 'DescripcionProducto', 'IdCategoria', 'Imagen'],
             include: [{
                 model: Categoria,
                 attributes: ['id', 'NombreCategoria']
@@ -245,5 +245,34 @@ exports.CambiarEstadoProductoActivo = async (req, res) => {
         res.status(500).json({
             message: 'Error interno del servidor', error: error
         })
+    }
+}
+
+exports.ActualizarImagenProducto  = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // Validación de archivo
+        if (!req.file || !req.file.path) {
+            return res.status(400).json({ message: "No se subió ninguna imagen" });
+        }
+
+        // Buscar producto
+        const producto = await Producto.findByPk(id);
+        if (!producto) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+
+        // Guardar URL de Cloudinary
+        await producto.update({ Imagen: req.file.path });
+
+        res.json({
+            message: "Imagen de producto actualizada correctamente",
+            url: req.file.path
+        });
+
+    } catch (error) {
+        console.error("Error al actualizar imagen:", error);
+        res.status(500).json({ message: "Error en el servidor" });
     }
 }

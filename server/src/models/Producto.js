@@ -41,6 +41,11 @@ const Producto = sequelize.define('Producto', {
         type: DataTypes.ENUM('activo', 'inactivo'),
         allowNull: false,
         defaultValue: 'activo'
+    },
+
+    Imagen: {
+        type: DataTypes.STRING(500),
+        allowNull: true
     }
 }, {
     tableName: 'productos',

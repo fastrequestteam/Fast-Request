@@ -48,7 +48,7 @@ exports.findAllSalsasPublicas = async (req, res) => {
                 estadoSalsa: 'activo',
                 EmpresaId: empresaId
             },
-            attributes: ['id', 'nombreSalsa']
+            attributes: ['id', 'nombreSalsa', 'Imagen']
         })
 
         res.status(200).json({ message: 'Salsas obtenidas de manera exitosa', salsas })
@@ -285,6 +285,33 @@ exports.validacionDeNombreSalsa = async (req, res) => {
     }
 }
 
+exports.actualizarImagenSalsa = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ message: "No se subió ninguna imagen" });
+    }
+
+    const salsa = await Salsas.findByPk(id, { paranoid: false });
+
+    if (!salsa) {
+      return res.status(404).json({ message: "Salsa no encontrada" });
+    }
+
+    await salsa.update({ Imagen: req.file.path });
+
+    res.json({
+      message: "Imagen de salsa actualizada correctamente",
+      url: req.file.path,
+    });
+  } catch (error) {
+    console.error("Error al actualizar imagen de salsa:", error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
+};
+
+
 // --------------------- Controlador para "Gaseosas" ---------------------
 
 
@@ -333,7 +360,7 @@ exports.findAllGaseosasPublicas = async (req, res) => {
                 estadoGaseosa: 'activo',
                 EmpresaId: empresaId
             },
-            attributes: ['id', 'nombreGaseosa'],
+            attributes: ['id', 'nombreGaseosa', 'Imagen'],
         })
 
         res.status(200).json({ message: 'Gaseosas obtenidas de manera exitosa', gaseosas })
@@ -353,13 +380,14 @@ exports.createGaseosa = async (req, res) => {
             return res.status(400).json({ error: "empresaId es requerido" });
         }
 
-        const { nombreGaseosa, estadoGaseosa } = req.body
+        const { nombreGaseosa, precioGaseosa, estadoGaseosa } = req.body
 
         if (!nombreGaseosa || !estadoGaseosa) return res.status(400).json({ message: 'Debes de proporcionar el nombre y el estado de la gaseosa' })
 
         const gaseosaCreada = await Gaseosas.create({
             nombreGaseosa,
             estadoGaseosa,
+            precioGaseosa,
             EmpresaId
         })
 
@@ -388,7 +416,7 @@ exports.updateGaseosa = async (req, res) => {
 
         if (!gaseosa) return res.status(400).json({ message: 'EL id es obligatorio' })
 
-        const { nombreGaseosa } = req.body
+        const { nombreGaseosa, precioGaseosa } = req.body
 
         if (!nombreGaseosa) return res.status(400).json({ message: 'Debes de proporcionar el nombre de la gaseosa para actualizarla' })
 
@@ -398,6 +426,7 @@ exports.updateGaseosa = async (req, res) => {
 
         const gaseosaActualizada = await gaseosa.update({
             nombreGaseosa,
+            precioGaseosa,
         })
 
         console.log('Gaseosa actualizada:', gaseosaActualizada);
@@ -567,3 +596,29 @@ exports.validacionDeNombreGaseosa = async (req, res) => {
         res.status(500).json({ message: 'Error interno del servidor', err: err })
     }
 }
+
+exports.actualizarImagenGaseosa = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ message: "No se subió ninguna imagen" });
+    }
+
+    const gaseosa = await Gaseosas.findByPk(id, { paranoid: false });
+
+    if (!gaseosa) {
+      return res.status(404).json({ message: "Gaseosa no encontrada" });
+    }
+
+    await gaseosa.update({ Imagen: req.file.path });
+
+    res.json({
+      message: "Imagen de gaseosa actualizada correctamente",
+      url: req.file.path,
+    });
+  } catch (error) {
+    console.error("Error al actualizar imagen de gaseosa:", error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
+};

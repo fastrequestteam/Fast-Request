@@ -13,6 +13,10 @@ const Gaseosas = sequelize.define('Gaseosas', {
         allowNull: false,
         defaultValue: 'activo'
     },
+    precioGaseosa:{
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: false,
+    },
     EmpresaId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -21,7 +25,10 @@ const Gaseosas = sequelize.define('Gaseosas', {
             key: 'Id'
         }
     },
-
+    Imagen: {
+        type: DataTypes.STRING(500),
+        allowNull: true
+    }
 
 
 }, {

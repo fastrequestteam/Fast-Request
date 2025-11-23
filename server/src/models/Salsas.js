@@ -21,6 +21,10 @@ const Salsas = sequelize.define('Salsas', {
             key: 'Id'
         }
     },
+    Imagen: {
+        type: DataTypes.STRING(500),
+        allowNull: true
+    }
 
 },{
     tableName: 'salsas',

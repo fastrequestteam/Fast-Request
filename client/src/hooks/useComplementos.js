@@ -4,7 +4,7 @@ import { authHeader } from "../helpers/authHeader";
 import Swal from 'sweetalert2';
 import { validacionDeCampos } from '../helpers/validacionDeCampos';
 
-export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: "activo" }, initialGaseosas = { nombreGaseosa: "", estadoGaseosa: "" }) => {
+export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: "activo" }, initialGaseosas = { nombreGaseosa: "", precioGaseosa: "", estadoGaseosa: "" }) => {
     const [dataSalsas, setDataSalsas] = useState([]);
     const [dataGaseosas, setDataGaseosas] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -19,7 +19,8 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
     const [paginacionActualGaseosas, setPaginacionActualGaseosas] = useState(1)
     const [errores, setErrores] = useState({
         nombreSalsa: "",
-        nombreGaseosa: ""
+        nombreGaseosa: "",
+        precioGaseosa: "",
     })
 
     const formRef = useRef(null);
@@ -295,7 +296,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
     };
 
     const limpiarFormulario = () => {
-        setForComplementosData({ nombreSalsa: "", estadoSalsa: "activo", nombreGaseosa: "", estadoGaseosa: "activo" });
+        setForComplementosData({ nombreSalsa: "", estadoSalsa: "activo", nombreGaseosa: "", precioGaseosa: "",estadoGaseosa: "activo" });
     };
 
     useEffect(() => {
