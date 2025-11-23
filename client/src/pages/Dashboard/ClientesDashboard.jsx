@@ -13,11 +13,10 @@ import { usePaginacion } from "../../hooks/usePaginacion";
 const ClientesDashboard = () => {
     const {
         onChangeInputs,
-        CrearOactualizarCliente,
-        eliminarCliente,
+        CrearCliente,
+        cambiarEstadoCliente,
         clientes,
         obtenerClientes,
-        editarCliente,
         openModal,
         isCreating,
         modalVisible,
@@ -25,8 +24,10 @@ const ClientesDashboard = () => {
         formData,
         closeModal,
         errores,
-        setErrores
+        setErrores,
+        validacionDeClientes
     } = useClientes();
+
 
     useEffect(() => {
         obtenerClientes();
@@ -37,22 +38,32 @@ const ClientesDashboard = () => {
     const res = useFiltroClientes(clientes, busqueda)
     const { itemsPorPagina, funtionFinally } = usePaginacion(paginacionActual, res)
 
+    const validaciones = async () => {
 
-    const validaciones = () => {
+        const nombreClienteError = validacionDeCampos('NombreCliente', formData.NombreCliente)
+        const NumeroDocumentoError = validacionDeCampos('NumeroDocumento', formData.NumeroDocumento)
+        const CorreoElectronicoError = validacionDeCampos('CorreoElectronico', formData.CorreoElectronico)
+        const NumeroContactoError = validacionDeCampos('NumeroContacto', formData.NumeroContacto)
 
-        const nombreClienteError = validacionDeCampos('NombreCliente', formData.NombreCliente, clientes)
-        const NumeroDocumentoError = validacionDeCampos('NumeroDocumento', formData.NumeroDocumento, clientes)
-        const CorreoElectronicoError = validacionDeCampos('CorreoElectronico', formData.CorreoElectronico, clientes)
-        const NumeroContactoError = validacionDeCampos('NumeroContacto', formData.NumeroContacto, clientes)
-
-        setErrores({
-            nombreCliente: nombreClienteError,
+        let erroresTemp = {
+            NombreCliente: nombreClienteError,
             NumeroDocumento: NumeroDocumentoError,
             CorreoElectronico: CorreoElectronicoError,
-            NumeroContacto: NumeroContactoError,
-        })
+            NumeroContacto: NumeroContactoError
+        }
 
-        if (nombreClienteError || NumeroDocumentoError || CorreoElectronicoError || NumeroContactoError) return;
+        if (!NumeroDocumentoError || !CorreoElectronicoError || !NumeroContactoError) {
+            const backendErrores = await validacionDeClientes()
+            erroresTemp = {
+                ...erroresTemp,
+                NumeroDocumento: backendErrores?.NumeroDocumento || erroresTemp.NumeroDocumento,
+                CorreoElectronico: backendErrores?.CorreoElectronico || erroresTemp.CorreoElectronico,
+                NumeroContacto: backendErrores?.NumeroContacto || erroresTemp.NumeroContacto
+            }
+            setErrores(erroresTemp)
+        }
+
+        return Object.values(erroresTemp).some(err => err)
 
     }
 
@@ -64,7 +75,7 @@ const ClientesDashboard = () => {
             <div className="container_tablas">
                 <div className="table_Header">
                     <h2>Clientes</h2>
-                    <button className="boton_raro" onClick={openModal}>Crear Nuevo</button>
+                    <button className="boton_raro" onClick={openModal}>Crear Cliente</button>
 
                     <div className="input_search">
                         <input
@@ -75,6 +86,15 @@ const ClientesDashboard = () => {
                         />
                         <ion-icon id="search-sharp" name="search-sharp"></ion-icon>
                     </div>
+
+                    <a
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            navigate(`/dashboard/clientesInactivos`)
+                        }}>
+                        <ion-icon id="iconosoperacionVisualizarEstado" name="reader-outline"></ion-icon>
+                    </a>
                 </div>
 
                 <table className="tabladashb">
@@ -91,9 +111,9 @@ const ClientesDashboard = () => {
                     <tbody className="tabladashb_tbody">
                         {funtionFinally.map((customer) => (
                             <tr className="tabladashb_tbody_tr" key={customer.Id}>
-                                <td className="tabladashb_tbody_tr_td">{customer.NombreCliente}</td>
-                                <td className="tabladashb_tbody_tr_td">{customer.NumeroDocumento}</td>
-                                <td className="tabladashb_tbody_tr_td">{customer.CorreoElectronico}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.NombreCliente.toLowerCase()}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.NumeroDocumento.toLowerCase()}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.CorreoElectronico.toLowerCase()}</td>
                                 <td className="tabladashb_tbody_tr_td">{customer.NumeroContacto}</td>
                                 <td className="tabladashb_tbody_tr_td">{customer.EstadoCliente}</td>
                                 <td className="tabladashb_tbody_tr_td">
@@ -101,18 +121,9 @@ const ClientesDashboard = () => {
                                         href="#"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            editarCliente(customer);
+                                            cambiarEstadoCliente(customer.Id);
                                         }}>
-                                        <ion-icon id="iconosoperacionEditar" name="pencil"></ion-icon>
-                                    </a>
-
-                                    <a
-                                        href="#"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            eliminarCliente(customer.Id);
-                                        }}>
-                                        <ion-icon id="iconosoperacionEliminar" name="trash"></ion-icon>
+                                        <ion-icon id="iconosoperacionEliminar" name="ban"></ion-icon>
                                     </a>
 
                                     <a
@@ -155,14 +166,18 @@ const ClientesDashboard = () => {
                 <form
                     id="miFormulario"
                     ref={formRef}
-                    onSubmit={(e) => {
+                    onSubmit={async (e) => {
                         e.preventDefault();
-                        CrearOactualizarCliente();
-                        validaciones()
+
+                        const hayErrores = await validaciones()
+                        if (hayErrores) return
+
+                        CrearCliente();
+
                     }}
                 >
                     <h2 className="modal__title">
-                        {isCreating ? "Crear Cliente" : "Editar Cliente"}
+                        Crear Cliente
                     </h2>
 
                     <div className="dashinputs_formulario">
@@ -220,23 +235,6 @@ const ClientesDashboard = () => {
                             required
                         />
                         {errores.NumeroContacto && <div style={{ color: 'red' }}>{errores.NumeroContacto}</div>}
-                    </div>
-
-
-                    <div className="dashinputs_formulario">
-                        <label htmlFor="EstadoCliente">Estado:</label>
-                        <select
-                            name="EstadoCliente"
-                            id="EstadoCliente"
-                            className="dashinputs_formulario_Labels"
-                            value={formData.EstadoCliente}
-                            onChange={onChangeInputs}
-                            required
-                        >
-                            <option value="" hidden>Selecciona uno</option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
-                        </select>
                     </div>
 
                     <div className="botones_formulario">

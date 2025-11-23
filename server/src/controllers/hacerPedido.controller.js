@@ -1,4 +1,4 @@
-const { Pedido, Clientes, Producto } = require('../models');
+const { Pedido, Clientes, Producto, Salsas, Gaseosas } = require('../models');
 
 exports.nuevoPedido = async (req, res) => {
     try {
@@ -16,8 +16,15 @@ exports.nuevoPedido = async (req, res) => {
             notasAdicionales,
         } = req.body;
 
-        const cliente = await Clientes.findOne({ where: { id: clienteId } });
+        const cliente = await Clientes.findOne({ where: { Id: clienteId } });
         if (!cliente) return res.status(400).json({ message: 'Cliente no existe. Debes registrarlo con todos sus datos primero.' });
+
+
+        if (cliente.EstadoCliente === 'inactivo') {
+            return res.status(400).json({
+                mensaje: 'No se pueden crear pedidos para clientes con estado \"inactivo\" '
+            });
+        }
 
         const producto = await Producto.findOne({ where: { id: productoId } });
         if (!producto) return res.status(400).json({ message: 'Producto no existe. Debes registrarlo con todos sus datos primero.' });
@@ -72,7 +79,8 @@ exports.seleccionarPedidos = async (req, res) => {
         console.error('Error al seleccionar pedidos:', error);
         res.status(500).json({ error: 'No se pudo traer los pedidos.' });
     }
-};
+}
+
 
 exports.obtenerPedidosConClientes = async (req, res) => {
     try {
@@ -119,11 +127,79 @@ exports.obtenerNombresProductos = async (req, res) => {
 
 exports.obtenerNombresClientes = async (req, res) => {
     try {
-        const clientes = await Clientes.findAll();
+        const clientes = await Clientes.findAll({
+            where: {
+                EstadoCliente: 'activo'
+            },
+        });
         res.status(200).json(clientes);
 
         console.log('nombres del cliente obtenidos exitosamente');
     } catch (err) {
         res.status(500).json({ err: 'Error al obtener los clientes' });
     }
-};
+}
+
+
+exports.ObtenerPedidoCompleto = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const pedido = await Pedido.findByPk(id, {
+            include: [{
+                model: Clientes.unscoped(),
+                attributes: ['NombreCliente', 'EstadoCliente'],
+                required: true
+            }, {
+                model: Producto,
+                attributes: ['NombreProducto', 'PrecioProducto'],
+                required: true
+            }],
+
+        })
+
+        if (!pedido) return res.status(404).json({ message: 'Pedido no realizado. Debes realizarlo primero.' })
+
+        console.log('Datos del pedido obtenidos de manera correcta')
+        res.status(200).json({ message: 'Datos del pedido obtenidos de manera correcta', data: pedido })
+
+    } catch (err) {
+        console.error('Error al obtener el pedido:', err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
+
+// visualizacion de las salsa y gaseosas a la hora de realizar el pedido 👹
+
+exports.obtenerNombresSalsas = async (req, res) => {
+    try {
+        const salsas = await Salsas.findAll({
+            where: {
+                estadoSalsa: 'activo'
+            },
+        });
+        res.status(200).json(salsas);
+
+        console.log('nombres de las salsa obtenidas exitosamente');
+    } catch (err) {
+        res.status(500).json({ err: 'Error al obtener los clientes' });
+    }
+}
+
+
+exports.obtenerNombresGaseosas = async (req, res) => {
+    try {
+        const gaseosas = await Gaseosas.findAll({
+            where: {
+                estadoGaseosa: 'activo'
+            },
+        });
+        res.status(200).json(gaseosas);
+
+        console.log('nombres de las gaseosas obtenidas exitosamente');
+    } catch (err) {
+        res.status(500).json({ err: 'Error al obtener los clientes' });
+    }
+}
+

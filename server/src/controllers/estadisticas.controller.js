@@ -140,7 +140,7 @@ exports.nuevosClientes = async (req, res) => {
             }
         }
 
-        const totalNuevosClientes = await Cliente.count({
+        const totalNuevosClientes = await Cliente.unscoped().count({
             where: whereCondition
         });
 
@@ -269,7 +269,7 @@ exports.analisisClientes = async (req, res) => {
             ],
             where: whereCondition,
             include: [{
-                model: Cliente,
+                model: Cliente.unscoped(),
                 attributes: ['NombreCliente', 'NumeroContacto', 'CorreoElectronico']
             }],
             group: ['clienteId', 'cliente.id'],

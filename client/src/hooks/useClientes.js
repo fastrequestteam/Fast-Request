@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { validacionDeCampos } from "../helpers/validacionDeCampos";
 import { authHeader } from "../helpers/authHeader";
 
-export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", CorreoElectronico: "", NumeroContacto: "", EstadoCliente: "" }) => {
+export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", CorreoElectronico: "", NumeroContacto: "", EstadoCliente: "activo" }) => {
 
     const [modalVisible, SetmodalVisible] = useState(false)
     const [formData, setFormData] = useState(initial)
@@ -16,7 +16,7 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
         NumeroDocumento: '',
         CorreoElectronico: '',
         NumeroContacto: '',
-        repeated: ''
+        repeated: '',
     })
 
     const onChangeInputs = ({ target }) => {
@@ -28,13 +28,14 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
 
         setErrores(prevErrores => ({
             ...prevErrores,
-            [name]: validacionDeCampos(name, value, clientes)
+            [name]: validacionDeCampos(name, value)
         }))
+
     }
 
     const obtenerClientes = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/cliente/', 
+            const res = await axios.get('http://localhost:5000/api/cliente/',
                 {
                     headers: authHeader()
                 }
@@ -45,70 +46,100 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
         }
     }
 
-    const CrearOactualizarCliente = async () => {
+
+    const CrearCliente = async () => {
         try {
-            if (formData.Id) {
-                await axios.put(`http://localhost:5000/api/cliente/${formData.Id}`, formData, 
+            await axios.post('http://localhost:5000/api/cliente/', formData,
+                {
+                    headers: authHeader()
+                }
+            );
+            Swal.fire({
+                title: "Creado",
+                text: "Cliente creado correctamente",
+                icon: "success",
+                background: "#272727",
+                color: "#c9c9c9",
+            });
+
+            obtenerClientes()
+            closeModal()
+        } catch (err) {
+            console.error("Error al crear el Cliente:", err);
+        }
+    }
+
+    const cambiarEstadoCliente = async (Id) => {
+        const result = await Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Esto cambiara el estado del cliente, \n ya no se visualizara en el apartado principal.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, cambiar estado",
+            background: "#272727",
+            color: "#c9c9c9",
+        });
+        try {
+            if (result.isConfirmed) {
+                await axios.put(`http://localhost:5000/api/cliente/inactivo/${Id}`,
+                    {},
                     {
                         headers: authHeader()
                     }
                 )
-                Swal.fire("Actualizado", "Cliente actualizado correctamente", "success");
-            } else {
-                await axios.post('http://localhost:5000/api/cliente/', formData, 
-                    {
-                        headers: authHeader()
-                    }
-                );
                 Swal.fire({
-                    title: "Creado",
-                    text: "Cliente creado correctamente",
+                    title: "¡Cambio de estado exitoso!",
+                    text: "El cambio de estado del cliente a sido exitoso",
                     icon: "success",
                     background: "#272727",
                     color: "#c9c9c9",
                 });
-            }
-            obtenerClientes()
-            closeModal()
-        } catch (err) {
-            console.error("Error al crear o actualizar el Cliente:", err);
-        }
-    }
 
-    const eliminarCliente = async (Id) => {
-        const result = await Swal.fire({
-            title: "¿Estás seguro?",
-            text: "Esto eliminará la categoría.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sí, eliminar",
-        });
-        try {
-            if (result.isConfirmed) {
-                await axios.delete(`http://localhost:5000/api/cliente/${Id}`, 
-                    {
-                        headers: authHeader()
-                    }
-                )
-                Swal.fire("Eliminado", "cliente eliminada exitosamente", "success");
+                Swal.fire("¡Cambio de estado exitoso!", "El cambio de estado del cliente a sido exitoso", "success");
                 obtenerClientes()
             }
 
         } catch (err) {
-            console.error("Error al eliminar el cliente:", err);
-            Swal.fire("Error", "No se pudo eliminar el cliente", "error");
+            console.error("Error al cambiar el estado del cliente:", err);
+            Swal.fire("Error", "No se cambiar el estado del cliente", "error");
+        }
+    }
+
+
+
+    const validacionDeClientes = async () => {
+        try {
+
+            const res = await axios.post(`http://localhost:5000/api/cliente/verify-duplicate`, formData,
+                {
+                    headers: authHeader()
+                },
+            )
+
+            return {
+                NumeroDocumento: res.data.NumeroDocumento.mensaje || '',
+                CorreoElectronico: res.data.CorreoElectronico.mensaje || '',
+                NumeroContacto: res.data.NumeroContacto.mensaje || ''
+            }
+
+        } catch (error) {
+            console.error("Error al validar duplicados:", error);
+
+            if (error.response?.status >= 500 || !error.response) {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo validar la información. Intente nuevamente.",
+                    icon: "error",
+                    background: "#272727",
+                    color: "#c9c9c9",
+                });
+            }
         }
     }
 
 
     const limpiarFormulario = () => {
-        setFormData({ NombreCliente: "", NumeroDocumento: "", CorreoElectronico: "", NumeroContacto: "", EstadoCliente: "" });
-    };
-
-    const editarCliente = (customer) => {
-        setFormData(customer);
-        setIsCreating(false);
-        SetmodalVisible(true);
+        setFormData({ NombreCliente: "", NumeroDocumento: "", CorreoElectronico: "", NumeroContacto: "", EstadoCliente: "activo" });
     };
 
 
@@ -126,11 +157,10 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
 
     return {
         onChangeInputs,
-        CrearOactualizarCliente,
-        eliminarCliente,
+        CrearCliente,
+        cambiarEstadoCliente,
         clientes,
         obtenerClientes,
-        editarCliente,
         openModal,
         isCreating,
         modalVisible,
@@ -138,7 +168,8 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
         formData,
         closeModal,
         errores,
-        setErrores
+        setErrores,
+        validacionDeClientes
     }
 }
 

@@ -21,7 +21,7 @@ export const useFiltro = (data, busqueda) => {
 
 //useFiltro categoria
 export const useFiltroCategoria = (data, busqueda) => {
-     const res = useMemo(() => {
+    const res = useMemo(() => {
         if (!busqueda.trim()) return data;
         const termino = busqueda.toLowerCase();
         return data.filter((item) => {
@@ -38,11 +38,11 @@ export const useFiltroCategoria = (data, busqueda) => {
 
 //useFiltro Productos
 export const useFiltroProductos = (data, busqueda) => {
-     const res = useMemo(() => {
+    const res = useMemo(() => {
         if (!busqueda.trim()) return data;
         const termino = busqueda.toLowerCase();
         return data.filter((item) => {
-             return [
+            return [
                 item.id?.toString(),
                 item.NombreProducto?.toLowerCase(),
                 item.NombreCategoria?.toLowerCase(),
@@ -83,17 +83,52 @@ export const useFiltroRoles = (data, busqueda) => {
 //useFiltro clientes
 
 export const useFiltroClientes = (data, busqueda) => {
-     const res = useMemo(() => {
+    const res = useMemo(() => {
         if (!busqueda.trim()) return data;
         const termino = busqueda.toLowerCase();
         return data.filter((item) => {
-             return [
+            return [
                 item.id?.toString(),
                 item.NombreCliente?.toLowerCase(),
                 item.NumeroDocumento?.toString(),
                 item.CorreoElectronico?.toLowerCase(),
                 item.NumeroContacto?.toString(),
-                item.EstadoCliente?.toLowerCase(),
+            ].some(value => value?.toLowerCase().includes(termino));
+        });
+    }, [data, busqueda]);
+
+    return res;
+}
+
+//useFiltro Salsas
+
+export const useFiltroSalsas = (data, busqueda) => {
+    const res = useMemo(() => {
+        if (!busqueda.trim()) return data;
+        const termino = busqueda.toLowerCase();
+        return data.filter((item) => {
+            return [
+                item.id?.toString(),
+                item.nombreSalsa?.toLowerCase(),
+                item.estadoSalsa?.toLowerCase(),
+            ].some(value => value?.toLowerCase().includes(termino));
+        });
+    }, [data, busqueda]);
+
+    return res;
+}
+
+//useFiltro Gaseosas
+
+export const useFiltroGaseosas = (data, busqueda) => {
+    const res = useMemo(() => {
+        if (!busqueda.trim()) return data;
+        const termino = busqueda.toLowerCase();
+        return data.filter((item) => {
+            return [
+                item.id?.toString(),
+                item.nombreGaseosa?.toLowerCase(),
+                item.estadoGaseosa?.toLowerCase(),
             ].some(value => value?.toLowerCase().includes(termino));
         });
     }, [data, busqueda]);

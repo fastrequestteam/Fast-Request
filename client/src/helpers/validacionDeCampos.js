@@ -1,7 +1,9 @@
-export const validacionDeCampos = (name, value, clientes = []) => {
+export const validacionDeCampos = (name, value) => {
     let errores = '';
 
-    if (value.trim() === '') {
+    const trimmedValue = (typeof value === 'string' ? value : '').trim()
+
+    if (trimmedValue === '') {
         return errores
     }
 
@@ -23,6 +25,7 @@ export const validacionDeCampos = (name, value, clientes = []) => {
             errores = ''
         }
     }
+
 
     // if (name === 'password') {
     //     if (value.length < 8 || value.length > 15) {
@@ -190,7 +193,7 @@ export const validacionDeCampos = (name, value, clientes = []) => {
             errores = 'Este campo no puede estar vacío.'
         } else if (value !== trimmed) {
             errores = 'No debe haber espacios al inicio o al final.';
-        } else if (trimmed.length <= 3) {
+        } else if (trimmed.length < 3) {
             errores = 'este valor es demasiado corto.'
         } else if (trimmed.length >= 30) {
             errores = 'este valor es demasiado largo.';
@@ -217,8 +220,6 @@ export const validacionDeCampos = (name, value, clientes = []) => {
             errores = 'Este valor es demasiado largo.';
         } else if (!regex.test(trimmed)) {
             errores = 'Este campo solo debe contener números.';
-        } else if (clientes.some(cliente => cliente.NumeroDocumento?.trim() === trimmed)) {
-            errores = 'Este documento ya está registrado.';
         } else {
             errores = '';
         }
@@ -232,13 +233,10 @@ export const validacionDeCampos = (name, value, clientes = []) => {
             errores = 'Este campo no puede estar vacío.';
         } else if (!regex.test(trimmed)) {
             errores = 'El correo debe tener un formato válido, como ejemplo@dominio.com.';
-        } else if (clientes.some(cliente => cliente.CorreoElectronico?.trim().toLowerCase() === trimmed.toLowerCase())) {
-            errores = 'Este correo ya está registrado.'
         } else {
             errores = '';
         }
     }
-
 
 
     if (name === 'NumeroContacto') {
@@ -249,18 +247,125 @@ export const validacionDeCampos = (name, value, clientes = []) => {
             errores = 'Este campo no puede estar vacío.';
         } else if (value !== trimmed) {
             errores = 'No debe haber espacios al inicio o al final.';
+        } else if (!regex.test(trimmed)) {
+            errores = 'Este campo solo debe contener números.';
         } else if (trimmed.length < 10) {
             errores = 'Este valor es demasiado corto.';
         } else if (trimmed.length > 12) {
             errores = 'Este valor es demasiado largo.';
-        } else if (!regex.test(trimmed)) {
-            errores = 'Este campo solo debe contener números.';
-        } else if (clientes.some(cliente => cliente.NumeroContacto?.trim() === trimmed)) {
-            errores = 'Este número de contacto ya está registrado.';
         } else {
             errores = '';
         }
     }
+
+
+    // -------------------- validaciones para los modales de gaseosas y salsas --------------------
+
+    if (name === 'nombreSalsa') {
+        const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/;
+        const trimmed = value.trim();
+
+        if (trimmed === '') {
+            errores = 'Este campo no puede estar vacío.';
+        } else if (value !== trimmed) {
+            errores = 'No debe haber espacios al inicio o al final.';
+        } else if (trimmed.length <= 2) {
+            errores = 'Este valor es demasiado corto.';
+        } else if (trimmed.length >= 40) {
+            errores = 'Este valor es demasiado largo.';
+        } else if (!regex.test(trimmed)) {
+            errores = 'Este campo solo debe contener letras y espacios.';
+        } else if (/\s{2,}/.test(trimmed)) {
+            errores = 'No se permiten espacios múltiples entre palabras.';
+        } else {
+            errores = '';
+        }
+    }
+
+    if (name === 'nombreGaseosa') {
+        const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/;
+        const trimmed = value.trim();
+
+        if (trimmed === '') {
+            errores = 'Este campo no puede estar vacío.';
+        } else if (value !== trimmed) {
+            errores = 'No debe haber espacios al inicio o al final.';
+        } else if (trimmed.length <= 3) {
+            errores = 'Este valor es demasiado corto.';
+        } else if (trimmed.length >= 40) {
+            errores = 'Este valor es demasiado largo.';
+        } else if (!regex.test(trimmed)) {
+            errores = 'Este campo solo debe contener letras y espacios.';
+        } else if (/\s{2,}/.test(trimmed)) {
+            errores = 'No se permiten espacios múltiples entre palabras.';
+        } else {
+            errores = '';
+        }
+    }
+
+
+
+    // -------------------- validaciones para los campos de configuracion y perfil --------------------
+
+    if (name === 'nombre' || name === 'apellido') {
+        const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/
+        const trimmed = value.trim();
+
+        if (trimmed === '') {
+            errores = 'Este campo no puede estar vacío.'
+        } else if (value !== trimmed) {
+            errores = 'No debe haber espacios al inicio o al final.';
+        } else if (trimmed.length < 3) {
+            errores = 'este valor es demasiado corto.'
+        } else if (trimmed.length >= 30) {
+            errores = 'este valor es demasiado largo.';
+        } else if (!regex.test(trimmed)) {
+            errores = 'Este campo solo debe contener letras y espacios.'
+        } else if (/\s{2,}/.test(trimmed)) {
+            errores = 'No se permiten espacios múltiples entre palabras.';
+        } else {
+            errores = ''
+        }
+    }
+
+    if (name === 'current' || name === 'new' || name === 'confirm') {
+        const trimmed = value.trim();
+
+        if (trimmed === '') {
+            errores = 'Este campo no puede estar vacío.';
+        } else if (value !== trimmed) {
+            errores = 'No debe haber espacios al inicio o al final.';
+        } else if (value.length < 6 || value.length > 15) {
+            errores = 'La contraseña debe tener entre 6 y 15 caracteres.';
+        } else if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
+            errores = 'La contraseña debe incluir al menos una letra minúscula y una mayúscula.';
+        } else if (!/\d/.test(value)) {
+            errores = 'La contraseña debe incluir al menos un número.';
+        } else {
+            errores = '';
+        }
+    }
+
+    if (name === 'telefono') {
+        const regex = /^[0-9]+$/;
+        const trimmed = value.trim();
+
+        if (trimmed === '') {
+            errores = 'Este campo no puede estar vacío.';
+        } else if (value !== trimmed) {
+            errores = 'No debe haber espacios al inicio o al final.';
+        } else if (!regex.test(trimmed)) {
+            errores = 'Este campo solo debe contener números.';
+        } else if (trimmed.length < 10) {
+            errores = 'Este valor es demasiado corto.';
+        } else if (trimmed.length > 12) {
+            errores = 'Este valor es demasiado largo.';
+        } else {
+            errores = '';
+        }
+    }
+
+
 
     return errores;
 }

@@ -16,8 +16,8 @@ const PedidosPorCliente = () => {
             const response = await axios.get(`http://localhost:5000/api/pedidos/cliente-pedidos/${clienteId}`,
                 {
                     headers: authHeader()
-                } 
-                );
+                }
+            );
             setPedidos(response.data);
         } catch (err) {
             console.error('Error al obtener los pedidos de cliente', err);
