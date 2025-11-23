@@ -3,6 +3,11 @@ const router = express.Router();
 const complementosController = require('../controllers/complementos.controller');
 const verificarJWT = require('../middlewares/verificarJWT');
 const { soloAdmin, soloEmpresa } = require('../middlewares/verificarRoles');
+const { uploadCloudComplementos } = require('../middlewares/upload')
+
+// RUTAS PARA ACTUALIZAR LA IMAGEN DE GASEOSA Y SALSA
+router.put("/salsasImagen/:id/imagen", verificarJWT, uploadCloudComplementos.single("imagen"),complementosController.actualizarImagenSalsa)
+router.put("/gaseosasImagen/:id/imagen", verificarJWT, uploadCloudComplementos.single("imagen") ,complementosController.actualizarImagenGaseosa)
 
 
 // rutas para Salsas
@@ -26,6 +31,10 @@ router.put('/update-estado-inactivo-gaseosa/:id', verificarJWT, complementosCont
 router.put('/update-estado-activo-gaseosa/:id', verificarJWT, complementosController.cambioEstadoGaseosaActivo)
 router.delete('/destroy-gaseosa/:id', verificarJWT, complementosController.eliminacioDeGaseosa)
 
+
+// rutas publicas
+router.get('/salsas', complementosController.findAllSalsasPublicas)
+router.get('/gaseosas', complementosController.findAllGaseosasPublicas)
 
 
 module.exports = router

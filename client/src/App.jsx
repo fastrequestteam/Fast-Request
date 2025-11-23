@@ -26,10 +26,32 @@ import MiPagina from './pages/MiPagina/miPagina';
 import CocinaDashboard from './pages/Dashboard/CocinaDashboard';
 import Complementos from './pages/Dashboard/complementos';
 import ComplementosCompletos from './pages/Dashboard/complementosCompletos';
+import CategoriasInactivas from './pages/Dashboard/CategoriasInactivasDashboard';
+import ProductosInactivos from './pages/Dashboard/ProductosInactivosDashboard';
+import RolesInactivos from './pages/Dashboard/RolesInactivosDashboard';
+import Carta from './pages/MiPagina/Carta';
+import Contactanos from './pages/MiPagina/Contactanos';
+import Login_miPagina from './pages/MiPagina/Login/Login';
+import Registro_miPagina from './pages/MiPagina/Registro/Registro';
+
+import HomePage from './pages/Home/homePage';
+import NosotrosPage from './pages/Home/Nosotros'
+import ServiciosPage from './pages/Home/Servicios'
+import PoliticaPage from './pages/Home/Politica'
+import TerminosPage from './pages/Home/Terminos'
+import ContactanosPage from './pages/Home/Contactanos'
+import VerMasPage from './pages/Home/VerMas'
+import FooterPage from './components/Home/Footer'
+import NavbarPage from './components/Home/Navbar'
+
+import MiPaginaEdicion from './pages/PaginaDeEdicion/HomeEdicion';
+import CartaPageEdit from './pages/PaginaDeEdicion/CartaEdicion';
+import ContactanosPageEdit from './pages/PaginaDeEdicion/contactanosEdicion';
+import MiPaginaLayout from './components/miPagina/layout';
 
 const AppContent = () => {
 
-  const location = useLocation(); 
+  const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   return (
@@ -41,8 +63,11 @@ const AppContent = () => {
           <Routes>
             <Route path="/dashboard" element={<InicioDashboard />} />
             <Route path="/dashboard/categoria" element={<CategoriaDashboard />} />
+            <Route path="/dashboard/categoriasInactivas" element={<CategoriasInactivas />} />
             <Route path="/dashboard/productos" element={<ProductosDashboard />} />
+            <Route path="/dashboard/productosInactivos" element={<ProductosInactivos />} />
             <Route path="/dashboard/roles" element={<RolesDashboard />} />
+            <Route path="/dashboard/rolesInactivos" element={<RolesInactivos />} />
             <Route path="/dashboard/usuarios" element={<UsuariosDashboard />} />
             <Route path="/dashboard/clientes" element={<ClientesDashboard />} />
             <Route path="/dashboard/estadisticas" element={<EstadisticasDashboard />} />
@@ -55,7 +80,7 @@ const AppContent = () => {
             <Route path="/dashboard/clientesInactivos" element={<VisualizarInactividadDeClientes />} />
             <Route path="/dashboard/configuracion" element={<Configuracion />} />
             <Route path="/dashboard/perfil" element={<Perfil />} />
-            <Route path="/dashboard/cocina" element={<CocinaDashboard />} /> 
+            <Route path="/dashboard/cocina" element={<CocinaDashboard />} />
           </Routes>
         </ThemeProvider>
       ) : (
@@ -63,7 +88,37 @@ const AppContent = () => {
           <Route path="/" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
-          <Route path='/miPagina' element={<MiPagina />} /> 
+
+
+
+
+
+          <Route path='/home' element={<HomePage />} />
+          <Route path='/home/nosotros' element={<NosotrosPage />} />
+          <Route path='/home/servicios' element={<ServiciosPage />} />
+          <Route path='/home/politica' element={<PoliticaPage />} />
+          <Route path='/home/terminos' element={<TerminosPage />} />
+          <Route path='/home/contactanos' element={<ContactanosPage />} />
+          <Route path='/home/verMas' element={<VerMasPage />} />
+          <Route path='/home/footer' element={<FooterPage />} />
+          <Route path='/home/navbar' element={<NavbarPage />} />
+
+
+          {/* Paginas de esicion para "MiPagina" */}
+          <Route path='/miPagina/edit' element={<MiPaginaEdicion />} />
+          <Route path='/miPagina/carta/edit' element={<CartaPageEdit />} />
+          <Route path="/miPagina/contacto/edit" element={<ContactanosPageEdit />} />
+
+          <Route path="/miPagina/:empresaSlug" element={<MiPaginaLayout />}>
+            <Route index element={<MiPagina />} />
+            <Route path="carta" element={<Carta />} />
+            <Route path="contacto" element={<Contactanos />} />
+            <Route path="Login" element={<Login_miPagina />} />
+            <Route path="Registro" element={<Registro_miPagina />} />
+          </Route>
+
+
+
         </Routes>
       )}
     </>

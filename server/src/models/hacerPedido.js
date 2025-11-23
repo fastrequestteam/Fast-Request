@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 const Producto = require('./Producto')
+const Empresa = require('./Empresa')
 
 const Pedido = sequelize.define('Pedido', {
 
@@ -19,6 +20,14 @@ const Pedido = sequelize.define('Pedido', {
             key: 'id'
         },
         allowNull: false,
+    },
+    EmpresaId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'empresas',
+            key: 'Id'
+        }
     },
     cantidadProducto: {
         type: DataTypes.INTEGER,
@@ -61,13 +70,18 @@ const Pedido = sequelize.define('Pedido', {
         allowNull: false,
     },
     estadoDelPedido: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        defaultValue: 'En proceso',
+        type: DataTypes.ENUM('En espera', 'En proceso', 'terminado'),
+        allowNull: false
     }
 }, {
     tableName: 'pedidos',
     timestamps: true,
+
+    scopes: {
+        enEspera: { where: { estadoDelPedido: 'En espera' } },
+        enProceso: { where: { estadoDelPedido: 'En proceso' } },
+        terminado: { where: { estadoDelPedido: 'terminado' } },
+    }
 });
 
 Producto.hasMany(Pedido, {
@@ -79,6 +93,16 @@ Pedido.belongsTo(Producto, {
     foreignKey: 'productoId',
     targetKey: 'Id'
 })
+
+Empresa.hasMany(Pedido, {
+    foreignKey: 'EmpresaId',
+    sourceKey: 'Id'
+});
+
+Pedido.belongsTo(Empresa, {
+    foreignKey: 'EmpresaId',
+    targetKey: 'Id'
+});
 
 
 module.exports = Pedido

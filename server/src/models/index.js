@@ -10,7 +10,7 @@ const Perfil = require('./configuracionPerfil')
 const Empresa = require('./Empresa');
 const Salsas = require('./Salsas')
 const Gaseosas = require('./Gaseosas')
-
+const TextosEditables = require('./TextosEditables')
 
 module.exports = {
   Usuario,
@@ -24,6 +24,7 @@ module.exports = {
   Perfil,
   Empresa,
   Salsas,
-  Gaseosas
+  Gaseosas,
+  TextosEditables
 };
 

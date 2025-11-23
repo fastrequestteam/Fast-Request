@@ -5,9 +5,16 @@ const { Clientes, Pedido } = require('../models');
 
 exports.VisualizarClientes = async (req, res) => {
     try {
+        const EmpresaId = req.user.empresaId;
+
+        if (!EmpresaId) {
+            return res.status(400).json({ error: "empresaId es requerido" });
+        }
+
         const clientes = await Clientes.findAll({
             where: {
-                EstadoCliente: 'activo'
+                EstadoCliente: 'activo',
+                EmpresaId: EmpresaId
             },
         })
         res.status(200).json(clientes)
@@ -21,15 +28,22 @@ exports.VisualizarClientes = async (req, res) => {
 
 exports.CrearClientes = async (req, res) => {
     try {
-        const { NombreCliente, NumeroDocumento, CorreoElectronico, NumeroContacto, EstadoCliente } = req.body
+
+        const EmpresaId = req.user.empresaId;
+
+        if (!EmpresaId) {
+            return res.status(400).json({ error: "empresaId es requerido" });
+        }
+
+        const { NombreCliente, CorreoElectronico, NumeroContacto, EstadoCliente } = req.body
 
         const nuevoCliente = await Clientes.create(
             {
                 NombreCliente,
-                NumeroDocumento,
                 CorreoElectronico,
                 NumeroContacto,
-                EstadoCliente
+                EstadoCliente,
+                EmpresaId
             }
         );
 
@@ -66,9 +80,19 @@ exports.CrearClientes = async (req, res) => {
 
 exports.CambioEstadoInactivoClientes = async (req, res) => {
     try {
+        const EmpresaId = req.user.empresaId;
+
+        if (!EmpresaId) {
+            return res.status(400).json({ error: "empresaId es requerido" });
+        }
+
         const { id } = req.params
         const clienteForId = await Clientes.unscoped().findByPk(id)
         if (!clienteForId) return res.status(404).json({ message: "Cliente no encontrada." });
+
+        if (clienteForId.EmpresaId !== EmpresaId) {
+            return res.status(403).json({ message: "No autorizado" });
+        }
 
         await clienteForId.update({ EstadoCliente: 'inactivo' })
 
@@ -83,7 +107,19 @@ exports.CambioEstadoInactivoClientes = async (req, res) => {
 
 exports.VisualizarClientesInactivos = async (req, res) => {
     try {
-        const clientes = await Clientes.scope('soloClientesInactivos').findAll()
+
+        const EmpresaId = req.user.empresaId;
+
+        if (!EmpresaId) {
+            return res.status(400).json({ error: "empresaId es requerido" });
+        }
+
+        const clientes = await Clientes.scope('soloClientesInactivos').findAll({
+            where: {
+                EmpresaId: EmpresaId
+            },
+        })
+
         res.status(200).json(clientes)
         console.log('clientes obtenidos de manera correcta')
 
@@ -96,11 +132,21 @@ exports.VisualizarClientesInactivos = async (req, res) => {
 
 exports.CambioEstadoActivoClientes = async (req, res) => {
     try {
+        const EmpresaId = req.user.empresaId;
+
+        if (!EmpresaId) {
+            return res.status(400).json({ error: "empresaId es requerido" });
+        }
+        
         const { id } = req.params;
         const cliente = await Clientes.scope('soloClientesInactivos').findByPk(id);
 
         if (!cliente) {
             return res.status(404).json({ message: "Cliente inactivo no encontrado." });
+        }
+
+        if (cliente.EmpresaId !== EmpresaId) {
+            return res.status(403).json({ message: "No autorizado" });
         }
 
         await cliente.update({ EstadoCliente: 'activo' });
@@ -115,19 +161,26 @@ exports.CambioEstadoActivoClientes = async (req, res) => {
 
 exports.validacionDeCampos = async (req, res) => {
     try {
-        const { NumeroDocumento, CorreoElectronico, NumeroContacto } = req.body;
 
-        if (!NumeroDocumento || !CorreoElectronico || !NumeroContacto) {
+        const EmpresaId = req.user.empresaId;
+
+        if (!EmpresaId) {
+            return res.status(400).json({ error: "empresaId es requerido" });
+        }
+
+        const { CorreoElectronico, NumeroContacto } = req.body;
+
+        if (!CorreoElectronico || !NumeroContacto) {
             return res.status(400).json({ message: 'Debes proporcionar todos los campos requeridos' });
         }
 
         const clientes = await Clientes.unscoped().findAll({
             where: {
+                EmpresaId: EmpresaId,
                 // [Op.or] significa: buscar coincidencias en cualquiera de los campos especificados
                 // Op:  Significa operaciones lógicas en las consultas
                 // or: Significa "o" lógico, es decir, al menos una de las condiciones debe cumplirse
                 [Op.or]: [
-                    { NumeroDocumento: NumeroDocumento.trim() },
                     { CorreoElectronico: CorreoElectronico.trim().toLowerCase() },
                     { NumeroContacto: NumeroContacto.trim() }
                 ]
@@ -135,9 +188,6 @@ exports.validacionDeCampos = async (req, res) => {
         });
 
         const resultados = {
-            NumeroDocumento: clientes.some(client => client.NumeroDocumento === NumeroDocumento.trim()) ?
-                { existe: true, mensaje: 'Este documento ya existe.' } : '',
-
             CorreoElectronico: clientes.some(client => client.CorreoElectronico === CorreoElectronico.trim().toLowerCase()) ?
                 { existe: true, mensaje: 'Este correo ya existe.' } : '',
 

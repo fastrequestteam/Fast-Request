@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
+const Empresa = require('./Empresa')
 
 const Producto = sequelize.define('Producto', {
     Id: {
@@ -20,6 +21,14 @@ const Producto = sequelize.define('Producto', {
         },
         allowNull: false
     },
+    EmpresaId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'empresas',
+            key: 'Id'
+        }
+    },
     PrecioProducto: {
         type: DataTypes.DECIMAL,
         allowNull: false
@@ -29,14 +38,52 @@ const Producto = sequelize.define('Producto', {
         allowNull: false
     },
     EstadoProducto: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.ENUM('activo', 'inactivo'),
+        allowNull: false,
+        defaultValue: 'activo'
+    },
+
+    Imagen: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+        defaultValue: 'https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868473/placehold_image_o7n2dz.jpg'
     }
 }, {
     tableName: 'productos',
     timestamps: true,
+
+    defaultScope: {
+        where: {
+            EstadoProducto: 'activo'
+        }
+    },
+
+    scopes: {
+        ProductoInactivo: {
+            where: {
+
+            }
+        },
+        soloProductosInactivos: {
+            where: {
+                EstadoProducto: 'inactivo'
+            }
+        }
+    }
 }
 );
+
+
+Empresa.hasMany(Producto, {
+    foreignKey: 'EmpresaId',
+    sourceKey: 'Id'
+});
+
+Producto.belongsTo(Empresa, {
+    foreignKey: 'EmpresaId',
+    targetKey: 'Id'
+});
+
 
 
 

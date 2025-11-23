@@ -19,6 +19,7 @@ const Complementos = () => {
 
     const initialGaseosas = {
         nombreGaseosa: "",
+        precioGaseosa: "",
         estadoGaseosa: "activo"
     }
 
@@ -159,6 +160,7 @@ const Complementos = () => {
                         <thead>
                             <tr>
                                 <th>Nombre Gaseosa</th>
+                                <th>Precio Gaseosa</th>
                                 <th>Estado Gaseosa</th>
                                 <th>Acciones</th>
                                 <th>
@@ -172,6 +174,7 @@ const Complementos = () => {
                             {gaseosasPaginadas.map((gaseosa) => (
                                 <tr className="tabladashb_tbody_tr" key={gaseosa.id}>
                                     <td className="tabladashb_tbody_tr_td">{gaseosa.nombreGaseosa.toLowerCase()}</td>
+                                    <td className="tabladashb_tbody_tr_td">{gaseosa.precioGaseosa}</td>
                                     <td className="tabladashb_tbody_tr_td">{gaseosa.estadoGaseosa}</td>
                                     <td className="tabladashb_tbody_tr_td" >
                                         <a
@@ -216,73 +219,94 @@ const Complementos = () => {
                 </section>
             </div>
 
-            <ModalDashboard show={modalVisible} onClose={closeModal}>
-                <form
-                    id="miFormulario"
-                    ref={formRef}
-                    onSubmit={async (e) => {
-                        e.preventDefault()
+           <ModalDashboard show={modalVisible} onClose={closeModal}>
+    <form
+        id="miFormulario"
+        ref={formRef}
+        onSubmit={async (e) => {
+            e.preventDefault();
 
-                        const tipo = modalTipo
-                        const name = tipo === 'salsa' ? (nombreSalsa || '') : (nombreGaseosa || '')
+            const tipo = modalTipo;
+            const name = tipo === 'salsa' ? (nombreSalsa || '') : (nombreGaseosa || '');
 
-                        const hayErrores = validacionesDeCampos(
-                            tipo === 'salsa' ? 'nombreSalsa' : 'nombreGaseosa',
-                            name
-                        )
-                        const mensajeError = await validacionDeComplementos(tipo, name);
+            const hayErrores = validacionesDeCampos(
+                tipo === 'salsa' ? 'nombreSalsa' : 'nombreGaseosa',
+                name
+            );
+            const mensajeError = await validacionDeComplementos(tipo, name);
 
-                        if (mensajeError || hayErrores) {
-                            setErrores((prev) => ({
-                                ...prev,
-                                [tipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"]: mensajeError || hayErrores
-                            }));
-                            return
-                        }
-                        
-                        if (hayErrores) return
+            if (mensajeError || hayErrores) {
+                setErrores((prev) => ({
+                    ...prev,
+                    [tipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"]: mensajeError || hayErrores
+                }));
+                return;
+            }
 
-                        if (modalTipo === 'salsa') {
-                            await ComplementosSalsas()
-                        } else {
-                            await ComplementosGaseosas()
-                        }
+            if (hayErrores) return;
 
-                        closeModal()
-                    }}
-                >
-                    <h2 className="modal__title">
-                        {isCreating ? (modalTipo === "salsa" ? "Crear Salsa" : "Crear Gaseosa") : (modalTipo === "salsa" ? "Editar Salsa" : "Editar Gaseosa")}
-                    </h2>
+            if (modalTipo === 'salsa') {
+                await ComplementosSalsas();
+            } else {
+                await ComplementosGaseosas();
+            }
 
-                    <div className="dashinputs_formulario">
-                        <label htmlFor={modalTipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"}>
-                            {modalTipo === "salsa" ? "Nombre de la Salsa:" : "Nombre de la Gaseosa:"}
-                        </label>
-                        <input
-                            type="text"
-                            name={modalTipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"}
-                            id={modalTipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"}
-                            className="dashinputs_formulario_Labels"
-                            value={modalTipo === "salsa" ? nombreSalsa : nombreGaseosa}
-                            onChange={onChangeInputs}
-                        />
-                        {modalTipo === 'salsa'
-                            ? errores.nombreSalsa && <div style={{ color: 'red' }}>{errores.nombreSalsa}</div>
-                            : errores.nombreGaseosa && <div style={{ color: 'red' }}>{errores.nombreGaseosa}</div>
-                        }
-                    </div>
+            closeModal();
+        }}
+    >
+        <h2 className="modal__title">
+            {isCreating
+                ? modalTipo === "salsa" ? "Crear Salsa" : "Crear Gaseosa"
+                : modalTipo === "salsa" ? "Editar Salsa" : "Editar Gaseosa"}
+        </h2>
 
-                    <div className="botones_formulario">
-                        <button type="submit" className="boton_formulario">
-                            {isCreating ? "Crear" : "Actualizar"}
-                        </button>
-                        <button type="button" className="close__modal" onClick={closeModal}>
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </ModalDashboard>
+        <div className="dashinputs_formulario">
+            <label htmlFor={modalTipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"}>
+                {modalTipo === "salsa" ? "Nombre de la Salsa:" : "Nombre de la Gaseosa:"}
+            </label>
+            <input
+                type="text"
+                name={modalTipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"}
+                id={modalTipo === "salsa" ? "nombreSalsa" : "nombreGaseosa"}
+                className="dashinputs_formulario_Labels"
+                value={modalTipo === "salsa" ? nombreSalsa : nombreGaseosa}
+                onChange={onChangeInputs}
+            />
+            {modalTipo === 'salsa'
+                ? errores.nombreSalsa && <div style={{ color: 'red' }}>{errores.nombreSalsa}</div>
+                : errores.nombreGaseosa && <div style={{ color: 'red' }}>{errores.nombreGaseosa}</div>
+            }
+        </div>
+
+        {/* ✅ Campo de precio SOLO si la gaseosa está activa en el modal */}
+        {modalTipo === "gaseosa" && (
+            <div className="dashinputs_formulario">
+                <label>Precio de la gaseosa</label>
+                <input
+                    type="text"
+                    name="precioGaseosa"
+                    value={forComplementosData.precioGaseosa || ""}
+                    onChange={onChangeInputs}
+                    className="dashinputs_formulario_Labels"
+                    placeholder="Ingrese el precio"
+                />
+                {errores.precioGaseosa && (
+                    <div style={{ color: "red" }}>{errores.precioGaseosa}</div>
+                )}
+            </div>
+        )}
+
+        <div className="botones_formulario">
+            <button type="submit" className="boton_formulario">
+                {isCreating ? "Crear" : "Actualizar"}
+            </button>
+            <button type="button" className="close__modal" onClick={closeModal}>
+                Cancelar
+            </button>
+        </div>
+    </form>
+</ModalDashboard>
+
         </DashboardLayout>
     )
 }

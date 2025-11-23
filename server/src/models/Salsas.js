@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
-
+const Empresa = require('./Empresa')
 
 const Salsas = sequelize.define('Salsas', {
 
@@ -13,6 +13,19 @@ const Salsas = sequelize.define('Salsas', {
         allowNull: false,
         defaultValue: 'activo'
     },
+    EmpresaId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'empresas',
+            key: 'Id'
+        }
+    },
+    Imagen: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+        defaultValue: 'https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868563/placehold_image_biilgt.jpg'
+    }
 
 },{
     tableName: 'salsas',
@@ -40,7 +53,15 @@ const Salsas = sequelize.define('Salsas', {
 })
 
 
+Empresa.hasMany(Salsas, {
+    foreignKey: 'EmpresaId',
+    sourceKey: 'Id'
+});
 
+Salsas.belongsTo(Empresa, {
+    foreignKey: 'EmpresaId',
+    targetKey: 'Id'
+});
 
 
 

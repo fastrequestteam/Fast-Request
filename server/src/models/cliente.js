@@ -1,7 +1,7 @@
-const { DataTypes, where } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 const Pedido = require('./hacerPedido')
-
+const Empresa = require('./Empresa')
 
 const Clientes = sequelize.define('clientes', {
     Id: {
@@ -12,10 +12,6 @@ const Clientes = sequelize.define('clientes', {
     NombreCliente: {
         type: DataTypes.STRING(100),
         allowNull: false
-    },
-    NumeroDocumento: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
     },
     CorreoElectronico: {
         type: DataTypes.STRING(100),
@@ -30,6 +26,14 @@ const Clientes = sequelize.define('clientes', {
         type: DataTypes.ENUM('activo', 'inactivo'),
         allowNull: false,
         defaultValue: 'activo'
+    },
+    EmpresaId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'empresas',
+            key: 'Id'
+        }
     },
 
 }, {
@@ -50,7 +54,7 @@ const Clientes = sequelize.define('clientes', {
         clientesInactivos: {
             where: {}
         },
-        
+
         //cada vez que yo pida "clientes", muéstra SOLO los que tienen el estado inactivo, 
         // sin que tenga que pedirlo manualmente
         soloClientesInactivos: {
@@ -70,5 +74,17 @@ Pedido.belongsTo(Clientes, {
     foreignKey: 'clienteId',
     targetKey: 'Id'
 })
+
+
+
+Empresa.hasMany(Clientes, {
+    foreignKey: 'EmpresaId',
+    sourceKey: 'Id'
+});
+
+Clientes.belongsTo(Empresa, {
+    foreignKey: 'EmpresaId',
+    targetKey: 'Id'
+});
 
 module.exports = Clientes;
