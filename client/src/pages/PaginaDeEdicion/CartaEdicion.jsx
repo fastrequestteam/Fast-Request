@@ -6,7 +6,7 @@ import { useMiPaginaEdit } from "../../hooks/useMiPaginaEdit";
 import { Link } from "react-router-dom";
 
 const CartaPageEdit = () => {
-  const { categorias, productos, salsas, gaseosas, subirImagen} = useMiPaginaEdit();
+  const { categorias, productos, salsas, gaseosas, subirImagen } = useMiPaginaEdit();
 
   const refsCategorias = useRef({});
   const refSalsas = useRef(null);
@@ -140,7 +140,7 @@ const CartaPageEdit = () => {
 
               <div className="Lista">
                 {salsas.map((s) => (
-                  <div className="Producto" key={s.Id}>
+                  <div className="Producto" key={s.id}>
                     <div className="informacion">
                       <h2>{s.nombreSalsa.toUpperCase()}</h2>
                       {/*<p>{s.DescripcionSalsa}</p>*/}
@@ -155,7 +155,7 @@ const CartaPageEdit = () => {
                       <input
                         type="file"
                         accept="image/*"
-                        id={`file-salsa-${s.Id}`}
+                        id={`file-salsa-${s.id}`}
                         style={{ display: "none" }}
                         onChange={(e) => subirImagen("salsa", s.id, e.target.files[0])}
                       />
@@ -163,7 +163,7 @@ const CartaPageEdit = () => {
                       <ion-icon
                         name="camera-outline"
                         class="icono-camara"
-                        onClick={() => document.getElementById(`file-salsa-${s.Id}`).click()}
+                        onClick={() => document.getElementById(`file-salsa-${s.id}`).click()}
                       ></ion-icon>
                     </div>
                   </div>
@@ -179,11 +179,14 @@ const CartaPageEdit = () => {
 
               <div className="Lista">
                 {gaseosas.map((g) => (
-                  <div className="Producto" key={g.Id}>
+                  <div className="Producto" key={g.id}>
                     <div className="informacion">
                       <h2>{g.nombreGaseosa.toUpperCase()}</h2>
                       <p>
-                        Precio: <strong>${g.precioGaseosa}</strong>
+                        Precio:{" "}
+                        <strong>
+                          {Number(g.precioGaseosa || 0).toLocaleString("es-CO")}
+                        </strong>
                       </p>
                     </div>
 
@@ -196,7 +199,7 @@ const CartaPageEdit = () => {
                       <input
                         type="file"
                         accept="image/*"
-                        id={`file-gaseosa-${g.Id}`}
+                        id={`file-gaseosa-${g.id}`}
                         style={{ display: "none" }}
                         onChange={(e) => subirImagen("gaseosa", g.id, e.target.files[0])}
                       />
@@ -204,7 +207,7 @@ const CartaPageEdit = () => {
                       <ion-icon
                         name="camera-outline"
                         class="icono-camara"
-                        onClick={() => document.getElementById(`file-gaseosa-${g.Id}`).click()}
+                        onClick={() => document.getElementById(`file-gaseosa-${g.id}`).click()}
                       ></ion-icon>
                     </div>
                   </div>

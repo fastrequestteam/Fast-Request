@@ -3,11 +3,11 @@ const router = express.Router();
 const productoController = require("../controllers/producto.controller");
 const verificarJWT = require('../middlewares/verificarJWT');
 const { soloAdmin, soloEmpresa } = require('../middlewares/verificarRoles');
-const uploadCloud = require('../middlewares/upload')
+const { uploadCloudProductos } = require('../middlewares/upload')
 
 
 // RUTA PARA PONER LA IMAGEN 
-router.put("/productoImagen/:id/imagen", verificarJWT, uploadCloud.single("imagen"), productoController.ActualizarImagenProducto)
+router.put("/productoImagen/:id/imagen", verificarJWT, uploadCloudProductos.single("imagen"), productoController.ActualizarImagenProducto)
 
 // RUTAS CRUD BASE
 router.get("/", verificarJWT,productoController.VisualizarProductos);

@@ -9,6 +9,7 @@ const API_URL2 = "http://localhost:5000/api/productos/productos";
 const API_URL3 = "http://localhost:5000/api/complementos/salsas";
 const API_URL4 = "http://localhost:5000/api/complementos/gaseosas";
 const API_EMPRESA = "http://localhost:5000/api/empresa/empresaPublic";
+const Api_textos = 'http://localhost:5000/api/textos-editables/find-text';
 
 
 export const useMiPagina = () => {
@@ -19,9 +20,28 @@ export const useMiPagina = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [salsas, setSalsas] = useState([]);
-  const [gaseosas, setGaseosas ] = useState([]);
-
+  const [gaseosas, setGaseosas] = useState([]);
+  const [textosEditables, setTextosEditables] = useState([]);
   const { empresaSlug } = useParams();
+
+
+  const cargarTextos = async () => {
+    try {
+      if (!empresaId) return;
+      const res = await axios.get(Api_textos, { params: { empresaId } });
+
+      const map = {};
+      res.data.forEach(t => {
+        map[t.campo] = t.valor;
+      });
+      
+      setTextosEditables(map);
+
+    } catch (error) {
+      console.error("Error en categorías:", error);
+      Swal.fire("Error", "Error al cargar las categorías", "error");
+    }
+  }
 
   const VisualizarCategoriasMenu = async () => {
     try {
@@ -45,6 +65,7 @@ export const useMiPagina = () => {
     }
   };
 
+
   const cargarSalsas = async () => {
     try {
       const res = await axios.get(API_URL3, { params: { empresaId } });
@@ -54,7 +75,7 @@ export const useMiPagina = () => {
       Swal.fire("Error", "Error al cargar salsas", "error");
     }
   }
-  
+
   const cargarGaseosas = async () => {
     try {
       const res = await axios.get(API_URL4, { params: { empresaId } });
@@ -98,6 +119,7 @@ export const useMiPagina = () => {
       cargarProductos();
       cargarSalsas();
       cargarGaseosas();
+      cargarTextos();
     }
   }, [empresaId]);
 
@@ -109,5 +131,6 @@ export const useMiPagina = () => {
     empresaNombre,
     loading,
     error,
+    textosEditables,
   };
 };

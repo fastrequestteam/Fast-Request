@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/miPagina.css";
 import { useNavigate } from "react-router-dom";
 import NavbarMiPageEdit from "../../components/miPagina/NavbarEdicion";
+import FooterEdit from '../../components/miPagina/FooterEdit'
+import EditableText from '../../components/miPagina/EditTextHome'
+import { useTextosEditables } from "../../hooks/useTextosEditables";
 
 const MiPaginaEdicion = () => {
+
+    const { textos, updateTexto, loading } = useTextosEditables();
+
 
     const [currentSlide, setCurrentSlide] = useState(0);
     const navigate = useNavigate()
@@ -30,6 +36,10 @@ const MiPaginaEdicion = () => {
 
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length);
+
+    if (loading) {
+        return <p>Cargando...</p>
+    }
 
     return (
         <div className="page">
@@ -58,7 +68,13 @@ const MiPaginaEdicion = () => {
 
             {/* Productos */}
             <div className="products">
-                <h2>Productos Más Comprados</h2>
+                <h2>
+                    <EditableText
+                        campo="tituloProductos"
+                        textos={textos}
+                        updateTexto={updateTexto}
+                    />
+                </h2>
                 <div className="products-grid">
                     {topProducts.map((product) => (
                         <div key={product.id} className="product-card">
@@ -77,45 +93,26 @@ const MiPaginaEdicion = () => {
 
             {/* Sobre Nosotros */}
             <div className="about-us">
-                <h2>Sobre Nosostros</h2>
+                <h2>
+                    <EditableText
+                        campo="tituloSobreNosotros"
+                        textos={textos}
+                        updateTexto={updateTexto}
+                    />
+                </h2>
                 <div className="about-us-container">
-                    <p>Contenido sobre nuestra empresa, misión, visión y valores.</p>
+                    <p>
+                        <EditableText
+                            campo="descripcionSobreNosotros"
+                            textos={textos}
+                            updateTexto={updateTexto}
+                        />
+                    </p>
                     <img src="https://placehold.co/400x300" alt="Imagen de la Empresa" />
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer className="footer">
-                <div className="footer-container">
-                    <div>
-                        <div className="logo">LOGO</div>
-                        <p>Tu tienda de confianza con los mejores productos y precios increíbles.</p>
-                    </div>
-                    <div>
-                        <h3>Enlaces Rápidos</h3>
-                        <ul>
-                            <li><a href="#">Inicio</a></li>
-                            <li><a href="#">Productos</a></li>
-                            <li><a href="#">Contacto</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3>Contacto</h3>
-                        <p><ion-icon name="location-outline"></ion-icon> Medellín, Colombia</p>
-                        <p><ion-icon name="call-outline"></ion-icon> +57 300 123 4567</p>
-                        <p><ion-icon name="mail-outline"></ion-icon> info@empresa.com</p>
-                    </div>
-                    <div>
-                        <h3>Síguenos</h3>
-                        <div className="socials">
-                            <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
-                            <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
-                            <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
-                        </div>
-                    </div>
-                </div>
-                <div className="copy">© 2025 Tu Empresa. Todos los derechos reservados.</div>
-            </footer>
+            <FooterEdit />
         </div>
     );
 };

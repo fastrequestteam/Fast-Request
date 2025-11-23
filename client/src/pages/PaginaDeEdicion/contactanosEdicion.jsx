@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../assets/css/miPagina.css";
 import NavbarMiPageEdit from "../../components/miPagina/NavbarEdicion";
 import { useNavigate } from "react-router-dom";
+import FooterEdit from '../../components/miPagina/FooterEdit'
 
 const ContactanosPageEdit = () => {
 
@@ -80,39 +81,7 @@ const ContactanosPageEdit = () => {
                     </form>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="footer">
-                <div className="footer-container">
-                    <div>
-                        <div className="logo">LOGO</div>
-                        <p>Tu tienda de confianza con los mejores productos y precios increíbles.</p>
-                    </div>
-                    <div>
-                        <h3>Enlaces Rápidos</h3>
-                        <ul>
-                            <li><a href="#">Inicio</a></li>
-                            <li><a href="#">Productos</a></li>
-                            <li><a href="#">Contacto</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3>Contacto</h3>
-                        <p><ion-icon name="location-outline"></ion-icon> Medellín, Colombia</p>
-                        <p><ion-icon name="call-outline"></ion-icon> +57 300 123 4567</p>
-                        <p><ion-icon name="mail-outline"></ion-icon> info@empresa.com</p>
-                    </div>
-                    <div>
-                        <h3>Síguenos</h3>
-                        <div className="socials">
-                            <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
-                            <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
-                            <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
-                        </div>
-                    </div>
-                </div>
-                <div className="copy">© 2025 Tu Empresa. Todos los derechos reservados.</div>
-            </footer>
+            <FooterEdit />
         </div>
     );
 };

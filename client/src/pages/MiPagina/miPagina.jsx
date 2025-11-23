@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/miPagina.css";
 import { useNavigate } from "react-router-dom";
+import Footer from '../../components/miPagina/Footer'
+import { useMiPagina } from "../../hooks/useMiPagina";
+
 const MiPagina = () => {
+
+
+  const { textosEditables } = useMiPagina();
+
+
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate()
   const sliderImages = [
@@ -53,7 +62,7 @@ const MiPagina = () => {
 
       {/* Productos */}
       <div className="products">
-        <h2>Productos Más Comprados</h2>
+        <h2>{textosEditables.tituloProductos}</h2>
         <div className="products-grid">
           {topProducts.map((product) => (
             <div key={product.id} className="product-card">
@@ -73,45 +82,14 @@ const MiPagina = () => {
 
       {/* Sobre Nosotros */}
       <div className="about-us">
-          <h2>Sobre Nosostros</h2>
-          <div className="about-us-container">
-              <p>Contenido sobre nuestra empresa, misión, visión y valores.</p>
-              <img src="https://placehold.co/400x300" alt="Imagen de la Empresa" />
-          </div>
+        <h2>{textosEditables.tituloSobreNosotros}</h2>
+        <div className="about-us-container">
+          <p>{textosEditables.descripcionSobreNosotros}</p>
+          <img src="https://placehold.co/400x300" alt="Imagen de la Empresa" />
+        </div>
       </div>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div className="footer-container">
-          <div>
-            <div className="logo">LOGO</div>
-            <p>Tu tienda de confianza con los mejores productos y precios increíbles.</p>
-          </div>
-          <div>
-            <h3>Enlaces Rápidos</h3>
-            <ul>
-              <li><a href="#">Inicio</a></li>
-              <li><a href="#">Productos</a></li>
-              <li><a href="#">Contacto</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Contacto</h3>
-            <p><ion-icon name="location-outline"></ion-icon> Medellín, Colombia</p>
-            <p><ion-icon name="call-outline"></ion-icon> +57 300 123 4567</p>
-            <p><ion-icon name="mail-outline"></ion-icon> info@empresa.com</p>
-          </div>
-          <div>
-            <h3>Síguenos</h3>
-            <div className="socials">
-              <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
-              <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
-              <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
-            </div>
-          </div>
-        </div>
-        <div className="copy">© 2025 Tu Empresa. Todos los derechos reservados.</div>
-      </footer>
+      <Footer />
     </div>
   );
 };

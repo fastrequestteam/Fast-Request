@@ -3,11 +3,11 @@ const router = express.Router();
 const complementosController = require('../controllers/complementos.controller');
 const verificarJWT = require('../middlewares/verificarJWT');
 const { soloAdmin, soloEmpresa } = require('../middlewares/verificarRoles');
-const uploadCloud = require('../middlewares/upload')
+const { uploadCloudComplementos } = require('../middlewares/upload')
 
 // RUTAS PARA ACTUALIZAR LA IMAGEN DE GASEOSA Y SALSA
-router.put("/salsasImagen/:id/imagen", verificarJWT, uploadCloud.single("imagen"),complementosController.actualizarImagenSalsa)
-router.put("/gaseosasImagen/:id/imagen", verificarJWT, uploadCloud.single("imagen") ,complementosController.actualizarImagenGaseosa)
+router.put("/salsasImagen/:id/imagen", verificarJWT, uploadCloudComplementos.single("imagen"),complementosController.actualizarImagenSalsa)
+router.put("/gaseosasImagen/:id/imagen", verificarJWT, uploadCloudComplementos.single("imagen") ,complementosController.actualizarImagenGaseosa)
 
 
 // rutas para Salsas

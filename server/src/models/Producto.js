@@ -45,7 +45,8 @@ const Producto = sequelize.define('Producto', {
 
     Imagen: {
         type: DataTypes.STRING(500),
-        allowNull: true
+        allowNull: true,
+        defaultValue: 'https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868473/placehold_image_o7n2dz.jpg'
     }
 }, {
     tableName: 'productos',

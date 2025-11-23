@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import "../../assets/css/miPagina.css";
-import {useMiPagina} from "../../hooks/useMiPagina";
+import { useMiPagina } from "../../hooks/useMiPagina";
 import { Link } from "react-router-dom";
 
 const Carta = () => {
@@ -19,21 +19,21 @@ const Carta = () => {
   const refGaseosas = useRef(null);
 
   const scrollToCategory = (id) => {
-  if (id === "salsas" && refSalsas.current) {
-    refSalsas.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    return;
-  }
-  if (id === "gaseosas" && refGaseosas.current) {
-    refGaseosas.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    return;
-  }
-  if (refsCategorias.current[id]) {
-    refsCategorias.current[id].scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-};
+    if (id === "salsas" && refSalsas.current) {
+      refSalsas.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (id === "gaseosas" && refGaseosas.current) {
+      refGaseosas.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (refsCategorias.current[id]) {
+      refsCategorias.current[id].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
 
   if (loading) {
     return <div className="loading-container"><p>Cargando...</p></div>;
@@ -117,9 +117,12 @@ const Carta = () => {
                       <div className="imagen-prod">
                         <img
                           src={
-                            produc.Imagen?.startsWith("http")
-                              ? produc.Imagen
-                              : `http://localhost:5000/${produc.Imagen}`
+                            produc.Imagen
+                              ? (produc.Imagen.startsWith("http")
+                                ? produc.Imagen
+                                : `http://localhost:5000/${produc.Imagen}`
+                              )
+                              : "https://placehold.co/250x200?text=Sin+Imagen"
                           }
                           alt={produc.NombreProducto}
                         />
@@ -146,9 +149,12 @@ const Carta = () => {
                     <div className="imagen-prod">
                       <img
                         src={
-                          s.Imagen?.startsWith("http")
+                          s.Imagen
+                            ? (s.Imagen.startsWith("http")
                               ? s.Imagen
                               : `http://localhost:5000/${s.Imagen}`
+                            )
+                            : "https://placehold.co/250x200?text=Sin+Imagen"
                         }
                         alt={s.nombreSalsa}
                       />
@@ -169,15 +175,26 @@ const Carta = () => {
                   <div className="Producto" key={g.Id}>
                     <div className="informacion">
                       <h2>{g.nombreGaseosa.toUpperCase()}</h2>
+                      <p>
+                        Precio:{" "}
+                        <strong>
+                          {Number(g.precioGaseosa || 0).toLocaleString("es-CO")}
+                        </strong>
+                      </p>
+
                     </div>
 
                     <div className="imagen-prod">
                       <img
                         src={
-                          g.Imagen?.startsWith("http")
+                          g.Imagen
+                            ? (g.Imagen.startsWith("http")
                               ? g.Imagen
                               : `http://localhost:5000/${g.Imagen}`
+                            )
+                            : "https://placehold.co/250x200?text=Sin+Imagen"
                         }
+
                         alt={g.nombreGaseosa}
                       />
                       <ion-icon name="add-outline"></ion-icon>

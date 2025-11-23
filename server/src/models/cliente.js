@@ -1,4 +1,4 @@
-const { DataTypes, where } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 const Pedido = require('./hacerPedido')
 const Empresa = require('./Empresa')

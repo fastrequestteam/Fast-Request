@@ -19,6 +19,34 @@ const storage = new CloudinaryStorage({
     },
 });
 
-const uploadCloud = multer({ storage });
 
-module.exports = uploadCloud;
+const storageProductos = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'productos', // Carpeta en Cloudinary donde se guardarán las imágenes de productos
+        allowed_formats: ['jpg', 'jpeg', 'png', 'WebP'], // Formatos permitidos
+        transformation: [{ width: 300, height: 300, crop: 'limit' }] // transformar la imagen
+    },
+});
+
+
+const storageComplementos = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'complementos', // Carpeta en Cloudinary donde se guardarán las imágenes de productos
+        allowed_formats: ['jpg', 'jpeg', 'png', 'WebP'], // Formatos permitidos
+        transformation: [{ width: 300, height: 300, crop: 'limit' }] // transformar la imagen
+    },
+});
+
+
+const uploadCloud = multer({ storage });
+const uploadCloudProductos = multer({ storage: storageProductos });
+const uploadCloudComplementos = multer({ storage: storageComplementos });
+
+
+module.exports = {
+    uploadCloud,
+    uploadCloudProductos,
+    uploadCloudComplementos
+};

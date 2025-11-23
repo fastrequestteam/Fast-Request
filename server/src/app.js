@@ -61,6 +61,7 @@ esperarDB().then(() => {
   const configuracion = require('./routers/configuracion.routes.js')
   const complementos = require('./routers/complementos.routes.js')
   const empresaPublicaRoutes = require('./routers/empresaPublica.routes.js')
+  const textosEditablesRoutes = require('./routers/textosEditables.routes.js')
 
   // Rutas protegidas o públicas
   app.use("/api/usuarios", usuarioRoutes);
@@ -78,7 +79,7 @@ esperarDB().then(() => {
   app.use('/api/configuracion', configuracion)
   app.use('/api/complementos', complementos)
   app.use('/api/empresa', empresaPublicaRoutes)
-
+  app.use('/api/textos-editables', textosEditablesRoutes)
 
   app.get("/", (req, res) => {
     res.send("API de registro de usuarios en funcionamiento.");

@@ -27,7 +27,8 @@ const Gaseosas = sequelize.define('Gaseosas', {
     },
     Imagen: {
         type: DataTypes.STRING(500),
-        allowNull: true
+        allowNull: true,
+        defaultValue: 'https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868563/placehold_image_biilgt.jpg'
     }
 
 
