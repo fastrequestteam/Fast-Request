@@ -181,8 +181,8 @@ exports.ObtenerPedidoCompleto = async (req, res) => {
 
         const { id } = req.params;
 
-        const pedido = await Pedido.findOne(id, {
-            where: { EmpresaId: EmpresaId },
+        const pedido = await Pedido.findOne({
+            where: { id, EmpresaId: EmpresaId },
             include: [
                 {
                     model: Clientes.unscoped(),
@@ -207,6 +207,7 @@ exports.ObtenerPedidoCompleto = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
 
 exports.obtenerNombresSalsas = async (req, res) => {
     try {

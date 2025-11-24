@@ -48,9 +48,9 @@ function MenuDashboard() {
             <ul className='nav-ul'>
                 {[
                     {
-                        imageProfile: userData.Imagen_De_Perfil instanceof File
-                            ? URL.createObjectURL(userData.Imagen_De_Perfil)
-                            : userData.Imagen_De_Perfil || "https://res.cloudinary.com/dp9jbvpwl/image/upload/v1757260230/user_izbzpi.png",
+                        imageProfile: userData.LogoEmpresa instanceof File
+                            ? URL.createObjectURL(userData.LogoEmpresa)
+                            : userData.LogoEmpresa || "https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868563/placehold_image_biilgt.jpg",
                         title: NombreEmpresa.toUpperCase()
                     },
                     { to: '/dashboard', icon: 'home', title: 'Inicio' },

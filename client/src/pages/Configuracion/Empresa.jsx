@@ -39,7 +39,7 @@ const Empresa = () => {
                     ? userData.LogoEmpresa instanceof File
                       ? URL.createObjectURL(userData.LogoEmpresa)
                       : userData.LogoEmpresa
-                    : "https://res.cloudinary.com/dp9jbvpwl/image/upload/v1761450639/store-4156934_640_cknbry.png"
+                    : "https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868563/placehold_image_biilgt.jpg"
                 }
                 alt="Logo de la empresa"
               />

@@ -84,7 +84,12 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+}
 
+.navdash .nav-ul img{
+    border-radius: 100%;
+    border: 2px solid white;
+    margin-top: 7px;
 }
 
 .navdash .nav-ul .nav-ul-li {
