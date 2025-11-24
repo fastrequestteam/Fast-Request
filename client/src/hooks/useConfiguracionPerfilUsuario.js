@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
 import { authHeader } from "../helpers/authHeader";
 import { validacionDeCampos } from "../helpers/validacionDeCampos";
 
@@ -28,7 +29,7 @@ const useConfiguracionPerfilUsuario = (initial) => {
     }
   }, []);
 
-const API_GET = async () => {
+  const API_GET = async () => {
     try {
 
       const token = localStorage.getItem('token')
@@ -47,7 +48,7 @@ const API_GET = async () => {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      
+
       const Perfil = res.data.usuario
 
       if (Perfil) {
@@ -99,6 +100,17 @@ const API_GET = async () => {
         console.log('📤 No se envía imagen nueva');
       }
 
+
+      Swal.fire({
+        title: 'Subiendo imagen...',
+        text: "Espera un poco, la imagen se esta subiendo🚀!",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
       const res = await axios.put(
         `http://localhost:5000/api/perfil/update-perfil/${usuarioId}`,
         formData,
@@ -129,6 +141,18 @@ const API_GET = async () => {
           detail: { updatedUserData: updatedUserData }
         }));
       }
+
+      Swal.fire({
+        icon: 'success',
+        title: '¡Actualizado!',
+        text: 'Los datos del perfil se actualizaron correctamente',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        background: '#1a1a1a',
+        color: '#e0e0e0',
+        iconColor: '#4CAF50'
+      });
 
       return res.data;
 
@@ -167,10 +191,7 @@ const API_GET = async () => {
       if (res && res.perfil) {
         await API_GET();
       }
-
       setIsEditing(false);
-      showNotification("Perfil actualizado con éxito", "success");
-
     } catch (error) {
       console.error('❌ Error al guardar:', error);
       showNotification("Error al guardar los cambios", "error");
@@ -196,7 +217,6 @@ const API_GET = async () => {
       showNotification("Foto seleccionada, recuerda guardar los cambios", "success", "Imagen lista");
     }
   }
-
 
   const handleInputChange = ({ target }) => {
 

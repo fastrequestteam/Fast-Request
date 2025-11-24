@@ -84,7 +84,12 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+}
 
+.navdash .nav-ul img{
+    border-radius: 100%;
+    border: 2px solid white;
+    margin-top: 7px;
 }
 
 .navdash .nav-ul .nav-ul-li {
@@ -141,6 +146,22 @@ body {
     white-space: nowrap;
 
 }
+
+.nav-titulo-name {
+    position: relative;
+    display: block;
+    padding: 0 40px;
+    margin-left: 10px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: var(--tabla-linea-color) 2px solid;
+
+}
+
 
 /* FIN DEL MENU */
 

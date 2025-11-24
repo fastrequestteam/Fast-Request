@@ -1,19 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import useConfiguracionEmpresa from '../../hooks/useConfiguracionEmpresa';
 
 function MenuDashboard() {
     const [activeIndex, setActiveIndex] = useState(null);
+    const location = useLocation();
 
     const handleMouseOver = (index) => {
         setActiveIndex(index);
     };
+
+    const initial = {
+        NombreEmpresa: '',
+        Imagen_De_Perfil: "http://localhost:5000/uploads/perfiles/user.png",
+    }
+
+    const { userData, cargarEmpresa, API_GET } = useConfiguracionEmpresa(initial)
+
+    const { NombreEmpresa } = userData;
+
+    useEffect(() => {
+
+        const handleCompanyDates = () => {
+            cargarEmpresa();
+        }
+
+        window.addEventListener("companyDatesUpdated", handleCompanyDates);
+        return () =>
+            window.removeEventListener("companyDatesUpdated", handleCompanyDates);
+    }, [cargarEmpresa])
+
+
+    useEffect(() => {
+        const handleProfileUpdate = () => {
+            API_GET();
+        };
+
+        window.addEventListener("userProfileUpdated", handleProfileUpdate);
+        return () =>
+            window.removeEventListener("userProfileUpdated", handleProfileUpdate);
+    }, [API_GET]);
+
 
 
     return (
         <div className="navdash">
             <ul className='nav-ul'>
                 {[
-                    { icon: 'paper-plane', title: 'Fast Request' },
+                    {
+                        imageProfile: userData.LogoEmpresa instanceof File
+                            ? URL.createObjectURL(userData.LogoEmpresa)
+                            : userData.LogoEmpresa || "https://res.cloudinary.com/dp9jbvpwl/image/upload/v1763868563/placehold_image_biilgt.jpg",
+                        title: NombreEmpresa.toUpperCase()
+                    },
                     { to: '/dashboard', icon: 'home', title: 'Inicio' },
                     { to: '/dashboard/hacerPedido', icon: 'create', title: 'Hacer Pedido' },
                     { to: '/dashboard/pedidos', icon: 'receipt', title: 'Pedidos' },
@@ -39,8 +78,21 @@ function MenuDashboard() {
                             </NavLink>
                         ) : (
                             <span className='nav-ul-li-a no-link'>
-                                <span className="icono"><ion-icon name={item.icon}></ion-icon></span>
-                                <span className="nav-titulo">{item.title}</span>
+                                {item.imageProfile ? (
+                                    <span className="icono">
+                                        <img
+                                            src={item.imageProfile}
+                                            alt="Avatar"
+                                            className="nav-avatar object-cover"
+                                            style={{ width: '50px', height: '50px' }}
+                                        />
+                                    </span>
+                                ) : (
+                                    <span className="icono">
+                                        <ion-icon name={item.icon}></ion-icon>
+                                    </span>
+                                )}
+                                <span className="nav-titulo-name">{item.title}</span>
                             </span>
                         )}
                     </liz>
