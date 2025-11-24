@@ -3,36 +3,26 @@ import "../../assets/css/miPagina.css";
 import { useNavigate } from "react-router-dom";
 import Footer from '../../components/miPagina/Footer'
 import { useMiPagina } from "../../hooks/useMiPagina";
+import { useProductosMasVendidosPublico } from "../../hooks/useProductosMasVendidosPublico";
 
 const MiPagina = () => {
 
-
-  const { textosEditables } = useMiPagina();
+  const { productos: topProducts, loading: loadingTop } = useProductosMasVendidosPublico();
+  const { textosEditables, sliderImages, imagenNosotros } = useMiPagina();
 
 
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate()
-  const sliderImages = [
-    { id: 1, src: "https://placehold.co/800x400?text=Oferta+1", alt: "Oferta 1" },
-    { id: 2, src: "https://placehold.co/800x400?text=Oferta+2", alt: "Oferta 2" },
-    { id: 3, src: "https://placehold.co/800x400?text=Oferta+3", alt: "Oferta 3" },
-    { id: 4, src: "https://placehold.co/800x400?text=Oferta+4", alt: "Oferta 4" },
-  ];
 
-  const topProducts = [
-    { id: 1, name: "Producto Premium 1", price: "$125.000", image: "https://placehold.co/250x200?text=Producto+1" },
-    { id: 2, name: "Producto Estrella 2", price: "$89.900", image: "https://placehold.co/250x200?text=Producto+2" },
-    { id: 3, name: "Producto Popular 3", price: "$156.000", image: "https://placehold.co/250x200?text=Producto+3" },
-    { id: 4, name: "Producto Favorito 4", price: "$78.500", image: "https://placehold.co/250x200?text=Producto+4" },
-  ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
+    useEffect(() => {
+      if (sliderImages.length === 0) return;
+      const timer = setInterval(() => {
+        setCurrentSlide(prev => (prev + 1) % sliderImages.length);
+      }, 4000);
+      return () => clearInterval(timer);
+    }, [sliderImages.length]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length);
@@ -42,41 +32,49 @@ const MiPagina = () => {
 
       {/* Slider */}
       <div className="slider">
-        {sliderImages.map((image, index) => (
-          <div key={image.id} className={`slide ${index === currentSlide ? "active" : ""}`}>
-            <img src={image.src} alt={image.alt} />
-          </div>
-        ))}
-        <button onClick={prevSlide} className="slide-btn left">
-          <ion-icon name="chevron-back-outline"></ion-icon>
-        </button>
-        <button onClick={nextSlide} className="slide-btn right">
-          <ion-icon name="chevron-forward-outline"></ion-icon>
-        </button>
-        <div className="indicators">
-          {sliderImages.map((_, index) => (
-            <button key={index} onClick={() => setCurrentSlide(index)} className={index === currentSlide ? "active" : ""}></button>
-          ))}
-        </div>
+          {sliderImages.length === 0 ? (
+              <p>No hay imágenes disponibles</p>
+          ) : (
+              sliderImages.map((url, index) => (
+                  <div key={index} className={`slide ${index === currentSlide ? "active" : ""}`}>
+                      <img src={url} alt={`slide-${index}`} />
+                  </div>
+              ))
+          )}
+
+          <button onClick={prevSlide} className="slide-btn left">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <button onClick={nextSlide} className="slide-btn right">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
       </div>
 
       {/* Productos */}
       <div className="products">
         <h2>{textosEditables.tituloProductos}</h2>
-        <div className="products-grid">
-          {topProducts.map((product) => (
-            <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} />
-              <div className="product-info">
-                <h3>{product.name}</h3>
-                <div className="price-action">
-                  <span>{product.price}</span>
-                  <button><ion-icon name="add-outline"></ion-icon></button>
-                </div>
+          {loadingTop ? (
+              <p>Cargando productos más vendidos...</p>
+            ) : topProducts.length === 0 ? (
+              <p>No hay productos vendidos aún.</p>
+            ) : (
+              <div className="products-grid">
+                {topProducts.map((product, index) => (
+                  <div key={index} className="product-card">
+                    <img
+                      src={product.image || "https://placehold.co/250x200?text=No+Image"}
+                      alt={product.name}
+                    />
+                    <div className="product-info">
+                      <h3>{product.name}</h3>
+                      <div className="price-action">
+                        <span>${Number(product.price).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-        </div>
+          )}
       </div>
 
 
@@ -85,7 +83,10 @@ const MiPagina = () => {
         <h2>{textosEditables.tituloSobreNosotros}</h2>
         <div className="about-us-container">
           <p>{textosEditables.descripcionSobreNosotros}</p>
-          <img src="https://placehold.co/400x300" alt="Imagen de la Empresa" />
+          <img
+            src={imagenNosotros || "https://placehold.co/400x300"}
+            alt="Imagen de la Empresa"
+          />
         </div>
       </div>
 

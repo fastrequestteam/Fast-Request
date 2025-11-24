@@ -39,14 +39,35 @@ const storageComplementos = new CloudinaryStorage({
     },
 });
 
+const storageNosotros = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'nosotros', // Carpeta en Cloudinary donde se guardarán las imágenes de nosotros
+        allowed_formats: ['jpg', 'jpeg', 'png', 'WebP'], // Formatos permitidos
+        transformation: [{ width: 400, height: 300, crop: 'limit'}] // transformar la imagen
+    },
+});
+
+const storageSliders = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'sliderimagenes', // Carpeta en Cloudinary donde se guardarán las imágenes de nosotros
+        allowed_formats: ['jpg', 'jpeg', 'png', 'WebP'], // Formatos permitidos
+        transformation: [{ width: 800, height: 400, crop: 'limit'}] // transformar la imagen
+    },
+});
+
 
 const uploadCloud = multer({ storage });
 const uploadCloudProductos = multer({ storage: storageProductos });
 const uploadCloudComplementos = multer({ storage: storageComplementos });
-
+const uploadCloudNosotros = multer({ storage: storageNosotros });
+const uploadCloudSliders = multer({ storage: storageSliders });
 
 module.exports = {
     uploadCloud,
     uploadCloudProductos,
-    uploadCloudComplementos
+    uploadCloudComplementos,
+    uploadCloudNosotros,
+    uploadCloudSliders
 };

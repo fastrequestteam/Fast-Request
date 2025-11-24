@@ -23,6 +23,15 @@ const Empresa = sequelize.define('Empresa', {
   LogoEmpresa: {
     type: DataTypes.STRING(255),
     allowNull: true
+  },
+  SobreNosotros: {
+    type: DataTypes.STRING(500), 
+    allowNull: true
+  }, 
+  SliderImagenes: {
+    type: DataTypes.JSON,
+    allowNull: true,
+    defaultValue: []
   }
 }, {
   tableName: 'empresas',

@@ -56,6 +56,18 @@ export const useMiPaginaEdit = () => {
   }
 
   const subirImagen = async (tipo, id, archivo) => {
+  if (!archivo) return;
+
+  Swal.fire({
+    title: 'Subiendo imagen...',
+    text: "Espera un poco, la imagen se está subiendo 🚀!",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
   try {
     const formData = new FormData();
     formData.append("imagen", archivo);
@@ -73,15 +85,24 @@ export const useMiPaginaEdit = () => {
     });
 
     // Recargar datos
-    cargarProductos();
-    cargarSalsas();
-    cargarGaseosas();
+    await Promise.all([
+      cargarProductos(),
+      cargarSalsas(),
+      cargarGaseosas(),
+    ]);
+
+    Swal.fire({
+      icon: "success",
+      title: "Imagen actualizada",
+      timer: 1200,
+    });
 
   } catch (error) {
     console.error("Error al subir imagen:", error);
     Swal.fire("Error", "No se pudo actualizar la imagen", "error");
   }
 };
+
 
   useEffect(() => {
     VisualizarCategoriasMenu();

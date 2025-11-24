@@ -8,7 +8,7 @@ const { uploadCloudProductos } = require('../middlewares/upload')
 
 // RUTA PARA PONER LA IMAGEN 
 router.put("/productoImagen/:id/imagen", verificarJWT, uploadCloudProductos.single("imagen"), productoController.ActualizarImagenProducto)
-
+router.get("/productos-mas-vendidos", productoController.getProductosMasVendidos);
 // RUTAS CRUD BASE
 router.get("/", verificarJWT,productoController.VisualizarProductos);
 router.post("/", verificarJWT,productoController.CrearProducto);

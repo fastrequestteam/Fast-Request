@@ -1,38 +1,35 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/miPagina.css";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import NavbarMiPageEdit from "../../components/miPagina/NavbarEdicion";
 import FooterEdit from '../../components/miPagina/FooterEdit'
 import EditableText from '../../components/miPagina/EditTextHome'
 import { useTextosEditables } from "../../hooks/useTextosEditables";
+import { useMiPaginaInicioEdit } from "../../hooks/useMiPaginaInicioEdit"
+import { useMiPaginaInicioEditSlider } from "../../hooks/useMiPaginaInicioEditSlider";
+import { useProductosMasVendidosPublico } from "../../hooks/useProductosMasVendidosPublico";
 
 const MiPaginaEdicion = () => {
 
     const { textos, updateTexto, loading } = useTextosEditables();
-
+    const { imagenNosotros, handleSubirImagenNosotros, previewNosotros } = useMiPaginaInicioEdit();
+    const { sliderImages, agregarImagenSlider, eliminarImagenSlider, loading: loadingSlider } = useMiPaginaInicioEditSlider();
+    const { productos: topProducts, loading: loadingTop } = useProductosMasVendidosPublico();
 
     const [currentSlide, setCurrentSlide] = useState(0);
     const navigate = useNavigate()
-    const sliderImages = [
-        { id: 1, src: "https://placehold.co/800x400?text=Oferta+1", alt: "Oferta 1" },
-        { id: 2, src: "https://placehold.co/800x400?text=Oferta+2", alt: "Oferta 2" },
-        { id: 3, src: "https://placehold.co/800x400?text=Oferta+3", alt: "Oferta 3" },
-        { id: 4, src: "https://placehold.co/800x400?text=Oferta+4", alt: "Oferta 4" },
-    ];
-
-    const topProducts = [
-        { id: 1, name: "Producto Premium 1", price: "$125.000", image: "https://placehold.co/250x200?text=Producto+1" },
-        { id: 2, name: "Producto Estrella 2", price: "$89.900", image: "https://placehold.co/250x200?text=Producto+2" },
-        { id: 3, name: "Producto Popular 3", price: "$156.000", image: "https://placehold.co/250x200?text=Producto+3" },
-        { id: 4, name: "Producto Favorito 4", price: "$78.500", image: "https://placehold.co/250x200?text=Producto+4" },
-    ];
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
-        }, 4000);
-        return () => clearInterval(timer);
-    }, []);
+    if (sliderImages.length === 0) return;
+
+    const timer = setInterval(() => {
+        setCurrentSlide(prev => (prev + 1) % sliderImages.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
+
+}, [sliderImages.length]);
 
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length);
@@ -47,24 +44,76 @@ const MiPaginaEdicion = () => {
             <NavbarMiPageEdit />
             {/* Slider */}
             <div className="slider">
-                {sliderImages.map((image, index) => (
-                    <div key={image.id} className={`slide ${index === currentSlide ? "active" : ""}`}>
-                        <img src={image.src} alt={image.alt} />
-                    </div>
-                ))}
+
+                {sliderImages.length === 0 ? (
+                    <p>No hay imágenes en el slider.</p>
+                ) : (
+                    sliderImages.map((image, index) => (
+                        <div key={index} className={`slide ${index === currentSlide ? "active" : ""}`}>
+                            <img src={image} alt={`Slide ${index}`} />
+                            {/* Botón eliminar */}
+                            <button
+                                className="btn-delete-slider"
+                                onClick={() => eliminarImagenSlider(image)}
+                            >
+                                <ion-icon name="trash-outline"></ion-icon>
+                            </button>
+                        </div>
+                    ))
+                )}
+
                 <button onClick={prevSlide} className="slide-btn left">
                     <ion-icon name="chevron-back-outline"></ion-icon>
                 </button>
+
                 <button onClick={nextSlide} className="slide-btn right">
                     <ion-icon name="chevron-forward-outline"></ion-icon>
                 </button>
+
+                {/* Indicadores */}
                 <div className="indicators">
                     {sliderImages.map((_, index) => (
-                        <button key={index} onClick={() => setCurrentSlide(index)} className={index === currentSlide ? "active" : ""}></button>
+                        <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            className={index === currentSlide ? "active" : ""}
+                        ></button>
                     ))}
                 </div>
-            </div>
 
+                {/* Botón agregar imagen */}
+                <button
+                    className="btn-add-slider"
+                    onClick={() => document.getElementById("slider-input").click()}
+                >
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                </button>
+
+                {/* Input oculto */}
+                <input
+                    id="slider-input"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+
+                        Swal.fire({
+                            title: "Subiendo imagen...",
+                            didOpen: () => Swal.showLoading(),
+                            allowOutsideClick: false
+                        });
+
+                        try {
+                            await agregarImagenSlider(file);
+                            Swal.fire({ icon: "success", title: "Imagen agregada" });
+                        } catch (err) {
+                            Swal.fire({ icon: "error", title: "Error al subir" });
+                        }
+                    }}
+                />
+            </div>
 
             {/* Productos */}
             <div className="products">
@@ -75,19 +124,29 @@ const MiPaginaEdicion = () => {
                         updateTexto={updateTexto}
                     />
                 </h2>
-                <div className="products-grid">
-                    {topProducts.map((product) => (
-                        <div key={product.id} className="product-card">
-                            <img src={product.image} alt={product.name} />
-                            <div className="product-info">
-                                <h3>{product.name}</h3>
-                                <div className="price-action">
-                                    <span>{product.price}</span>
+
+                {loadingTop ? (
+                    <p>Cargando productos más vendidos...</p>
+                ) : topProducts.length === 0 ? (
+                    <p>No hay productos vendidos aún.</p>
+                ) : (
+                    <div className="products-grid">
+                        {topProducts.map((product, index) => (
+                            <div key={index} className="product-card">
+                                <img
+                                    src={product.image || "https://placehold.co/250x200?text=No+Image"}
+                                    alt={product.name}
+                                />
+                                <div className="product-info">
+                                    <h3>{product.name}</h3>
+                                    <div className="price-action">
+                                        <span>${Number(product.price).toLocaleString()}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
 
@@ -108,7 +167,33 @@ const MiPaginaEdicion = () => {
                             updateTexto={updateTexto}
                         />
                     </p>
-                    <img src="https://placehold.co/400x300" alt="Imagen de la Empresa" />
+                       {/* Imagen de Nosotros con botón de cargar */}
+                    <div className="about-image-container">
+
+                        {/* Imagen previa si se cambia, o la de BD */}
+                        <img
+                            src={previewNosotros || imagenNosotros || "https://placehold.co/400x300"}
+                            alt="Imagen de la Empresa"
+                            className="about-us-image"
+                        />
+
+                        {/* Ícono para subir */}
+                        <button 
+                            className="upload-icon-btn"
+                            onClick={() => document.getElementById("input-nosotros").click()}
+                        >
+                            <ion-icon name="image-outline"></ion-icon>
+                        </button>
+
+                        {/* Input oculto */}
+                        <input
+                            id="input-nosotros"
+                            type="file"
+                            style={{ display: "none" }}
+                            accept="image/*"
+                            onChange={handleSubirImagenNosotros}
+                        />
+                    </div>
                 </div>
             </div>
 

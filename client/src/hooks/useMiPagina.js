@@ -22,6 +22,8 @@ export const useMiPagina = () => {
   const [salsas, setSalsas] = useState([]);
   const [gaseosas, setGaseosas] = useState([]);
   const [textosEditables, setTextosEditables] = useState([]);
+  const [sliderImages, setSliderImages] = useState([]);
+  const [imagenNosotros, setImagenNosotros] = useState("");
   const { empresaSlug } = useParams();
 
 
@@ -100,6 +102,8 @@ export const useMiPagina = () => {
         const res = await axios.get(`${API_EMPRESA}/${empresaSlug}`);
         setEmpresaId(res.data.empresaId);
         setEmpresaNombre(res.data.nombre);
+        setSliderImages(res.data.slider || []);
+        setImagenNosotros(res.data.sobreNosotros || "");
         setError(null);
       } catch (error) {
         console.error("Error empresa:", error);
@@ -132,5 +136,7 @@ export const useMiPagina = () => {
     loading,
     error,
     textosEditables,
+    sliderImages,      // <--- NUEVO
+    imagenNosotros
   };
 };

@@ -276,3 +276,28 @@ exports.ActualizarImagenProducto  = async (req, res) => {
         res.status(500).json({ message: "Error en el servidor" });
     }
 }
+
+const { QueryTypes } = require("sequelize");
+const { sequelize } = require('../config/db');
+
+exports.getProductosMasVendidos = async (req, res) => {
+    try {
+        const result = await sequelize.query(`
+            SELECT 
+                p.NombreProducto AS name,
+                p.PrecioProducto AS price,
+                p.Imagen AS image,
+                SUM(pe.cantidadProducto) AS vendidos
+            FROM productos p
+            JOIN pedidos pe ON pe.productoId = p.Id
+            GROUP BY p.Id
+            ORDER BY vendidos DESC
+            LIMIT 4;
+        `, { type: QueryTypes.SELECT });
+
+        res.json(result);
+    } catch (error) {
+        console.error("ERROR SQL:", error);
+        res.status(500).json({ message: "Error al obtener productos más vendidos" });
+    }
+};
