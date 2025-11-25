@@ -17,7 +17,7 @@ const DashboardLayout = ({ title = "Dashboard", children }) => {
 
     return (
         <section className='SectionDashboard'>
-            <div className={`nav ${activeMenu ? 'active' : ''}`}>
+            <div className={`navdash ${activeMenu ? 'active' : ''}`}>
                 <MenuDashboard />
             </div>
             <div className={`containerDashboard ${activeMenu ? 'active' : ''}`}>

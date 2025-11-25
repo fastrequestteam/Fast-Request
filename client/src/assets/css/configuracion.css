@@ -84,14 +84,22 @@ body {
     width: 300px;
     height: 100%;
     background: var(--black);
-    /* COLOR DEL MENU */
     border-left: 10px solid var(--black);
     overflow: hidden;
     transition: 0.4s;
+    z-index: 1000;
 }
 
-.dashboard-nav.active {
-    width: 80px;
+/* SOLO EN DESKTOP: el menú se colapsa */
+@media (min-width: 769px) {
+    .dashboard-nav.active {
+        width: 80px;
+    }
+    
+    .dashboard-container.active {
+        width: calc(100% - 80px);
+        left: 80px;
+    }
 }
 
 .dashboard-menu {
@@ -169,10 +177,6 @@ body {
     transition: 0.4s;
 }
 
-.dashboard-container.active {
-    width: calc(100% - 80px);
-    left: 80px;
-}
 
 .dashboard-container .topbar {
     width: 100%;
@@ -701,31 +705,28 @@ body {
 
 /* NOTIFICATION OPTIONS */
 
-
 /* RESPONSIVE */
+
+/* ============================================================
+   📱 1200px - TABLETS GRANDES
+   ============================================================ */
 @media (max-width: 1200px) {
     .dashboard-search {
         width: 300px;
     }
 }
 
+/* ============================================================
+   📱 992px - TABLETS (menú colapsado)
+   ============================================================ */
 @media (max-width: 992px) {
     .dashboard-nav {
-        left: -300px;
+        width: 80px;
     }
-
-    .dashboard-nav.active {
-        left: 0;
-        width: 300px;
-    }
-
+    
     .dashboard-container {
-        width: 100%;
-        left: 0;
-    }
-
-    .dashboard-container.active {
-        left: 300px;
+        width: calc(100% - 80px);
+        left: 80px;
     }
 
     .theme-options {
@@ -734,7 +735,99 @@ body {
     }
 }
 
+/* ============================================================
+   📱 768px - MÓVILES GRANDES (menú desplegable desde arriba)
+   ============================================================ */
 @media (max-width: 768px) {
+    body {
+        overflow-x: hidden !important;
+    }
+
+    /* TOPBAR CENTRADO */
+    .topbar {
+        position: sticky !important;
+        top: 0;
+        z-index: 5000 !important;
+        background: var(--Gray) !important;
+        justify-content: center !important;
+        padding: 0 15px !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .topbar .toggle {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+
+    /* 👉 AGREGA ESTO (lo importante) */
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+}
+
+    .topbar .perfil-usuario {
+        position: absolute !important;
+        right: 15px !important;
+    }
+
+    /* MENÚ DESPLEGABLE DESDE ARRIBA */
+    .dashboard-nav {
+        position: fixed !important;
+        top: 60px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 0px !important;  /* ← Debe ser 0px */
+        max-height: calc(100vh - 60px) !important;
+        overflow: hidden !important;
+        transition: height 0.4s ease-in-out !important;
+        z-index: 9000 !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+        border-left: none !important;
+    }
+
+    .dashboard-nav.active {
+    max-height: 600px !important;
+    overflow-y: auto !important;
+}
+
+
+
+    .dashboard-menu {
+        position: relative !important;
+        padding: 10px 0 !important;
+    }
+
+    .dashboard-menu li {
+        width: 100% !important;
+    }
+
+    .dashboard-link {
+        justify-content: flex-start !important;
+        padding: 15px 20px !important;
+    }
+
+    .dashboard-icon {
+        min-width: 50px !important;
+    }
+
+    .dashboard-label {
+        display: inline-block !important;
+        white-space: nowrap !important;
+    }
+
+    /* CONTAINER DEL DASHBOARD */
+    .dashboard-container {
+        position: relative !important;
+        width: 100% !important;
+        left: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    .dashboard-container.active {
+        margin-left: 0 !important;
+    }
+
+    /* Otros estilos responsivos */
     .panel-content {
         flex-direction: column;
     }
@@ -747,8 +840,39 @@ body {
     .dashboard-config {
         padding: 15px;
     }
+
+    .perfil-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .perfil-title {
+        margin-bottom: 1.5rem;
+    }
+
+    .info-section {
+        flex-direction: column;
+    }
+
+    .info-group {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
 }
 
+/* ============================================================
+   📱 576px - MÓVILES PEQUEÑOS
+   ============================================================ */
 @media (max-width: 576px) {
     .dashboard-search {
         display: none;
@@ -756,24 +880,84 @@ body {
 
     .dashboard-toggle {
         position: fixed;
-        z-index: 1001;
+        z-index: 5001;
     }
 
-    .dashboard-nav {
-        width: 100%;
-        left: -100%;
-        z-index: 1000;
+    .perfil-container1 {
+        margin: 1rem;
+        padding: 1.5rem;
     }
 
-    .dashboard-nav.active {
-        width: 100%;
+    .config-header {
+        padding: 15px;
     }
 
-    .user-menu {
-        right: -100px;
+    .config-title {
+        font-size: 22px;
+    }
+
+    .block-header {
+        padding: 15px;
+    }
+
+    .config-panel {
+        padding: 15px;
+    }
+
+    .foto-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .notification-container {
+        max-width: 100%;
+        left: 10px;
+        right: 10px;
     }
 }
 
+/* ============================================================
+   📱 480px - MÓVILES MUY PEQUEÑOS
+   ============================================================ */
+@media (max-width: 480px) {
+    .topbar .toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 2em;
+    }
+
+    .topbar .perfil-usuario {
+        width: 35px;
+        height: 35px;
+    }
+
+    .perfil-container1 {
+        padding: 1rem;
+    }
+
+    .perfil-title h2 {
+        font-size: 1.4rem;
+    }
+
+    .config-title {
+        font-size: 20px;
+    }
+
+    .foto-container {
+        width: 90px;
+        height: 90px;
+    }
+
+    .info-group {
+        padding: 0.8rem;
+    }
+
+    .info-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
 /*perfil*/
 
 /* Estilos para el Perfil de Usuario */

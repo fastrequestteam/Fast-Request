@@ -1,4 +1,4 @@
-:root {
+:root{
   --white-text: #c9c9c9;
   --white-icons: #e9e9e9;
   --black: #13161C;
@@ -11,6 +11,10 @@
   --white-green: #e67e22;
   --font: "General Sans", sans-serif;
   --color-prueba: #00c5ff;
+
+  /* breakpoints */
+  --bp-mobile: 767px;
+  --bp-tablet: 1024px;
 }
 
 /* CONTENEDOR PRINCIPAL */
@@ -19,8 +23,9 @@
   background: var(--Gray);
   color: var(--white-text);
   font-family: var(--font);
-  padding: 3rem 2rem 4rem; /* más aire arriba y abajo */
+  padding: 3rem 2rem 4rem;
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* ENCABEZADO */
@@ -28,13 +33,15 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  margin-bottom: 2.5rem; /* más espacio con los pedidos */
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
 }
 
 .cocina-header h2 {
   color: var(--white-icons);
   font-size: 1.9rem;
   font-weight: 600;
+  margin: 0;
 }
 
 .cocina-header .icon {
@@ -42,52 +49,54 @@
   color: var(--white-icons);
 }
 
-/* CONTENEDOR DE PEDIDOS */
+/* CONTENEDOR DE PEDIDOS
+   - por defecto mobile-first: lista vertical con scroll horizontal opcional
+*/
 .pedidos-grid {
   display: flex;
-  gap: 1.8rem;
+  gap: 1.2rem;
   overflow-x: auto;
   padding-bottom: 1rem;
-  margin-bottom: 3.5rem; /* más separación con el botón */
+  margin-bottom: 3.5rem;
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: var(--Buton-color) transparent;
+  padding-left: 0.2rem;
 }
 
-.pedidos-grid::-webkit-scrollbar {
-  height: 8px;
-}
-
+/* custom scroll */
+.pedidos-grid::-webkit-scrollbar { height: 8px; }
 .pedidos-grid::-webkit-scrollbar-thumb {
   background: var(--Buton-color);
   border-radius: 4px;
 }
-
-.pedidos-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
+.pedidos-grid::-webkit-scrollbar-track { background: transparent; }
 
 /* TARJETA DE PEDIDO */
 .pedido-card {
-  flex: 0 0 320px;
+  flex: 0 0 320px;            /* ancho base de tarjeta en horizontal scrolling */
   background: var(--black);
   border-radius: 12px;
   padding: 1rem 1.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-  transition: 0.3s ease;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  transition: transform .25s ease, box-shadow .25s ease;
+  min-width: 260px;
+  max-width: 380px;
+  box-sizing: border-box;
 }
 
+/* hover */
 .pedido-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
 }
 
 /* CABECERA DEL PEDIDO */
 .pedido-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   margin-bottom: 0.8rem;
   padding-bottom: 0.5rem;
 }
@@ -97,8 +106,11 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pedido-header ion-icon {
@@ -112,23 +124,30 @@
   align-items: center;
   gap: 0.4rem;
   margin-top: 0.2rem;
+  font-size: 0.95rem;
 }
 
 /* CUERPO DEL PEDIDO */
 .pedido-body {
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--white-text);
   line-height: 1.4;
+  margin-top: 0.6rem;
+  overflow: hidden;
 }
 
-.pedido-body strong {
-  color: var(--white-icons);
+/* si tienes listas largas, acotar con altura y scroll interno opcional */
+.pedido-body .items {
+  max-height: 6.2rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
 }
 
+/* total */
 .total {
   margin-top: 0.8rem;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--white-greens);
 }
 
@@ -138,6 +157,7 @@
   text-align: center;
 }
 
+/* botones */
 .btn-completar {
   background: var(--Buton-color);
   color: #fff;
@@ -147,24 +167,20 @@
   cursor: pointer;
   font-weight: 500;
   font-size: 0.9rem;
-  transition: background 0.3s;
-  display: flex;
+  transition: background 0.25s ease, transform .15s ease;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  width: auto;
 }
 
-.btn-completar ion-icon {
-  font-size: 1.1rem;
-}
-
-.btn-completar:hover {
-  background: var(--Buton-hover-color);
-}
+.btn-completar ion-icon { font-size: 1.1rem; }
+.btn-completar:hover { background: var(--Buton-hover-color); transform: translateY(-2px); }
 
 /* BOTÓN REGRESAR */
 .btn-regresar {
-  margin-top: 3rem; /* más espacio hacia abajo */
+  margin-top: 3rem;
   background: transparent;
   color: var(--white-icons);
   border: 1px solid var(--white-icons);
@@ -172,14 +188,91 @@
   padding: 0.7rem 1.6rem;
   cursor: pointer;
   font-weight: 500;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
-
 .btn-regresar:hover {
   background: var(--Buton-color);
   border-color: var(--Buton-color);
   color: #fff;
 }
+
+/* accesibilidad focus */
+.btn-completar:focus, .btn-regresar:focus {
+  outline: 3px solid rgba(99,102,241,0.18);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.06);
+}
+
+/* ------------------------------------------------------------------
+   RESPONSIVE
+   Mobile-first: small screens (<= 767px) cards stack vertically, botones full-width
+   Tablet (768 - 1023) grid 2 cols
+   Desktop (>= 1024) grid 3+ cols
+------------------------------------------------------------------*/
+
+/* MOBILE (<= 767px) adjustments */
+@media (max-width: 767px) {
+  .cocina-container { padding: 2rem 1rem 3rem; }
+  .cocina-header h2 { font-size: 1.4rem; }
+  .pedido-card {
+    flex: 1 0 100%;
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
+    padding: 0.9rem;
+    border-radius: 10px;
+  }
+  .pedidos-grid {
+    display: block;           /* apilado vertical */
+  }
+  .pedidos-grid > .pedido-card { margin-bottom: 1rem; }
+  .btn-completar, .btn-regresar {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+  .pedido-body .items { max-height: 5.5rem; }
+}
+
+/* TABLET (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pedidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+    overflow: visible;
+  }
+  .cocina-header h2 { font-size: 1.6rem; }
+  .pedido-card {
+    max-width: none;
+  }
+  .pedido-body .items { max-height: 6rem; }
+}
+
+/* DESKTOP (>= 1024px) */
+@media (min-width: 1024px) {
+  .pedidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.8rem;
+    align-items: start;
+    overflow: visible;
+  }
+  .cocina-header h2 { font-size: 1.9rem; }
+  .pedido-card { padding: 1.2rem 1.4rem; }
+  .pedido-body .items { max-height: 7rem; }
+}
+
+/* Mejora visual en truncados largos */
+.pedido-header h3, .cliente, .pedido-body {
+  word-break: break-word;
+}
+
+/* utilidad: ocultar scroll visible en elementos que no necesitan
+   (solo estética en desktop) */
+@media (min-width: 768px) {
+  .pedidos-grid::-webkit-scrollbar { display: none; }
+}
+

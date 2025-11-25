@@ -55,28 +55,23 @@ body {
 }
 
 /* SECTION */
-
 .SectionDashboard {
     position: relative;
     width: 100%;
 }
 
 /* MENU */
+/* MENU */
 .navdash {
     position: fixed;
     width: 300px;
     height: 100%;
     background: var(--black);
-    /* COLOR DEL MENU */
     border-left: 10px solid var(--black);
     overflow: hidden;
-    transition: 0.4s;
+    transition: width 0.4s ease;
     overflow-y: auto;
-}
-
-.navdash.active {
-    width: 80px;
-
+    z-index: 1000;
 }
 
 .navdash .nav-ul {
@@ -84,17 +79,15 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-
 }
 
 .navdash .nav-ul .nav-ul-li {
     position: relative;
-    width: 200%;
+    width: 100%;
     list-style: none;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
-
 
 .nav-ul-li-a.active {
     font-weight: bold;
@@ -113,10 +106,8 @@ body {
     display: flex;
     width: 100%;
     color: var(--white-icons);
-    /* COLOR DE LA LETRA */
     text-decoration: none;
 }
-
 
 .navdash .nav-ul .nav-ul-li .nav-ul-li-a .icono {
     position: relative;
@@ -139,13 +130,19 @@ body {
     line-height: 60px;
     text-align: start;
     white-space: nowrap;
+}
 
+/* SOLO EN DESKTOP: el menú se colapsa */
+@media (min-width: 769px) {
+    .navdash.active {
+        width: 80px;
+    }
 }
 
 /* FIN DEL MENU */
+/* FIN DEL MENU */
 
 /* DASHBOARD */
-
 .containerDashboard {
     position: absolute;
     width: calc(100% - 300px);
@@ -155,14 +152,13 @@ body {
     /* COLOR DEL CENTRO */
     transition: 0.4s;
 }
-
-.containerDashboard.active {
-    width: calc(100% - 80px);
-    left: 80px;
+.navdash.active ~ .containerDashboard {
+    width: calc(100% - 80px) !important;
+    left: 80px !important;
 }
 
-/* TOPBAR */
 
+/* TOPBAR */
 .containerDashboard .topbar {
     width: 100%;
     height: 60px;
@@ -184,6 +180,7 @@ body {
     cursor: pointer;
     color: var(--white-icons);
 }
+
 .containerDashboard .topbar .perfil-usuario {
     position: relative;
     width: 40px;
@@ -440,81 +437,6 @@ body {
   font-size: clamp(16px, 2vw, 22px);
   pointer-events: none;
 }
-
-/* 📱 Ajuste responsive */
-@media (max-width: 768px) {
-  .table_Header {
-    flex-wrap: wrap;           /* ✅ los elementos bajan de línea */
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .input_search,
-  .input_search_complementos {
-    flex: 1 1 200px;           /* ✅ se ajustan al ancho disponible */
-    margin: 5px auto;
-  }
-
-  .input_search input,
-  .input_search_complementos input {
-    font-size: 14px;
-    padding: 8px 36px 8px 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .input_search,
-  .input_search_complementos {
-    flex: 1 1 160px;
-    max-width: 250px;
-  }
-
-  .input_search input,
-  .input_search_complementos input {
-    padding: 8px 32px 8px 14px;
-    font-size: 13px;
-  }
-
-  .input_search #search-sharp,
-  .input_search_complementos #search-sharp-complementos {
-    font-size: 18px;
-    right: 0.6rem;
-  }
-}
-
-/* 📱 Compactar espacio vertical en móviles */
-@media (max-width: 600px) {
-  .table_Header {
-    flex-direction: column; /* apila los elementos */
-    align-items: stretch;
-    gap: 6px; /* menos espacio entre elementos */
-    padding: 8px 12px; /* reduce padding interno */
-  }
-
-  .input_search,
-  .input_search_complementos {
-    margin: 0;              /* elimina márgenes verticales */
-    width: 100%;            /* ocupa todo el ancho disponible */
-    max-width: none;        /* quita límite de ancho */
-  }
-
-  .input_search input,
-  .input_search_complementos input {
-    width: 100%;
-  }
-
-  .table_Header > * {
-    margin-bottom: 4px;     /* espacio sutil entre cada elemento */
-  }
-
-  /* Opcional: reducir el alto del botón */
-  .table_Header button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-}
-
-
 
 .tabladashb {
     border-spacing: 0;
@@ -870,76 +792,6 @@ body {
 
 /* BREAKPOINTS */
 
-/* PANTALLA LARGA */
-@media only screen and (max-width: 1200px) {
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* PANTALLA LAPTOPS */
-
-@media only screen and (max-width: 992px) {
-    .nav {
-        left: -300px;
-
-    }
-
-    .nav.active {
-        left: 0;
-        width: 300px;
-    }
-
-    .container {
-        width: 100%;
-        left: 0;
-        overflow-x: auto;
-    }
-
-    .container.active {
-        left: 300px;
-    }
-}
-
-/* PANTALLA CELULAR */
-@media only screen and (max-width: 425px) {
-    .nav {
-        width: 100%;
-        left: -100%;
-        z-index: 1000;
-    }
-
-    .nav.active {
-        left: 0;
-        width: 100%;
-    }
-
-    .container.active .toggle {
-        color: var(--white-text);
-
-    }
-
-    .toggle {
-        position: fixed;
-        left: initial;
-        right: 0;
-        z-index: 10000;
-    }
-
-    .cards {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    .perfil-usuario {
-        min-width: 40px;
-    }
-
-    .container {
-        overflow-x: auto;
-        overflow-y: auto;
-    }
-}
-
 /* FIN DE LOS BREAKPOINTS */
 
 
@@ -1148,127 +1000,6 @@ body {
     grid-row: span 3;
 }
 
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.stats-card {
-    animation: fadeIn 0.6s ease forwards;
-    opacity: 0;
-}
-
-
-/* Estilos específicos para gráficos */
-.card-content .MiGrafico {
-    width: 100%;
-    height: 100%;
-}
-
-
-@media (max-width: 1366px) {
-    .daily-sales {
-        grid-column: 1 / span 12;
-    }
-
-    .top-product {
-        grid-column: 7 / span 6;
-    }
-
-    .customer-analysis {
-        grid-column: 1 / span 6;
-    }
-}
-
-@media (max-width: 1100px) {
-    .summary-metrics {
-        flex-wrap: wrap;
-    }
-
-    .metric {
-        flex: 1 1 calc(50% - 10px);
-        min-width: calc(50% - 10px);
-    }
-
-    .daily-sales {
-        grid-column: 1 / span 12;
-    }
-
-    .top-product {
-        grid-column: 7 / span 6;
-    }
-
-    .customer-analysis {
-        grid-column: 1 / span 6;
-    }
-}
-
-@media (max-width: 768px) {
-    .stats-dashboard {
-        grid-template-columns: 1fr;
-        padding: 16px;
-        gap: 16px;
-    }
-
-    .summary-card,
-    .daily-sales,
-    .top-product,
-    .customer-analysis,
-    .regional-performance {
-        grid-column: 1 / -1;
-    }
-
-    .summary-metrics {
-        flex-direction: column;
-    }
-
-    .metric {
-        min-width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .metric-value {
-        font-size: 24px;
-    }
-
-    .card-header {
-        padding: 16px;
-    }
-
-    .card-content {
-        padding: 16px;
-    }
-}
-
-
-@media (max-width: 480px) {
-    .stats-dashboard {
-        padding: 12px;
-        gap: 12px;
-    }
-
-    .card-header h3 {
-        font-size: 14px;
-    }
-
-    .metric-value {
-        font-size: 20px;
-    }
-
-    .metric-label {
-        font-size: 12px;
-    }
-}
-
-
 /* -----------------------ESTILOS DE LA SECCION HACER PEDIDO-----------------------*/
 .agenda-pedido {
     max-width: 500px;
@@ -1468,23 +1199,6 @@ div:has(> #tipos-bebida) {
     border-radius: 8px;
     border-left: 3px solid var(--white-green);
     margin-top: 5px;
-}
-
-
-@media (max-width: 520px) {
-    .agenda-pedido {
-        padding: 20px;
-        margin: 20px 15px;
-    }
-
-    .agenda-pedido h2 {
-        font-size: 24px;
-    }
-
-    .select_foranea {
-        font-size: 14px;
-        padding: 9px 32px 9px 12px;
-    }
 }
 
 
@@ -1823,31 +1537,6 @@ input:-moz-autofill {
     font-size: 18px;
 }
 
-@media (max-width: 768px) {
-    .pedido-card {
-        margin: 10px;
-        border-radius: 12px;
-    }
-
-    .pedido-card__header,
-    .pedido-card__section,
-    .pedido-card__footer {
-        padding: 16px 20px;
-    }
-
-    .pedido-card__header {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-
 /* --------------------- layout Complementos --------------------- */
 
 .mainContainer {
@@ -1984,38 +1673,6 @@ input:-moz-autofill {
     margin: 5px;
 }
 
-@media (max-width: 768px) {
-    .mainContainer {
-        padding: 20px 16px;
-        gap: 20px;
-    }
-
-    .containerSalsas,
-    .containerGaseosas {
-        padding: 20px;
-        min-width: 100%;
-    }
-
-    .tituloSeccionSalsas h2,
-    .tituloSeccionGaseosas h2 {
-        font-size: 1.25rem;
-    }
-
-    .tablaSalsas,
-    .tablaGaseosas {
-        font-size: 0.9rem;
-    }
-
-    .tablaSalsas th,
-    .tablaSalsas td,
-    .tablaGaseosas th,
-    .tablaGaseosas td {
-        padding: 10px 12px;
-    }
-}
-
-
-
 .btn-volver-complementos {
     padding: 0.5rem;
     border: none;
@@ -2082,206 +1739,426 @@ input:-moz-autofill {
 .input_search_clientes_inactivos .input-search-bar::placeholder {
     color: #2d3748;
 }
-/* ============= RESPONSIVE IMPROVADO DEL DASHBOARD ============= */
+/* BREAKPOINTS */
 
-/* TABLETS (≤ 1024px) */
-@media (max-width: 1024px) {
-    .navdash {
-        width: 250px;
-    }
-
-    .containerDashboard {
-        width: calc(100% - 250px);
-        left: 250px;
-    }
-
+/* ============================================================
+   📱 1200px - TABLETS GRANDES Y LAPTOPS PEQUEÑAS
+   ============================================================ */
+@media (max-width: 1200px) {
     .cardsDas {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .stats-dashboard {
+        grid-template-columns: repeat(8, 1fr);
+    }
+    
+    .daily-sales,
+    .regional-performance,
+    .customer-analysis,
+    .top-product,
+    .summary-card {
+        grid-column: 1 / span 8;
     }
 
     .container_tablas {
         width: 95%;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 15px;
-    }
-
-    .tabladashb th, .tabladashb td {
-        font-size: 14px;
-        padding: 8px;
+        margin-left: 20px;
     }
 }
 
-/* TABLETS PEQUEÑAS Y HORIZONTAL (≤ 768px) */
-@media (max-width: 768px) {
+/* ============================================================
+   📱 992px - TABLETS
+   ============================================================ */
+@media (max-width: 992px) {
+    /* Menú lateral colapsado */
     .navdash {
-        left: -250px;
-        width: 250px;
-        position: fixed;
-        z-index: 1000;
-        transition: left 0.3s ease;
-    }
-
-    .navdash.active {
-        left: 0;
+        width: 80px;
     }
 
     .containerDashboard {
-        width: 100%;
-        left: 0;
-        transition: 0.3s;
+        width: calc(100% - 80px);
+        left: 80px;
+    }
+
+    /* Cards en una sola columna */
+    .cardsDas {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    /* Tablas más estrechas */
+    .container_tablas {
+        width: 95%;
+        margin-left: 10px;
+        padding: 15px;
+    }
+
+    /* Inputs de búsqueda ocupan todo el ancho */
+    .input_search,
+    .input_search_complementos {
+        flex: 1 1 100%;
+        margin: 5px 0;
+    }
+
+    /* Stats dashboard */
+    .stats-dashboard {
+        grid-template-columns: repeat(4, 1fr);
+        padding: 15px;
+    }
+
+    .summary-metrics {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Formulario de pedidos */
+    .agenda-pedido {
+        max-width: 90%;
+        padding: 24px;
+    }
+
+    /* Tablas de complementos */
+    .mainContainer {
+        flex-direction: column;
+        padding: 20px 15px;
+    }
+
+    .containerSalsas,
+    .containerGaseosas {
+        max-width: 100%;
+        min-width: 100%;
+    }
+}
+/* ============================================================
+   📱 768px - MÓVILES GRANDES Y TABLETS PEQUEÑAS
+   ============================================================ */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden !important;
+    }
+
+    /* TOPBAR CENTRADO */
+    .topbar {
+        position: sticky !important;
+        top: 0;
+        z-index: 5000 !important;
+        background: var(--Gray) !important;
+        justify-content: center !important;
+        padding: 0 15px !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .topbar .toggle {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+    }
+
+    .topbar .perfil-usuario {
+        position: absolute !important;
+        right: 15px !important;
+    }
+
+    /* MENÚ DESPLEGABLE DESDE ARRIBA - CRÍTICO */
+    .navdash {
+        position: fixed !important;
+        top: 60px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 0px !important;
+        max-height: calc(100vh - 60px) !important;
+        overflow: hidden !important;
+        transition: height 0.4s ease-in-out !important;
+        z-index: 4999 !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+        border-left: none !important;
+    }
+
+    .navdash.active {
+        height: auto !important;
+        max-height: calc(100vh - 60px) !important;
+        overflow-y: auto !important;
+    }
+
+    .navdash .nav-ul {
+        position: relative !important;
+        padding: 10px 0 !important;
+    }
+
+    .navdash .nav-ul .nav-ul-li {
+        width: 100% !important;
+    }
+
+    .navdash .nav-ul .nav-ul-li .nav-ul-li-a {
+        justify-content: flex-start !important;
+        padding: 15px 20px !important;
+    }
+
+    .navdash .nav-ul .nav-ul-li .nav-ul-li-a .icono {
+        min-width: 50px !important;
+    }
+
+    .navdash .nav-ul .nav-ul-li .nav-ul-li-a .nav-titulo {
+        display: inline-block !important;
+        white-space: nowrap !important;
+    }
+
+    /* CONTAINER DEL DASHBOARD */
+    .containerDashboard {
+        position: relative !important;
+        width: 100% !important;
+        left: 0 !important;
+        margin-left: 0 !important;
     }
 
     .containerDashboard.active {
-        filter: brightness(0.6);
-        pointer-events: none;
+        margin-left: 0 !important;
     }
 
-    .containerDashboard .topbar {
-        padding: 0 15px;
-    }
-
-    .toggle {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        font-size: 2em;
-        cursor: pointer;
-        z-index: 2000;
-    }
-
+    /* Cards más compactas */
     .cardsDas {
         grid-template-columns: 1fr;
-    }
-
-    .input_search input {
-        width: 100%;
-    }
-
-    .container_tablas {
-        width: 100%;
-        margin: 10px 0;
         padding: 10px;
+        grid-gap: 15px;
     }
 
-    .container_tablas .table_Header {
+    .cardsDas .cardDas {
+        padding: 20px;
+    }
+
+    /* Tablas responsivas */
+    .container_tablas {
+        width: 95%;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 15px;
+    }
+
+    .table_Header {
         flex-direction: column;
-        gap: 10px;
-    }
-
-    .input_search, .select_tabla {
-        width: 100%;
+        gap: 15px;
+        align-items: flex-start !important;
     }
 
     .tabladashb {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .tabladashb .tabladashb_thead .tabladashb_thead_th {
+        padding: 8px 5px;
+        font-size: 13px;
+    }
+
+    .tabladashb .tabladashb_tbody .tabladashb_tbody_tr .tabladashb_tbody_tr_td {
+        padding: 8px 5px;
+        font-size: 13px;
+    }
+
+    /* Stats dashboard */
+    .stats-dashboard {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .summary-card {
+        min-height: auto;
+    }
+
+    .card-header {
+        padding: 12px 15px;
+    }
+
+    .card-content {
+        padding: 15px;
+    }
+
+    /* Formularios */
+    .agenda-pedido {
+        max-width: 95%;
+        margin: 20px auto;
+        padding: 20px;
     }
 
     .custom-modal__container {
         width: 95%;
         padding: 2em 1.5em;
     }
+
+    /* Pedido card */
+    .pedido-card {
+        max-width: 95%;
+        margin: 15px auto;
+    }
+
+    .pedido-card__header {
+        padding: 18px 20px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .pedido-card__section {
+        padding: 18px 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
 }
-
-/* CELULARES GRANDES (≤ 480px) */
+/* ============================================================
+   📱 480px - MÓVILES PEQUEÑOS
+   ============================================================ */
 @media (max-width: 480px) {
-    .navdash {
-        width: 100%;
-        left: -100%;
-    }
-
-    .navdash.active {
-        left: 0;
-    }
-
-    .containerDashboard {
-        width: 100%;
-        left: 0;
-    }
-
+    /* Topbar más compacto */
     .topbar {
-        flex-direction: row;
-        justify-content: space-between;
+        padding: 0 10px !important;
     }
 
-    .perfil-usuario {
+    .topbar .toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 2em;
+    }
+
+    .topbar .perfil-usuario {
         width: 35px;
         height: 35px;
     }
 
+    /* Cards más pequeñas */
     .cardsDas {
         padding: 10px;
-        grid-gap: 15px;
-    }
-
-    .cardsDas .cardDas {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-    }
-
-    .cardDas-numeros {
-        font-size: 1.8em;
-    }
-
-    .cardDas-icono {
-        font-size: 2em;
-        align-self: flex-end;
-    }
-
-    .container_tablas {
-        border-radius: 10px;
-    }
-
-    .tabladashb th, .tabladashb td {
-        font-size: 13px;
-        padding: 6px;
-    }
-
-    .boton_raro {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
-
-    .modal__title {
-        font-size: 1.5rem;
-    }
-
-    .boton_formulario, .close__modal {
-        padding: 0.6em 1.5em;
-        font-size: 13px;
-    }
-}
-
-/* CELULARES PEQUEÑOS (≤ 360px) */
-@media (max-width: 360px) {
-    .topbar {
-        height: 50px;
-        padding: 0 8px;
-    }
-
-    .toggle {
-        font-size: 1.8em;
+        grid-gap: 10px;
     }
 
     .cardsDas .cardDas {
         padding: 15px;
     }
 
-    .tabladashb th, .tabladashb td {
+    .cardsDas .cardDas .cardDas-numeros {
+        font-size: 2em;
+    }
+
+    .cardsDas .cardDas .cardDas-nombre {
+        font-size: 0.95em;
+        margin-right: 40px;
+    }
+
+    .cardsDas .cardDas .cardDas-icono {
+        font-size: 2.5em;
+    }
+
+    /* Tablas más compactas */
+    .container_tablas {
+        width: 98%;
+        margin-left: 5px;
+        margin-right: 5px;
+        padding: 10px;
+    }
+
+    .tabladashb {
         font-size: 12px;
     }
 
-    .input_search input {
-        font-size: 14px;
-        padding: 8px 12px;
+    .tabladashb .tabladashb_thead .tabladashb_thead_th {
+        padding: 6px 3px;
+        font-size: 11px;
     }
 
+    .tabladashb .tabladashb_tbody .tabladashb_tbody_tr .tabladashb_tbody_tr_td {
+        padding: 6px 3px;
+        font-size: 11px;
+    }
+
+    #iconosoperacion,
+    #iconosoperacionEditar,
+    #iconosoperacionEliminar,
+    #iconosoperacionVisualizar {
+        font-size: 18px;
+        margin-left: 5px;
+    }
+
+    /* Botones más pequeños */
+    .boton_raro {
+        padding: 8px 20px;
+        font-size: 12px;
+    }
+
+    /* Modal más pequeño */
     .custom-modal__container {
+        width: 98%;
         padding: 1.5em 1em;
     }
 
+    .modal__title {
+        font-size: 1.8rem;
+    }
+
+    /* Formulario de pedidos */
+    .agenda-pedido {
+        max-width: 98%;
+        padding: 15px;
+    }
+
+    .agenda-pedido h2 {
+        font-size: 22px;
+    }
+
+    .form-input-pedidos {
+        font-size: 14px;
+        padding: 10px 8px;
+    }
+
+    .form-btn-pedidos {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    /* Stats dashboard */
+    .stats-dashboard {
+        padding: 5px;
+        gap: 10px;
+    }
+
+    .card-header h3 {
+        font-size: 14px;
+    }
+
+    .metric-value {
+        font-size: 20px;
+    }
+
+    .metric-label {
+        font-size: 12px;
+    }
+
+    /* Pedido card */
+    .pedido-card {
+        max-width: 98%;
+    }
+
+    .pedido-card__header h2 {
+        font-size: 22px;
+    }
+
+    .pedido-card__id {
+        font-size: 14px;
+        padding: 4px 12px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .section-title ion-icon {
+        font-size: 20px;
+    }
+
+    .value {
+        font-size: 14px;
+    }
 }
 
+/* FIN DE LOS BREAKPOINTS */

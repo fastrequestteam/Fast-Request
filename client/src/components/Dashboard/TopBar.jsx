@@ -13,7 +13,7 @@ function TopBar({ onToggleNav }) {
     setPerfilActive(!perfilActive);
   };
 
-  const handleLogout = () => {
+  const handleLogout = () => {http://localhost:5173/dashboard
     Swal.fire({
       title: "¿Cerrar sesión?",
       text: "Tu sesión se cerrará y deberás iniciar nuevamente.",

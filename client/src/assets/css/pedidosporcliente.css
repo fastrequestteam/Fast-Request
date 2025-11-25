@@ -224,30 +224,148 @@ body {
   cursor: pointer;
   text-align: center;
 }
+@media (max-width: 768px) {
 
+  /* Contenedor general */
+  .tabla-contenedor {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0.5rem auto;
+  }
+
+  /* Header más compacto y legible */
+  .tabla-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    text-align: left;
+  }
+
+  /* Tabla con scroll horizontal suave */
+  .tabla {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    white-space: nowrap;
+    border-radius: 8px;
+  }
+
+  /* Celdas más compactas */
+  .tabla th,
+  .tabla td {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* Mejor legibilidad del header */
+  .tabla th {
+    font-weight: 600;
+  }
+
+  /* Sombra indicando que se puede desplazar */
+  .tabla::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 20px;
+    pointer-events: none;
+  }
+}
+/* ===========================
+   📱 Celulares pequeños (hasta 480px)
+   =========================== */
+@media (max-width: 480px) {
+  .tabla-contenedor {
+    padding: 0.5rem;
+    margin: 0.25rem auto;
+  }
+
+  .tabla-header {
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .tabla {
+    font-size: 0.8rem;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 0.5rem;
+  }
+}
+
+/* ===========================
+   📱 Celulares medianos (481–640px)
+   =========================== */
+@media (max-width: 640px) {
+  .tabla-contenedor {
+    padding: 0.75rem;
+  }
+
+  .tabla th,
+  .tabla td {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===========================
+   📱 Tablets verticales (641–768px)
+   =========================== */
 @media (max-width: 768px) {
   .tabla-contenedor {
     padding: 1rem;
     max-width: 100%;
-    margin: 1rem;
+    margin: 0.5rem auto;
   }
-  
+
   .tabla-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0.75rem;
   }
-  
+
   .tabla {
     display: block;
+    width: 100%;
     overflow-x: auto;
     white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
-  
+
   .tabla th,
   .tabla td {
-    padding: 0.75rem 1rem;
+    padding: 0.7rem;
+    font-size: 0.9rem;
   }
 }
 
+/* ===========================
+   💻 Tablets horizontales / iPad / MacBook pequeños (769–1024px)
+   =========================== */
+@media (max-width: 1024px) {
+  .tabla-contenedor {
+    max-width: 95%;
+  }
 
+  .tabla th,
+  .tabla td {
+    font-size: 1rem;
+  }
+}
+
+/* ===========================
+   🖥 Mac, laptops y escritorio grande
+   =========================== */
+@media (min-width: 1025px) {
+  .tabla-contenedor {
+    max-width: 1200px;
+  }
+}
+
+/*Otro con responsive*/
