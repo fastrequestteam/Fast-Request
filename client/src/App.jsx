@@ -25,7 +25,7 @@ import VisualizarInactividadDeClientes from './pages/Dashboard/visualizarCliente
 import PedidoCompleto from './pages/Dashboard/PedidoCompleto';
 import MiPagina from './pages/MiPagina/miPagina';
 import CocinaDashboard from './pages/Dashboard/CocinaDashboard';
-import Complementos from './pages/Dashboard/complementos';
+import Complementos from './pages/Dashboard/Complementos';
 import ComplementosCompletos from './pages/Dashboard/complementosCompletos';
 import CategoriasInactivas from './pages/Dashboard/CategoriasInactivasDashboard';
 import ProductosInactivos from './pages/Dashboard/ProductosInactivosDashboard';
