@@ -8,7 +8,12 @@ const dotenv = require("dotenv");
 const path = require('path');
 const db = require("./config/db.js");
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://fast-request-1.onrender.com', // URL permitida
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
+
+app.use(cors(corsOptions));
 dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
