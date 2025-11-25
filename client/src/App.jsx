@@ -18,7 +18,7 @@ import HacerPedidoDashboard from './pages/Dashboard/HacerPedidoDashboard';
 import ConditionalBootstrap from './components/ConditionalBootstrap';
 import Configuracion from './pages/Configuracion/configuracion';
 import Perfil from './pages/Configuracion/perfil';
-import Empresa from './pages/Configuracion/empresa';
+import Empresa from './pages/Configuracion/Empresa';
 import ClientesDashboard from './pages/Dashboard/ClientesDashboard';
 import PedidosPorCliente from './pages/Dashboard/pedidosPorCliente';
 import VisualizarInactividadDeClientes from './pages/Dashboard/visualizarClientesInactivos';
