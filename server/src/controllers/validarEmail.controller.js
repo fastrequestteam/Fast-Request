@@ -1,6 +1,7 @@
 const { ValidarEmail } = require('../models');
 const nodemailer = require('nodemailer');
 const dotenv = require("dotenv");
+const sgMail = require("@sendgrid/mail")
 
 dotenv.config();
 
