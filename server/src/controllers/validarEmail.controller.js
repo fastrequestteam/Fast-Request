@@ -1,7 +1,7 @@
 const { ValidarEmail } = require('../models');
 const nodemailer = require('nodemailer');
 const dotenv = require("dotenv");
-const sgMail = require("@sendgrid/mail")
+const sgMail = require("../config/email");
 
 dotenv.config();
 
@@ -15,6 +15,10 @@ exports.validarEmail = async (req, res) => {
             codigo: codigoAleatorio,
             expiracion: new Date(Date.now() + 5 * 60 * 1000)
         });
+        
+        console.log('SENDGRID KEY:', process.env.SENDGRID_API_KEY ? 'OK' : 'NOT FOUND');
+        console.log('EMAIL FROM:', process.env.EMAIL_FROM);
+
 
         const msg = {
             to: correo,
