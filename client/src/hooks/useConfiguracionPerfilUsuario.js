@@ -43,7 +43,7 @@ const useConfiguracionPerfilUsuario = (initial) => {
       const usuarioId = decoded.id;
 
       const res = await axios.get(
-        `http://localhost:5000/api/perfil/getUser/${usuarioId}`,
+        `https://fast-request-back.onrender.com/api/perfil/getUser/${usuarioId}`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -112,7 +112,7 @@ const useConfiguracionPerfilUsuario = (initial) => {
       });
 
       const res = await axios.put(
-        `http://localhost:5000/api/perfil/update-perfil/${usuarioId}`,
+        `https://fast-request-back.onrender.com/api/perfil/update-perfil/${usuarioId}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

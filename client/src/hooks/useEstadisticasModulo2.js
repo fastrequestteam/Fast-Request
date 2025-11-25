@@ -58,7 +58,7 @@ export const useEstadisticasModulo2 = () => {
 
 
 
-    const API_URL = 'http://localhost:5000/api/estadisticas'
+    const API_URL = 'https://fast-request-back.onrender.com/api/estadisticas'
 
 
     const API_Municipio = async () => {

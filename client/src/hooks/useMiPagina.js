@@ -4,13 +4,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api/categorias/categorias";
-const API_URL2 = "http://localhost:5000/api/productos/productos";
-const API_URL3 = "http://localhost:5000/api/complementos/salsas";
-const API_URL4 = "http://localhost:5000/api/complementos/gaseosas";
-const API_EMPRESA = "http://localhost:5000/api/empresa/empresaPublic";
-const Api_textos = 'http://localhost:5000/api/textos-editables/find-text';
-
+const API_URL = "https://fast-request-back.onrender.com/api/categorias/categorias";
+const API_URL2 = "https://fast-request-back.onrender.com/api/productos/productos";
+const API_URL3 = "https://fast-request-back.onrender.com/api/complementos/salsas";
+const API_URL4 = "https://fast-request-back.onrender.com/api/complementos/gaseosas";
+const API_EMPRESA = "https://fast-request-back.onrender.com/api/empresa/empresaPublic";
+const Api_textos = 'https://fast-request-back.onrender.com/api/textos-editables/find-text';
 export const useMiPagina = (initial = { NombreCliente: '', CorreoElectronico: '', mensaje: '', EstadoMensaje: 'pendiente' }) => {
   const [categorias, setCategorias] = useState([]);
   const [productos, setProductos] = useState([]);
@@ -102,7 +101,7 @@ export const useMiPagina = (initial = { NombreCliente: '', CorreoElectronico: ''
 
     try {
       await axios.post(
-        'http://localhost:5000/api/contactanos/enviar-mensaje',
+        'https://fast-request-back.onrender.com/api/contactanos/enviar-mensaje',
         {
           NombreCliente: mensajeData.NombreCliente,
           CorreoElectronico: mensajeData.CorreoElectronico,

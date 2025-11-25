@@ -35,7 +35,7 @@ const PasoContrasenaNueva = ({ datos, actualizar }) => {
 
         try {
             const response = await axios.put(
-                'http://localhost:5000/api/recuperarCuenta/recuperar/cambiar-contrasena',
+                'https://fast-request-back.onrender.com/api/recuperarCuenta/recuperar/cambiar-contrasena',
                 datosActualizados,
                 { headers: { 'Content-Type': 'application/json' } }
             );

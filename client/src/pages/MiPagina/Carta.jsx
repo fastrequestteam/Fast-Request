@@ -120,7 +120,7 @@ const Carta = () => {
                             produc.Imagen
                               ? (produc.Imagen.startsWith("http")
                                 ? produc.Imagen
-                                : `http://localhost:5000/${produc.Imagen}`
+                                : `https://fast-request-back.onrender.com/${produc.Imagen}`
                               )
                               : "https://placehold.co/250x200?text=Sin+Imagen"
                           }
@@ -152,7 +152,7 @@ const Carta = () => {
                           s.Imagen
                             ? (s.Imagen.startsWith("http")
                               ? s.Imagen
-                              : `http://localhost:5000/${s.Imagen}`
+                              : `https://fast-request-back.onrender.com/${s.Imagen}`
                             )
                             : "https://placehold.co/250x200?text=Sin+Imagen"
                         }
@@ -190,7 +190,7 @@ const Carta = () => {
                           g.Imagen
                             ? (g.Imagen.startsWith("http")
                               ? g.Imagen
-                              : `http://localhost:5000/${g.Imagen}`
+                              : `https://fast-request-back.onrender.com/${g.Imagen}`
                             )
                             : "https://placehold.co/250x200?text=Sin+Imagen"
                         }

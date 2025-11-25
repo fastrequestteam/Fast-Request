@@ -20,7 +20,7 @@ const PasoCodigo = ({ siguiente, anterior, datos, actualizar }) => {
         }
 
         try {
-            const res = await axios.post('http://localhost:5000/api/validarEmail/verify-code', {
+            const res = await axios.post('https://fast-request-back.onrender.com/api/validarEmail/verify-code', {
                 correo: datos.correo,
                 codigo
             }, {

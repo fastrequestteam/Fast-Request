@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/categorias";
+const API_URL = "https://fast-request-back.onrender.com/api/categorias";
 
 export const useCategorias = (initial = { NombreCategoria: "", EstadoCategoria: "" }) => {
     const [formCategoriaData, setFormCategoriaData] = useState(initial);

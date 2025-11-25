@@ -15,7 +15,7 @@ export const useContactanos = () => {
         setLoading(true)
         try {
 
-            const res = await axios.get('http://localhost:5000/api/contactanos/mensajes', { headers: authHeader() })
+            const res = await axios.get('https://fast-request-back.onrender.com/api/contactanos/mensajes', { headers: authHeader() })
             setMensajes(res.data.mensajesPendientes)
         }
 
@@ -33,7 +33,7 @@ export const useContactanos = () => {
 
     const actualizarMensajeActivo = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
+            await axios.put(`https://fast-request-back.onrender.com/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
             Swal.fire({
                 title: "¡Cambio de estado exitoso!",
                 text: "El cambio de estado del mensaje ha sido exitoso",
@@ -69,7 +69,7 @@ export const useContactanos = () => {
         try {
 
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/contactanos/mensajes-archivados/${id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/contactanos/mensajes-archivados/${id}`,
                     {},
                     {
                         headers: authHeader()

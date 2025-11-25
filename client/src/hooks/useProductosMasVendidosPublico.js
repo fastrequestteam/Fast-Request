@@ -10,7 +10,7 @@ export const useProductosMasVendidosPublico = () => {
         const fetchData = async () => {
             try {
                 const res = await axios.get(
-                    "http://localhost:5000/api/productos/productos-mas-vendidos",
+                    "https://fast-request-back.onrender.com/api/productos/productos-mas-vendidos",
                     { headers: authHeader() }
                 );
                 setProductos(res.data);

@@ -19,7 +19,7 @@ export const useContactanosEmpresas = (initial) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('http://localhost:5000/api/contactanos/enviar-mensaje-empresas', {
+            const res = await axios.post('https://fast-request-back.onrender.com/api/contactanos/enviar-mensaje-empresas', {
                 name: mensajesData.name, 
                 email: mensajesData.email, 
                 message: mensajesData.message

@@ -12,7 +12,7 @@ export const useCategoriasInactivas = () => {
     // ✅ Obtener todas las categorías inactivas
     const visualizarCategoriasInactivas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/categorias/Categorias-inactivas', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/categorias/Categorias-inactivas', {
                 headers: authHeader(),
             });
             setCategorias(res.data);
@@ -25,7 +25,7 @@ export const useCategoriasInactivas = () => {
     const cambiarEstadoCategoria = async (Id) => {
         try {
             await axios.put(
-                `http://localhost:5000/api/categorias/CambiarActivo/${Id}`,
+                `https://fast-request-back.onrender.com/api/categorias/CambiarActivo/${Id}`,
                 {},
                 { headers: authHeader() }
             );
@@ -61,7 +61,7 @@ export const useCategoriasInactivas = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5000/api/categorias/CategoriasInactivas/${Id}`, {
+                await axios.delete(`https://fast-request-back.onrender.com/api/categorias/CategoriasInactivas/${Id}`, {
                     headers: authHeader()
                 });
                 Swal.fire("Eliminado", "Categoría eliminada", "success");

@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useCategorias } from "./useCategorias";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/productos";
+const API_URL = "https://fast-request-back.onrender.com/api/productos";
 
 
 export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", PrecioProducto: "", DescripcionProducto: "", EstadoProducto: ""  }) => {

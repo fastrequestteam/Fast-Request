@@ -20,7 +20,7 @@ const PasoCodigoRecuperar = ({ siguiente, datos, actualizar }) => {
         }
 
         try {
-            const res = await axios.post('http://localhost:5000/api/recuperarCuenta/recuperar/verificar-codigo', {
+            const res = await axios.post('https://fast-request-back.onrender.com/api/recuperarCuenta/recuperar/verificar-codigo', {
                 correo: datos.correo,
                 codigo
             }, {

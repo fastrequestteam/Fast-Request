@@ -153,7 +153,7 @@ export const useConfiguracion = (initial = { nombre: '', apellido: '' }) => {
       const decored = jwtDecode(token)
       const id = decored.id
 
-      const res = await axios.put(`http://localhost:5000/api/configuracion/updatePass/${id}`,
+      const res = await axios.put(`https://fast-request-back.onrender.com/api/configuracion/updatePass/${id}`,
         passwords, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -256,7 +256,7 @@ export const useConfiguracion = (initial = { nombre: '', apellido: '' }) => {
       }
 
       const res = await axios.put(
-        `http://localhost:5000/api/configuracion/updateData/${id}`,
+        `https://fast-request-back.onrender.com/api/configuracion/updateData/${id}`,
         payload,
         {
           headers: {

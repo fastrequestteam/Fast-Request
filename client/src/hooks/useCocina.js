@@ -5,7 +5,7 @@ import axios from "axios"
 import { authHeader } from "../helpers/authHeader";
 
 
-const API_URL = "http://localhost:5000/api/pedidos";
+const API_URL = "https://fast-request-back.onrender.com/api/pedidos";
 
 const useCocina = () => {
     const [pedidos, setPedidos] = useState([]);

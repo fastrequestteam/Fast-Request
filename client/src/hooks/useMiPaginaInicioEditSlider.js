@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { authHeader } from "../helpers/authHeader";
 
-const API_EMPRESA = "http://localhost:5000/api/empresa";
+const API_EMPRESA = "https://fast-request-back.onrender.com/api/empresa";
 
 export const useMiPaginaInicioEditSlider = () => {
 

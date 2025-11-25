@@ -8,7 +8,7 @@ export const useTextosEditables = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/textos-editables/find-text-edit", { headers: authHeader() })
+        axios.get("https://fast-request-back.onrender.com/api/textos-editables/find-text-edit", { headers: authHeader() })
             .then(res => {
                 const map = {};
                 res.data.forEach(t => { map[t.campo] = t.valor; });
@@ -20,7 +20,7 @@ export const useTextosEditables = () => {
 
     const updateTexto = async (campo, valor) => {
         setTextos(prev => ({ ...prev, [campo]: valor }));
-        await axios.put(`http://localhost:5000/api/textos-editables/edit-text/${campo}`, { valor }, { headers: authHeader() });
+        await axios.put(`https://fast-request-back.onrender.com/api/textos-editables/edit-text/${campo}`, { valor }, { headers: authHeader() });
     };
 
     return {

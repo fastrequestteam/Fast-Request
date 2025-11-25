@@ -13,7 +13,7 @@ const PedidosPorCliente = () => {
 
     const obtenerPedidos = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/pedidos/cliente-pedidos/${clienteId}`,
+            const response = await axios.get(`https://fast-request-back.onrender.com/api/pedidos/cliente-pedidos/${clienteId}`,
                 {
                     headers: authHeader()
                 }

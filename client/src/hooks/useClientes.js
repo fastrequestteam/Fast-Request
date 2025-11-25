@@ -34,7 +34,7 @@ export const useClientes = (initial = { NombreCliente: "", CorreoElectronico: ""
 
     const obtenerClientes = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/cliente/',
+            const res = await axios.get('https://fast-request-back.onrender.com/api/cliente/',
                 {
                     headers: authHeader()
                 }
@@ -48,7 +48,7 @@ export const useClientes = (initial = { NombreCliente: "", CorreoElectronico: ""
 
     const CrearCliente = async () => {
         try {
-            await axios.post('http://localhost:5000/api/cliente/', formData,
+            await axios.post('https://fast-request-back.onrender.com/api/cliente/', formData,
                 {
                     headers: authHeader()
                 }
@@ -80,7 +80,7 @@ export const useClientes = (initial = { NombreCliente: "", CorreoElectronico: ""
         });
         try {
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/cliente/inactivo/${Id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/cliente/inactivo/${Id}`,
                     {},
                     {
                         headers: authHeader()
@@ -109,7 +109,7 @@ export const useClientes = (initial = { NombreCliente: "", CorreoElectronico: ""
     const validacionDeClientes = async () => {
         try {
 
-            const res = await axios.post(`http://localhost:5000/api/cliente/verify-duplicate`, formData,
+            const res = await axios.post(`https://fast-request-back.onrender.com/api/cliente/verify-duplicate`, formData,
                 {
                     headers: authHeader()
                 },

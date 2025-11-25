@@ -13,7 +13,7 @@ const PasoCorreo = ({ siguiente, datos, actualizar }) => {
 
     const verificarEmail = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/usuarios/verificarEmail?correo=${correo}`);
+            const res = await axios.get(`https://fast-request-back.onrender.com/api/usuarios/verificarEmail?correo=${correo}`);
             if (res.data.existe) {
                 setErrorEmail(res.data.mensaje); 
                 return true;
@@ -42,7 +42,7 @@ const PasoCorreo = ({ siguiente, datos, actualizar }) => {
         }
 
         try {
-            const res = await axios.post('http://localhost:5000/api/validarEmail/handle-email', {
+            const res = await axios.post('https://fast-request-back.onrender.com/api/validarEmail/handle-email', {
                 correo
             }, {
                 headers: { 'Content-Type': 'application/json' }

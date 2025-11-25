@@ -13,7 +13,7 @@ const PasoCorreoRecuperar = ({ siguiente, datos, actualizar }) => {
 
     const verificarEmail = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/recuperarCuenta/recuperar/verificar-email?correo=${correo}`);
+            const res = await axios.get(`https://fast-request-back.onrender.com/api/recuperarCuenta/recuperar/verificar-email?correo=${correo}`);
             if (res.data.existe) {
                 setErrorEmail(res.data.mensaje); 
                 return true;
@@ -43,7 +43,7 @@ const PasoCorreoRecuperar = ({ siguiente, datos, actualizar }) => {
 
 
         try {
-            const res = await axios.post('http://localhost:5000/api/recuperarCuenta/recuperar/enviar-email', {
+            const res = await axios.post('https://fast-request-back.onrender.com/api/recuperarCuenta/recuperar/enviar-email', {
                 correo
             }, {
                 headers: { 'Content-Type': 'application/json' }

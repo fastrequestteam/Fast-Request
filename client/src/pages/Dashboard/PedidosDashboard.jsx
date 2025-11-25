@@ -18,7 +18,7 @@ const PedidosDashboard = ({ onClose }) => {
 
     const obtenerPedidos = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/ObtenerPedidos', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/pedidos/ObtenerPedidos', {
                 headers: authHeader()
             })
             setFullPedidos(res.data);

@@ -12,7 +12,7 @@ export const useVisualizarClientesInactivos = () => {
 
     const visualizarClientesConEstadoInactivo = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/cliente/inactivos`,
+            const res = await axios.get(`https://fast-request-back.onrender.com/api/cliente/inactivos`,
                 {
                     headers: authHeader()
                 }
@@ -25,7 +25,7 @@ export const useVisualizarClientesInactivos = () => {
 
     const cambioDeEstadoCliente = async (Id) => {
         try {
-                await axios.put(`http://localhost:5000/api/cliente/activo/${Id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/cliente/activo/${Id}`,
                     {},
                     {
                         headers: authHeader()

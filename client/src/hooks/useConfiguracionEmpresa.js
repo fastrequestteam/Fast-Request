@@ -4,7 +4,7 @@ import { authHeader } from "../helpers/authHeader";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 
-const API_URL = "http://localhost:5000/api/empresa";
+const API_URL = "https://fast-request-back.onrender.com/api/empresa";
 
 export default function useConfiguracionEmpresa(initial) {
   const [userData, setUserData] = useState(initial);

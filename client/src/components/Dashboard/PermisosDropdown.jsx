@@ -13,7 +13,7 @@ function PermisosDropdown({ onChange }) {
   useEffect(() => {
     const fetchPermisos = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/permisos",{
+        const res = await axios.get("https://fast-request-back.onrender.com/api/permisos",{
           headers: authHeader()
         }
         ); // Ajusta si usas proxy

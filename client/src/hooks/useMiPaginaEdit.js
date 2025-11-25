@@ -4,10 +4,10 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/categorias/";
-const API_URL2 = "http://localhost:5000/api/productos/";
-const API_URL3 = "http://localhost:5000/api/complementos/obtener-salsas";
-const API_URL4 = "http://localhost:5000/api/complementos/obtener-gaseosas";
+const API_URL = "https://fast-request-back.onrender.com/api/categorias/";
+const API_URL2 = "https://fast-request-back.onrender.com/api/productos/";
+const API_URL3 = "https://fast-request-back.onrender.com/api/complementos/obtener-salsas";
+const API_URL4 = "https://fast-request-back.onrender.com/api/complementos/obtener-gaseosas";
 
 export const useMiPaginaEdit = () => {
   const [categorias, setCategorias] = useState([]);
@@ -73,9 +73,9 @@ export const useMiPaginaEdit = () => {
     formData.append("imagen", archivo);
 
     let endpoint = "";
-    if (tipo === "producto") endpoint = `http://localhost:5000/api/productos/productoImagen/${id}/imagen`;
-    if (tipo === "salsa") endpoint = `http://localhost:5000/api/complementos/salsasImagen/${id}/imagen`;
-    if (tipo === "gaseosa") endpoint = `http://localhost:5000/api/complementos/gaseosasImagen/${id}/imagen`;
+    if (tipo === "producto") endpoint = `https://fast-request-back.onrender.com/api/productos/productoImagen/${id}/imagen`;
+    if (tipo === "salsa") endpoint = `https://fast-request-back.onrender.com/api/complementos/salsasImagen/${id}/imagen`;
+    if (tipo === "gaseosa") endpoint = `https://fast-request-back.onrender.com/api/complementos/gaseosasImagen/${id}/imagen`;
 
     await axios.put(endpoint, formData, {
       headers: {

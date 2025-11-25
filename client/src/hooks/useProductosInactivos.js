@@ -11,7 +11,7 @@ export const useProductosInactivos = () => {
 
     const visualizarProductosInactivos = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/productos/Productos-inactivos',  {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/productos/Productos-inactivos',  {
                 headers: authHeader(),
             })
             setProductos(res.data)
@@ -22,7 +22,7 @@ export const useProductosInactivos = () => {
 
     const cambiarEstadoProducto = async (Id) => {
         try {
-            await axios.put(`http://localhost:5000/api/productos/CambiarActivo/${Id}`,
+            await axios.put(`https://fast-request-back.onrender.com/api/productos/CambiarActivo/${Id}`,
             {},
             {
                 headers: authHeader()

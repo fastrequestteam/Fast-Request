@@ -10,7 +10,7 @@ export const usePedidoCompleto = (id) => {
         try {
 
             const res = await axios.get(
-                `http://localhost:5000/api/pedidos/pedidoFull/${id}`, 
+                `https://fast-request-back.onrender.com/api/pedidos/pedidoFull/${id}`, 
                 {
                     headers: authHeader()
                 }

@@ -59,7 +59,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
 
     const resApiSalsas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/complementos/obtener-salsas', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/complementos/obtener-salsas', {
                 headers: authHeader()
             });
             setDataSalsas(res.data.salsas || res.data);
@@ -70,7 +70,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
 
     const resApiGaseosas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/complementos/obtener-gaseosas', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/complementos/obtener-gaseosas', {
                 headers: authHeader()
             });
             setDataGaseosas(res.data.gaseosas || res.data);
@@ -82,7 +82,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
     const ComplementosSalsas = async () => {
         try {
             if (forComplementosData.id) {
-                await axios.put(`http://localhost:5000/api/complementos/update-salsa/${forComplementosData.id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/complementos/update-salsa/${forComplementosData.id}`,
                     forComplementosData,
                     {
                         headers: authHeader()
@@ -91,7 +91,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
                 Swal.fire("Actualizado", "Salsa actualizada correctamente", "success");
             } else {
 
-                await axios.post('http://localhost:5000/api/complementos/create-salsa', forComplementosData,
+                await axios.post('https://fast-request-back.onrender.com/api/complementos/create-salsa', forComplementosData,
                     {
                         headers: authHeader()
                     });
@@ -111,7 +111,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         try {
             if (forComplementosData.id) {
 
-                await axios.put(`http://localhost:5000/api/complementos/update-gaseosa/${forComplementosData.id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/complementos/update-gaseosa/${forComplementosData.id}`,
                     forComplementosData,
                     {
                         headers: authHeader()
@@ -120,7 +120,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
                 Swal.fire("Actualizado", "Gaseosa actualizada correctamente", "success");
             } else {
 
-                await axios.post('http://localhost:5000/api/complementos/create-gaseosa', forComplementosData,
+                await axios.post('https://fast-request-back.onrender.com/api/complementos/create-gaseosa', forComplementosData,
                     {
                         headers: authHeader()
                     });
@@ -152,7 +152,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         try {
 
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/complementos/update-estado-inactivo-salsa/${id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/complementos/update-estado-inactivo-salsa/${id}`,
                     {},
                     {
                         headers: authHeader()
@@ -197,7 +197,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         try {
 
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/complementos/update-estado-inactivo-gaseosa/${id}`,
+                await axios.put(`https://fast-request-back.onrender.com/api/complementos/update-estado-inactivo-gaseosa/${id}`,
                     {},
                     {
                         headers: authHeader()
@@ -233,7 +233,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
 
         try {
 
-            const url = `http://localhost:5000/api/complementos/${tipo === 'salsa' ? 'verify-duplicate-salsa' : 'verify-duplicate-gaseosa'}`
+            const url = `https://fast-request-back.onrender.com/api/complementos/${tipo === 'salsa' ? 'verify-duplicate-salsa' : 'verify-duplicate-gaseosa'}`
 
             const body = tipo === "salsa" ? { nombreSalsa: name }
                 : { nombreGaseosa: name };

@@ -13,7 +13,7 @@ const useMnesajesDeClientesArchivados = () => {
     const obtenerMensajesArchivados = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(`http://localhost:5000/api/contactanos/mensajes-archivados`, { headers: authHeader() })
+            const res = await axios.get(`https://fast-request-back.onrender.com/api/contactanos/mensajes-archivados`, { headers: authHeader() })
             setMensajes(res.data.mensajesArchivados)
 
         } catch (err) {
@@ -31,7 +31,7 @@ const useMnesajesDeClientesArchivados = () => {
 
     const actualizarMensajeActivo = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
+                await axios.put(`https://fast-request-back.onrender.com/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
             Swal.fire({
                 title: "¡Cambio de estado exitoso!",
                 text: "El cambio de estado del mensaje ha sido exitoso",
@@ -68,7 +68,7 @@ const useMnesajesDeClientesArchivados = () => {
 
         try {
             if (result.isConfirmed) {
-                await axios.delete(`http://localhost:5000/api/contactanos/mensajesDelete/${id}`,
+                await axios.delete(`https://fast-request-back.onrender.com/api/contactanos/mensajesDelete/${id}`,
                     {
                         headers: authHeader()
                     }

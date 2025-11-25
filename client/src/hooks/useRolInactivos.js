@@ -11,7 +11,7 @@ export const useRolInactivos = () => {
 
     const visualizarRolesInactivos = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/rol/Roles-inactivos', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/rol/Roles-inactivos', {
                 headers: authHeader()
             })
             setRoles(res.data)
@@ -22,7 +22,7 @@ export const useRolInactivos = () => {
 
     const cambiarEstadoRol = async (Id) => {
         try {
-            await axios.put(`http://localhost:5000/api/rol/CambiarActivo/${Id}`, {}, 
+            await axios.put(`https://fast-request-back.onrender.com/api/rol/CambiarActivo/${Id}`, {}, 
                 {
                     headers: authHeader()
                 }

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/rol"
+const API_URL = "https://fast-request-back.onrender.com/api/rol"
 
 
 export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {

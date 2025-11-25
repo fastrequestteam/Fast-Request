@@ -56,7 +56,7 @@ const PasoContrasena = ({ anterior, datos, actualizar }) => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/auth/registro',
+                'https://fast-request-back.onrender.com/api/auth/registro',
                 datosParaBackend, 
                 { 
                     headers: { 

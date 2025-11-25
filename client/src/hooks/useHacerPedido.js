@@ -66,7 +66,7 @@ export const useHacerPedido = (initial) => {
 
     const restApi = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/productos', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/pedidos/productos', {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -83,7 +83,7 @@ export const useHacerPedido = (initial) => {
 
     const restApiClientes = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/clientes', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/pedidos/clientes', {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -101,7 +101,7 @@ export const useHacerPedido = (initial) => {
 
     const restApiSalsas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/salsas', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/pedidos/salsas', {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -119,7 +119,7 @@ export const useHacerPedido = (initial) => {
 
     const resApiGaseosa = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/gaseosas', {
+            const res = await axios.get('https://fast-request-back.onrender.com/api/pedidos/gaseosas', {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
