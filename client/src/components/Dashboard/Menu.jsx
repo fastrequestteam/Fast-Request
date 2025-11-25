@@ -64,6 +64,7 @@ function MenuDashboard() {
                     { to: '/dashboard/usuarios', icon: 'people', title: 'Usuarios' },
                     { to: '/dashboard/clientes', icon: 'person', title: 'Clientes' },
                     { to: '/dashboard/estadisticas', icon: 'stats-chart', title: 'Estadísticas' },
+                    { to: '/dashboard/mensajesClientes', icon: 'document-attach', title: 'Mensajes de Clientes' },
                     { to: '/miPagina/edit', icon: 'color-palette', title: 'Pagina Personalizable' },
                 ].map((item, index) => (
                     <liz

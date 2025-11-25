@@ -36,7 +36,7 @@ async function esperarDB() {
 
 esperarDB().then(() => {
 
-  sequelize.sync()
+  sequelize.sync({ alter: true }) // Sirve para actualizar los modelos sin perder datos
     .then(async () => {
       console.log("✅ Modelos sincronizados correctamente.");
     })
@@ -63,6 +63,7 @@ esperarDB().then(() => {
   const complementos = require('./routers/complementos.routes.js')
   const empresaPublicaRoutes = require('./routers/empresaPublica.routes.js')
   const textosEditablesRoutes = require('./routers/textosEditables.routes.js')
+  const contactanosRoutes = require('./routers/contactanos.routes.js')
 
   // Rutas protegidas o públicas
   app.use("/api/usuarios", usuarioRoutes);
@@ -82,7 +83,8 @@ esperarDB().then(() => {
   app.use('/api/complementos', complementos)
   app.use('/api/empresa', empresaPublicaRoutes)
   app.use('/api/textos-editables', textosEditablesRoutes)
-
+  app.use('/api/contactanos', contactanosRoutes)
+  
   app.get("/", (req, res) => {
     res.send("API de registro de usuarios en funcionamiento.");
   });

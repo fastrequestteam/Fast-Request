@@ -11,6 +11,7 @@ const Empresa = require('./Empresa');
 const Salsas = require('./Salsas')
 const Gaseosas = require('./Gaseosas')
 const TextosEditables = require('./TextosEditables')
+const contactoClientes = require('./contactoClientes');
 
 module.exports = {
   Usuario,
@@ -25,6 +26,7 @@ module.exports = {
   Empresa,
   Salsas,
   Gaseosas,
-  TextosEditables
+  TextosEditables,
+  contactoClientes
 };
 

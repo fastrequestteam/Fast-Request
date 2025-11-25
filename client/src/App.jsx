@@ -34,16 +34,8 @@ import Carta from './pages/MiPagina/Carta';
 import Contactanos from './pages/MiPagina/Contactanos';
 import Login_miPagina from './pages/MiPagina/Login/Login';
 import Registro_miPagina from './pages/MiPagina/Registro/Registro';
-
-import HomePage from './pages/Home/homePage';
-import NosotrosPage from './pages/Home/Nosotros'
-import ServiciosPage from './pages/Home/Servicios'
-import PoliticaPage from './pages/Home/Politica'
-import TerminosPage from './pages/Home/Terminos'
-import ContactanosPage from './pages/Home/Contactanos'
-import VerMasPage from './pages/Home/VerMas'
-import FooterPage from './components/Home/Footer'
-import NavbarPage from './components/Home/Navbar'
+import MensajesClientes from './pages/Dashboard/MensajesClientes';
+import VisualizarMensajesDeClientesArchivados from './pages/Dashboard/MensajesClientesArchivados';
 
 import MiPaginaEdicion from './pages/PaginaDeEdicion/HomeEdicion';
 import CartaPageEdit from './pages/PaginaDeEdicion/CartaEdicion';
@@ -81,6 +73,8 @@ const AppContent = () => {
             <Route path="/dashboard/clientesInactivos" element={<VisualizarInactividadDeClientes />} />
             <Route path="/dashboard/configuracion" element={<Configuracion />} />
             <Route path="/dashboard/perfil" element={<Perfil />} />
+            <Route path="/dashboard/mensajesClientes" element={<MensajesClientes />} />
+            <Route path="/dashboard/mensajesClientesArchivados" element={<VisualizarMensajesDeClientesArchivados />} />
 
             <Route path="/dashboard/empresa" element={<Empresa />} />
             <Route path="/dashboard/cocina" element={<CocinaDashboard />} /> 
@@ -95,17 +89,6 @@ const AppContent = () => {
 
 
 
-
-
-          <Route path='/home' element={<HomePage />} />
-          <Route path='/home/nosotros' element={<NosotrosPage />} />
-          <Route path='/home/servicios' element={<ServiciosPage />} />
-          <Route path='/home/politica' element={<PoliticaPage />} />
-          <Route path='/home/terminos' element={<TerminosPage />} />
-          <Route path='/home/contactanos' element={<ContactanosPage />} />
-          <Route path='/home/verMas' element={<VerMasPage />} />
-          <Route path='/home/footer' element={<FooterPage />} />
-          <Route path='/home/navbar' element={<NavbarPage />} />
 
 
           {/* Paginas de esicion para "MiPagina" */}

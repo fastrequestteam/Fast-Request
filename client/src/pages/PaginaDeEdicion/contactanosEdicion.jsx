@@ -1,27 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../assets/css/miPagina.css";
 import NavbarMiPageEdit from "../../components/miPagina/NavbarEdicion";
-import { useNavigate } from "react-router-dom";
 import FooterEdit from '../../components/miPagina/FooterEdit'
+import EditableText from "../../components/miPagina/EditTextHome";
+import { useTextosEditables } from "../../hooks/useTextosEditables";
 
 const ContactanosPageEdit = () => {
 
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        nombre: "",
-        email: "",
-        mensaje: "",
-    });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        alert("¡Gracias por contactarnos! Te responderemos pronto.");
-        setFormData({ nombre: "", email: "", mensaje: "" });
-    };
+    const { textos, updateTexto } = useTextosEditables();
+
 
     return (
         <div className="page">
@@ -30,12 +19,21 @@ const ContactanosPageEdit = () => {
             {/* Sección de contacto */}
             <section className="contact-section">
                 <div className="contact-container">
-                    <h2>Contáctanos</h2>
+                    <h2>
+                        <EditableText
+                            campo="tituloContactanos"
+                            textos={textos}
+                            updateTexto={updateTexto}
+                        />
+                    </h2>
                     <p>
-                        Si tienes alguna pregunta, sugerencia o deseas más información, no dudes en escribirnos.
+                        <EditableText
+                            campo="descripcionContactanos"
+                            textos={textos}
+                            updateTexto={updateTexto}
+                        />
                     </p>
-
-                    <form className="contact-form" onSubmit={handleSubmit}>
+                    <form className="contact-form">
                         <div className="Inputs-Contactanos">
                             <label htmlFor="nombre">Nombre</label>
                             <input
@@ -43,8 +41,6 @@ const ContactanosPageEdit = () => {
                                 id="nombre"
                                 name="nombre"
                                 placeholder="Tu nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
                                 required
                             />
                         </div>
@@ -56,8 +52,6 @@ const ContactanosPageEdit = () => {
                                 id="email"
                                 name="email"
                                 placeholder="tuemail@ejemplo.com"
-                                value={formData.email}
-                                onChange={handleChange}
                                 required
                             />
                         </div>
@@ -69,14 +63,16 @@ const ContactanosPageEdit = () => {
                                 name="mensaje"
                                 rows="5"
                                 placeholder="Escribe tu mensaje aquí..."
-                                value={formData.mensaje}
-                                onChange={handleChange}
                                 required
                             ></textarea>
                         </div>
 
                         <button type="submit" className="btn-enviar">
-                            Enviar Mensaje
+                            <EditableText
+                                campo="tituloBotonEnviar"
+                                textos={textos}
+                                updateTexto={updateTexto}
+                            />
                         </button>
                     </form>
                 </div>

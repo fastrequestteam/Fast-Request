@@ -89,7 +89,9 @@ body {
 .navdash .nav-ul img{
     border-radius: 100%;
     border: 2px solid white;
-    margin-top: 7px;
+    margin-top: 10px;
+    width: 45px !important;
+    height: 45px !important;
 }
 
 .navdash .nav-ul .nav-ul-li {

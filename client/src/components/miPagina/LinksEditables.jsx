@@ -4,9 +4,9 @@ const EditableLink = ({ campo, textos, updateTexto }) => {
     const [open, setOpen] = useState(false);
 
     const valoresPorDefecto = {
-        linkFacebook: "https://www.facebook.com/",
-        linkTwitter: "https://x.com/",
-        linkInstagram: "https://www.instagram.com/",
+        linkFacebook: "Haz doble click para editar",
+        linkTwitter: "Haz doble click para editar",
+        linkInstagram: "Haz doble click para editar",
     };
 
     const valor = textos[campo] !== undefined && textos[campo] !== null

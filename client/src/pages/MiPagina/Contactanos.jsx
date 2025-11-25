@@ -1,25 +1,30 @@
 import React, { useState } from "react";
 import "../../assets/css/miPagina.css";
-import { useNavigate } from "react-router-dom";
 import Footer from '../../components/miPagina/Footer'
+import { useMiPagina } from "../../hooks/useMiPagina";
 
 const Contactanos = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    nombre: "",
-    email: "",
-    mensaje: "",
-  });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const initial = {
+    NombreCliente: '',
+    CorreoElectronico: '',
+    mensaje: '',
+    EstadoMensaje: 'pendiente'
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("¡Gracias por contactarnos! Te responderemos pronto.");
-    setFormData({ nombre: "", email: "", mensaje: "" });
-  };
+  const {
+    textosEditables,
+    handleChange,
+    handleSubmit,
+    mensajeData,
+  } = useMiPagina(initial);
+
+  const {
+    NombreCliente,
+    CorreoElectronico,
+    mensaje
+  } = mensajeData;
+
 
   return (
     <div className="page">
@@ -27,33 +32,33 @@ const Contactanos = () => {
       {/* Sección de contacto */}
       <section className="contact-section">
         <div className="contact-container">
-          <h2>Contáctanos</h2>
+          <h2>{textosEditables.tituloContactanos}</h2>
           <p>
-            Si tienes alguna pregunta, sugerencia o deseas más información, no dudes en escribirnos.
+            {textosEditables.descripcionContactanos}
           </p>
 
           <form className="contact-form" onSubmit={handleSubmit}>
             <div className="Inputs-Contactanos">
-              <label htmlFor="nombre">Nombre</label>
+              <label htmlFor="NombreCliente">Nombre</label>
               <input
                 type="text"
-                id="nombre"
-                name="nombre"
+                id="NombreCliente"
+                name="NombreCliente"
                 placeholder="Tu nombre"
-                value={formData.nombre}
+                value={NombreCliente}
                 onChange={handleChange}
                 required
               />
             </div>
 
             <div className="Inputs-Contactanos">
-              <label htmlFor="email">Correo Electrónico</label>
+              <label htmlFor="CorreoElectronico">Correo Electrónico</label>
               <input
                 type="email"
-                id="email"
-                name="email"
+                id="CorreoElectronico"
+                name="CorreoElectronico"
                 placeholder="tuemail@ejemplo.com"
-                value={formData.email}
+                value={CorreoElectronico}
                 onChange={handleChange}
                 required
               />
@@ -66,14 +71,14 @@ const Contactanos = () => {
                 name="mensaje"
                 rows="5"
                 placeholder="Escribe tu mensaje aquí..."
-                value={formData.mensaje}
+                value={mensaje}
                 onChange={handleChange}
                 required
               ></textarea>
             </div>
 
             <button type="submit" className="btn-enviar">
-              Enviar Mensaje
+              {textosEditables.tituloBotonEnviar}
             </button>
           </form>
         </div>

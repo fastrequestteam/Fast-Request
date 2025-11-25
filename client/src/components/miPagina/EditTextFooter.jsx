@@ -4,14 +4,14 @@ const EditableText = ({ campo, textos, updateTexto, className }) => {
     const [editing, setEditing] = useState(false);
 
     const valoresPorDefecto = {
-        caracteristicas: "Tu tienda de confianza con los mejores productos y precios increíbles.",
-        tituloDeEnlaces: "Enlaces Rápidos",
-        tituloContacto: "Contacto",
-        localidad: "Medellín, Colombia",
-        telefono: "+57 300 123 4567",
-        email: "info@empresa.com",
-        tituloRedes: "Síguenos",
-        footerFinal: "© 2025 Tu Empresa. Todos los derechos reservados."
+        caracteristicas: "Haz doble click para editar",
+        tituloDeEnlaces: "Haz doble click para editar",
+        tituloContacto: "Haz doble click para editar",
+        localidad: "Haz doble click para editar",
+        telefono: "Haz doble click para editar",
+        email: "Haz doble click para editar",
+        tituloRedes: "Haz doble click para editar",
+        footerFinal: "Haz doble click para editar"
     };
 
     const valor = textos[campo] !== undefined && textos[campo] !== null

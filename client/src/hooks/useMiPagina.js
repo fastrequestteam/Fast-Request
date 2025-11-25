@@ -11,8 +11,7 @@ const API_URL4 = "http://localhost:5000/api/complementos/gaseosas";
 const API_EMPRESA = "http://localhost:5000/api/empresa/empresaPublic";
 const Api_textos = 'http://localhost:5000/api/textos-editables/find-text';
 
-
-export const useMiPagina = () => {
+export const useMiPagina = (initial = { NombreCliente: '', CorreoElectronico: '', mensaje: '', EstadoMensaje: 'pendiente' }) => {
   const [categorias, setCategorias] = useState([]);
   const [productos, setProductos] = useState([]);
   const [empresaId, setEmpresaId] = useState(null);
@@ -24,6 +23,7 @@ export const useMiPagina = () => {
   const [textosEditables, setTextosEditables] = useState([]);
   const [sliderImages, setSliderImages] = useState([]);
   const [imagenNosotros, setImagenNosotros] = useState("");
+  const [mensajeData, setMensajeData] = useState(initial)
   const { empresaSlug } = useParams();
 
 
@@ -36,7 +36,7 @@ export const useMiPagina = () => {
       res.data.forEach(t => {
         map[t.campo] = t.valor;
       });
-      
+
       setTextosEditables(map);
 
     } catch (error) {
@@ -88,6 +88,54 @@ export const useMiPagina = () => {
     }
   }
 
+
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    setMensajeData({
+      ...mensajeData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(
+        'http://localhost:5000/api/contactanos/enviar-mensaje',
+        {
+          NombreCliente: mensajeData.NombreCliente,
+          CorreoElectronico: mensajeData.CorreoElectronico,
+          mensaje: mensajeData.mensaje
+        },
+        {
+          params: { empresaId }
+        }
+      );
+
+      Swal.fire({
+        title: "¡Mensaje enviado!",
+        text: "Tu mensaje ha sido enviado con éxito. Nos pondremos en contacto contigo pronto.",
+        icon: "success",
+        background: "#272727",
+        color: "#c9c9c9",
+      });
+
+      setMensajeData({ NombreCliente: "", CorreoElectronico: "", mensaje: "" });
+
+    } catch (err) {
+      console.log(err);
+      Swal.fire({
+        title: "Error",
+        text: "Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.",
+        icon: "error",
+        background: "#272727",
+        color: "#c9c9c9",
+      });
+    }
+  };
+
+
   // Obtener empresa por slug
   useEffect(() => {
     if (!empresaSlug) {
@@ -137,6 +185,9 @@ export const useMiPagina = () => {
     error,
     textosEditables,
     sliderImages,      // <--- NUEVO
-    imagenNosotros
+    imagenNosotros,
+    handleChange,
+    handleSubmit,
+    mensajeData,
   };
 };

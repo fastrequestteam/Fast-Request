@@ -4,9 +4,15 @@ const EditableText = ({ campo, textos, updateTexto, className }) => {
     const [editing, setEditing] = useState(false);
 
     const valoresPorDefecto = {
-        tituloSobreNosotros: "Sobre Nosotros",
-        descripcionSobreNosotros: "Contenido sobre nuestra empresa, misión, visión y valores.",
-        tituloProductos: "Productos Más Comprados",
+        tituloSobreNosotros: "Haz doble click para editar",
+        descripcionSobreNosotros: "Haz doble click para editar",
+        tituloProductos: "Haz doble click para editar",
+
+
+        // Titilo Y descripcion en "Contactanos"
+        tituloContactanos: "Haz doble click para editar",
+        descripcionContactanos: "Haz doble click para editar",
+        tituloBotonEnviar: "Haz doble click para editar",
     };
 
     const valor = textos[campo] !== undefined && textos[campo] !== null
@@ -22,7 +28,7 @@ const EditableText = ({ campo, textos, updateTexto, className }) => {
     return (
         <span onDoubleClick={() => setEditing(true)} className={className}>
             {editing ? (
-                campo === "descripcionSobreNosotros" ? (
+                campo === "descripcionSobreNosotros" || campo === "descripcionContactanos" ? (
                     <textarea
                         autoFocus
                         value={valor}

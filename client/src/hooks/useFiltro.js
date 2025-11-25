@@ -135,3 +135,23 @@ export const useFiltroGaseosas = (data, busqueda) => {
 
     return res;
 }
+
+// useFiltro Mensajes
+
+export const useFiltroMensajes= (data, busqueda) => {
+    const res = useMemo(() => {
+        if (!busqueda.trim()) return data;
+        const termino = busqueda.toLowerCase();
+        return data.filter((item) => {
+            return [
+                item.id?.toString(),
+                item.NombreCliente?.toLowerCase(),
+                item.CorreoElectronico?.toLowerCase(),
+                item.mensaje?.toLowerCase(),
+                item.EstadoMensaje?.toLowerCase(),
+            ].some(value => value?.toLowerCase().includes(termino));
+        });
+    }, [data, busqueda]);
+
+    return res;
+}
