@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PasoCorreoRecuperar from './PasoCorreoRecuperar';
-import PasoCodigoRecuperar from './PasoCodigoRecuperar';
-import PasoContrasenaNueva from './PasoContrasenaNueva';
+import PasoCodigoRecuperar from './pasoCodigoRecuperar';
+import PasoContrasenaNueva from './pasoContrasenaNueva';
 
 function RecuperarContrasena() {
   const [paso, setPaso] = useState(1);
