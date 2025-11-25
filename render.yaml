@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: "cd server && npm install"
+    startCommand: "cd server && npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MYSQL_HOST
+        fromService:
+          name: mysql-db
+          type: pserv
+          property: host
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_USER
+        value: fast_user
+      - key: MYSQL_PASSWORD
+        value: 123456789
+      - key: MYSQL_DATABASE
+        value: fast_request
+
+  - type: web
+    name: frontend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: "cd client && npm install && npm run build"
+    startCommand: "cd client && npm run preview -- --host"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: backend
+          type: web
+          property: url
+
+  - type: pserv
+    name: mysql-db
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./Dockerfile.mysql
+    disk:
+      name: mysql-disk
+      mountPath: /var/lib/mysql
+      sizeGB: 1
+
