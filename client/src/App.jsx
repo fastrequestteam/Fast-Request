@@ -40,7 +40,7 @@ import VisualizarMensajesDeClientesArchivados from './pages/Dashboard/MensajesCl
 import MiPaginaEdicion from './pages/PaginaDeEdicion/HomeEdicion';
 import CartaPageEdit from './pages/PaginaDeEdicion/CartaEdicion';
 import ContactanosPageEdit from './pages/PaginaDeEdicion/contactanosEdicion';
-import MiPaginaLayout from './components/miPagina/layout';
+import MiPaginaLayout from './components/miPagina/Layout';
 
 const AppContent = () => {
 
