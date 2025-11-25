@@ -71,7 +71,7 @@ const HacerPedidoDashboard = ({ onClose }) => {
 
     const handleCrearPedido = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/pedidos/nuevoPedido', formPedidosData, {
+            const response = await axios.post('https://fast-request-back.onrender.com/api/pedidos/nuevoPedido', formPedidosData, {
                 headers: {
                     ...authHeader(),
                     'Content-Type': 'application/json',
