@@ -13,6 +13,11 @@ const PasoContrasena = ({ anterior, datos, actualizar }) => {
     const [confirmarPassword, setConfirmarPassword] = useState('');
     const [error, setError] = useState('');
     const [cargando, setCargando] = useState(false);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     const navigate = useNavigate();
 
@@ -56,7 +61,7 @@ const PasoContrasena = ({ anterior, datos, actualizar }) => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/auth/registro',
+                `${API_BASE_URL}/api/auth/registro`,
                 datosParaBackend, 
                 { 
                     headers: { 

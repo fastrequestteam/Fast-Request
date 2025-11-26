@@ -14,15 +14,20 @@ const PedidosDashboard = ({ onClose }) => {
     const [busqueda, setBusqueda] = useState('')
     const [paginacionActual, setPaginacionActual] = useState(1)
     const navigate = useNavigate()
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
 
     const obtenerPedidos = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/ObtenerPedidos', {
+            const res = await axios.get(`${API_BASE_URL}/api/pedidos/ObtenerPedidos`, {
                 headers: authHeader()
             })
             setFullPedidos(res.data);
-            console.log('Pedidos recibidos:', res.data); 
+            console.log('Pedidos recibidos:', res.data);
         } catch (err) {
             console.error('Error al cargar pedidos:', err);
         }
@@ -73,9 +78,9 @@ const PedidosDashboard = ({ onClose }) => {
                                 <td className="tabladashb_tbody_tr_td">{new Date(p.createdAt).toLocaleDateString()}</td>
                                 <td className="tabladashb_tbody_tr_td">
                                     <button className="detalles_pedido" onClick={(e) => {
-                                            e.preventDefault();
-                                            navigate(`/dashboard/pedido-full/${p.id}`)
-                                        }}><ion-icon id="iconosoperaciondetalles" name="filter"></ion-icon></button>
+                                        e.preventDefault();
+                                        navigate(`/dashboard/pedido-full/${p.id}`)
+                                    }}><ion-icon id="iconosoperaciondetalles" name="filter"></ion-icon></button>
                                 </td>
                             </tr>
                         ))}
@@ -87,17 +92,17 @@ const PedidosDashboard = ({ onClose }) => {
             <Stack spacing={2}>
                 <Pagination
                     className="paginacion"
-                    count={Math.ceil(res.length / itemsPorPagina)} 
+                    count={Math.ceil(res.length / itemsPorPagina)}
                     page={paginacionActual}
                     onChange={(event, value) => setPaginacionActual(value)}
                     size="large"
                     sx={{
                         '& .MuiPaginationItem-root': {
-                            color: '#fff', 
+                            color: '#fff',
                         },
                         '& .MuiPaginationItem-root.Mui-selected': {
-                            backgroundColor: '#1c1c1e', 
-                            color: '#fff',              
+                            backgroundColor: '#1c1c1e',
+                            color: '#fff',
                         },
                     }}
                 />

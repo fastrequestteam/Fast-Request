@@ -11,12 +11,17 @@ export const useComplemntosCompletos = () => {
     const [dataComplementoGaseosa, setDataComplementoGaseosa] = useState([])
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     const getSalsasCompletos = async () => {
         try {
 
             const res = await axios.get(
-                `http://localhost:5000/api/complementos/obtener-salsas-inactivas`,
+                `${API_BASE_URL}/api/complementos/obtener-salsas-inactivas`,
                 {
                     headers: authHeader()
                 }
@@ -36,7 +41,7 @@ export const useComplemntosCompletos = () => {
         try {
 
             const res = await axios.get(
-                `http://localhost:5000/api/complementos/obtener-gaseosas-inactivas`,
+                `${API_BASE_URL}/api/complementos/obtener-gaseosas-inactivas`,
                 {
                     headers: authHeader()
                 }
@@ -54,7 +59,7 @@ export const useComplemntosCompletos = () => {
     const actualizaEstadoSalsa = async (id) => {
         try {
 
-            await axios.put(`http://localhost:5000/api/complementos/update-estado-activo-salsa/${id}`,
+            await axios.put(`${API_BASE_URL}/api/complementos/update-estado-activo-salsa/${id}`,
                 {},
                 {
                     headers: authHeader()
@@ -81,7 +86,7 @@ export const useComplemntosCompletos = () => {
     const actualizaEstadoGaseosa = async (id) => {
         try {
 
-            await axios.put(`http://localhost:5000/api/complementos/update-estado-activo-gaseosa/${id}`,
+            await axios.put(`${API_BASE_URL}/api/complementos/update-estado-activo-gaseosa/${id}`,
                 {},
                 {
                     headers: authHeader()
@@ -118,7 +123,7 @@ export const useComplemntosCompletos = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5000/api/complementos/destroy-salsa/${id}`,
+                await axios.delete(`${API_BASE_URL}/api/complementos/destroy-salsa/${id}`,
                     {
                         headers: authHeader()
                     }
@@ -153,7 +158,7 @@ export const useComplemntosCompletos = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5000/api/complementos/destroy-gaseosa/${id}`,
+                await axios.delete(`${API_BASE_URL}/api/complementos/destroy-gaseosa/${id}`,
                     {
                         headers: authHeader()
                     }

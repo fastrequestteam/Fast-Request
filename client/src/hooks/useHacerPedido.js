@@ -24,6 +24,12 @@ export const useHacerPedido = (initial) => {
         notasAdicionales: ''
     })
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
     const formRef = useRef(null);
 
     const OnChangeInputs = ({ target }) => {
@@ -66,7 +72,7 @@ export const useHacerPedido = (initial) => {
 
     const restApi = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/productos', {
+            const res = await axios.get(`${API_BASE_URL}/api/pedidos/productos`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -83,7 +89,7 @@ export const useHacerPedido = (initial) => {
 
     const restApiClientes = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/clientes', {
+            const res = await axios.get(`${API_BASE_URL}/api/pedidos/clientes`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -101,7 +107,7 @@ export const useHacerPedido = (initial) => {
 
     const restApiSalsas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/salsas', {
+            const res = await axios.get(`${API_BASE_URL}/api/pedidos/salsas`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -119,7 +125,7 @@ export const useHacerPedido = (initial) => {
 
     const resApiGaseosa = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/pedidos/gaseosas', {
+            const res = await axios.get(`${API_BASE_URL}/api/pedidos/gaseosas`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeader()
@@ -157,7 +163,7 @@ export const useHacerPedido = (initial) => {
         restApi()
         restApiClientes()
         restApiSalsas(),
-        resApiGaseosa()
+            resApiGaseosa()
     }, [])
 
     return {

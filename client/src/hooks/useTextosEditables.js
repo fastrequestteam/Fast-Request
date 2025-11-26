@@ -6,9 +6,14 @@ export const useTextosEditables = () => {
 
     const [textos, setTextos] = useState({});
     const [loading, setLoading] = useState(true);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/textos-editables/find-text-edit", { headers: authHeader() })
+        axios.get(`${API_BASE_URL}/api/textos-editables/find-text-edit`, { headers: authHeader() })
             .then(res => {
                 const map = {};
                 res.data.forEach(t => { map[t.campo] = t.valor; });
@@ -20,7 +25,7 @@ export const useTextosEditables = () => {
 
     const updateTexto = async (campo, valor) => {
         setTextos(prev => ({ ...prev, [campo]: valor }));
-        await axios.put(`http://localhost:5000/api/textos-editables/edit-text/${campo}`, { valor }, { headers: authHeader() });
+        await axios.put(`${API_BASE_URL}/api/textos-editables/edit-text/${campo}`, { valor }, { headers: authHeader() });
     };
 
     return {

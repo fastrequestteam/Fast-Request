@@ -8,12 +8,24 @@ const dotenv = require("dotenv");
 const path = require('path');
 const db = require("./config/db.js");
 
-app.use(cors());
+const PORT = process.env.PORT || 5000;
+
+const corsOptions = {
+  origin: [
+    'https://fast-request-1.onrender.com',
+    `http://localhost:${PORT}`,
+    'http://localhost:5173', 
+    'http://localhost:5174'
+  ], // URL's permitidas
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+};
+
+app.use(cors(corsOptions));
 dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
-const PORT = process.env.PORT || 5000;
 
 // Funcion que se ejecuta para esperar la conexion a la base de datos 
 // con el fin de que la db este lista antes de iniciar el servidor  

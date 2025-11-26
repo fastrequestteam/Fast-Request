@@ -3,7 +3,14 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/categorias";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+const API_URL = `${API_BASE_URL}/api/categorias`;
 
 export const useCategorias = (initial = { NombreCategoria: "", EstadoCategoria: "" }) => {
     const [formCategoriaData, setFormCategoriaData] = useState(initial);
@@ -64,30 +71,30 @@ export const useCategorias = (initial = { NombreCategoria: "", EstadoCategoria: 
 
         // Validación en tiempo real
         const erroresTemp = { ...errores };
-            if (name === "NombreCategoria") {
-                if (!value.trim()) {
-                    erroresTemp.NombreCategoria = "El nombre es obligatorio";
-                } else if (!/^[A-Za-z]/.test(value)) {
-                    erroresTemp.NombreCategoria = "Nombre no valido";
-                } else if (
-                    categorias.some((cat) =>
-                        cat.NombreCategoria.toLowerCase().trim() === value.toLowerCase().trim() &&
-                        cat.Id !== formCategoriaData.Id
-                    )
-                ) {
-                    erroresTemp.NombreCategoria = "Este nombre de categoria ya existe";
-                } else {
-                    delete erroresTemp.NombreCategoria;
-                }
+        if (name === "NombreCategoria") {
+            if (!value.trim()) {
+                erroresTemp.NombreCategoria = "El nombre es obligatorio";
+            } else if (!/^[A-Za-z]/.test(value)) {
+                erroresTemp.NombreCategoria = "Nombre no valido";
+            } else if (
+                categorias.some((cat) =>
+                    cat.NombreCategoria.toLowerCase().trim() === value.toLowerCase().trim() &&
+                    cat.Id !== formCategoriaData.Id
+                )
+            ) {
+                erroresTemp.NombreCategoria = "Este nombre de categoria ya existe";
+            } else {
+                delete erroresTemp.NombreCategoria;
             }
+        }
 
-            if (name === "EstadoCategoria") {
-                if (!value) {
-                    erroresTemp.EstadoCategoria = "Selecciona un estado";
-                } else {
-                    delete erroresTemp.EstadoCategoria;
-                }
+        if (name === "EstadoCategoria") {
+            if (!value) {
+                erroresTemp.EstadoCategoria = "Selecciona un estado";
+            } else {
+                delete erroresTemp.EstadoCategoria;
             }
+        }
 
         setErrores(erroresTemp);
     };
@@ -151,40 +158,40 @@ export const useCategorias = (initial = { NombreCategoria: "", EstadoCategoria: 
     };
 
     const cambiarEstadoCategoriaInactivo = async (Id) => {
-    const result = await Swal.fire({
-        title: "¿Estás seguro?",
-        text: "Esto cambiará el estado de la categoría a inactiva.\nYa no se visualizará en el apartado principal.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, cambiar estado",
-        background: "#272727",
-        color: "#c9c9c9",
-    });
+        const result = await Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Esto cambiará el estado de la categoría a inactiva.\nYa no se visualizará en el apartado principal.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, cambiar estado",
+            background: "#272727",
+            color: "#c9c9c9",
+        });
 
-    try {
-        if (result.isConfirmed) {
-            await axios.put(
-                `${API_URL}/CambiarInactivo/${Id}`,
-                {},
-                { headers: authHeader() }
-            );
+        try {
+            if (result.isConfirmed) {
+                await axios.put(
+                    `${API_URL}/CambiarInactivo/${Id}`,
+                    {},
+                    { headers: authHeader() }
+                );
 
-            Swal.fire({
-                title: "¡Cambio de estado exitoso!",
-                text: "El estado de la categoría se cambió correctamente.",
-                icon: "success",
-                background: "#272727",
-                color: "#c9c9c9",
-            });
+                Swal.fire({
+                    title: "¡Cambio de estado exitoso!",
+                    text: "El estado de la categoría se cambió correctamente.",
+                    icon: "success",
+                    background: "#272727",
+                    color: "#c9c9c9",
+                });
 
-            // ✅ Recargar lista de categorías activas
-            cargarCategorias();
+                // ✅ Recargar lista de categorías activas
+                cargarCategorias();
+            }
+        } catch (err) {
+            console.error("Error al cambiar el estado de la categoría:", err);
+            Swal.fire("Error", "No se pudo cambiar el estado de la categoría", "error");
         }
-    } catch (err) {
-        console.error("Error al cambiar el estado de la categoría:", err);
-        Swal.fire("Error", "No se pudo cambiar el estado de la categoría", "error");
-    }
-};
+    };
 
     const editarCategoria = (categoria) => {
         setFormCategoriaData(categoria);

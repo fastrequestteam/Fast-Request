@@ -4,16 +4,23 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/categorias/";
-const API_URL2 = "http://localhost:5000/api/productos/";
-const API_URL3 = "http://localhost:5000/api/complementos/obtener-salsas";
-const API_URL4 = "http://localhost:5000/api/complementos/obtener-gaseosas";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+const API_URL = `${API_BASE_URL}/api/categorias/`;
+const API_URL2 = `${API_BASE_URL}/api/productos/`;
+const API_URL3 = `${API_BASE_URL}/api/complementos/obtener-salsas`;
+const API_URL4 = `${API_BASE_URL}/api/complementos/obtener-gaseosas`;
 
 export const useMiPaginaEdit = () => {
   const [categorias, setCategorias] = useState([]);
   const [productos, setProductos] = useState([]);
   const [salsas, setSalsas] = useState([]);
-  const [gaseosas, setGaseosas ] = useState([]);
+  const [gaseosas, setGaseosas] = useState([]);
 
   const VisualizarCategoriasMenu = async () => {
     try {
@@ -44,7 +51,7 @@ export const useMiPaginaEdit = () => {
       Swal.fire("Error", "Error al cargar salsas", "error");
     }
   }
-  
+
   const cargarGaseosas = async () => {
     try {
       const res = await axios.get(API_URL4, { headers: authHeader() });
@@ -56,52 +63,52 @@ export const useMiPaginaEdit = () => {
   }
 
   const subirImagen = async (tipo, id, archivo) => {
-  if (!archivo) return;
-
-  Swal.fire({
-    title: 'Subiendo imagen...',
-    text: "Espera un poco, la imagen se está subiendo 🚀!",
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    didOpen: () => {
-      Swal.showLoading();
-    }
-  });
-
-  try {
-    const formData = new FormData();
-    formData.append("imagen", archivo);
-
-    let endpoint = "";
-    if (tipo === "producto") endpoint = `http://localhost:5000/api/productos/productoImagen/${id}/imagen`;
-    if (tipo === "salsa") endpoint = `http://localhost:5000/api/complementos/salsasImagen/${id}/imagen`;
-    if (tipo === "gaseosa") endpoint = `http://localhost:5000/api/complementos/gaseosasImagen/${id}/imagen`;
-
-    await axios.put(endpoint, formData, {
-      headers: {
-        ...authHeader(),
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    // Recargar datos
-    await Promise.all([
-      cargarProductos(),
-      cargarSalsas(),
-      cargarGaseosas(),
-    ]);
+    if (!archivo) return;
 
     Swal.fire({
-      icon: "success",
-      title: "Imagen actualizada",
-      timer: 1200,
+      title: 'Subiendo imagen...',
+      text: "Espera un poco, la imagen se está subiendo 🚀!",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
     });
 
-  } catch (error) {
-    console.error("Error al subir imagen:", error);
-    Swal.fire("Error", "No se pudo actualizar la imagen", "error");
-  }
-};
+    try {
+      const formData = new FormData();
+      formData.append("imagen", archivo);
+
+      let endpoint = "";
+      if (tipo === "producto") endpoint = `${API_BASE_URL}/api/productos/productoImagen/${id}/imagen`;
+      if (tipo === "salsa") endpoint = `${API_BASE_URL}/api/complementos/salsasImagen/${id}/imagen`;
+      if (tipo === "gaseosa") endpoint = `${API_BASE_URL}/api/complementos/gaseosasImagen/${id}/imagen`;
+
+      await axios.put(endpoint, formData, {
+        headers: {
+          ...authHeader(),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Recargar datos
+      await Promise.all([
+        cargarProductos(),
+        cargarSalsas(),
+        cargarGaseosas(),
+      ]);
+
+      Swal.fire({
+        icon: "success",
+        title: "Imagen actualizada",
+        timer: 1200,
+      });
+
+    } catch (error) {
+      console.error("Error al subir imagen:", error);
+      Swal.fire("Error", "No se pudo actualizar la imagen", "error");
+    }
+  };
 
 
   useEffect(() => {

@@ -38,6 +38,12 @@ export const useConfiguracion = (initial = { nombre: '', apellido: '' }) => {
     confirm: "",
   })
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+  }
+
   const userMenuRef = useRef(null);
   const statusTimeoutRef = useRef(null);
 
@@ -153,7 +159,7 @@ export const useConfiguracion = (initial = { nombre: '', apellido: '' }) => {
       const decored = jwtDecode(token)
       const id = decored.id
 
-      const res = await axios.put(`http://localhost:5000/api/configuracion/updatePass/${id}`,
+      const res = await axios.put(`${API_BASE_URL}/api/configuracion/updatePass/${id}`,
         passwords, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -256,7 +262,7 @@ export const useConfiguracion = (initial = { nombre: '', apellido: '' }) => {
       }
 
       const res = await axios.put(
-        `http://localhost:5000/api/configuracion/updateData/${id}`,
+        `${API_BASE_URL}/api/configuracion/updateData/${id}`,
         payload,
         {
           headers: {

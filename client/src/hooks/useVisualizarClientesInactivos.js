@@ -8,11 +8,16 @@ export const useVisualizarClientesInactivos = () => {
 
     const navigate = useNavigate();
     const [clientes, setClientes] = useState([])
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
 
     const visualizarClientesConEstadoInactivo = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/cliente/inactivos`,
+            const res = await axios.get(`${API_BASE_URL}/api/cliente/inactivos`,
                 {
                     headers: authHeader()
                 }
@@ -25,27 +30,27 @@ export const useVisualizarClientesInactivos = () => {
 
     const cambioDeEstadoCliente = async (Id) => {
         try {
-                await axios.put(`http://localhost:5000/api/cliente/activo/${Id}`,
-                    {},
-                    {
-                        headers: authHeader()
-                    }
-                )
-                Swal.fire({
-                    title: "¡Cambio de estado exitoso!",
-                    text: "El cambio de estado del cliente a sido exitoso",
-                    icon: "success",
-                    background: "#272727",
-                    color: "#c9c9c9",
-                });
+            await axios.put(`${API_BASE_URL}/api/cliente/activo/${Id}`,
+                {},
+                {
+                    headers: authHeader()
+                }
+            )
+            Swal.fire({
+                title: "¡Cambio de estado exitoso!",
+                text: "El cambio de estado del cliente a sido exitoso",
+                icon: "success",
+                background: "#272727",
+                color: "#c9c9c9",
+            });
 
-                visualizarClientesConEstadoInactivo()
-                
+            visualizarClientesConEstadoInactivo()
+
         } catch (err) {
             console.error("Error al cambiar el estado del cliente:", err);
             Swal.fire("Error", "No se a podido cambiar el estado del cliente", "error");
         }
-    } 
+    }
 
     const volverAlInicio = (e) => {
         e.preventDefault()

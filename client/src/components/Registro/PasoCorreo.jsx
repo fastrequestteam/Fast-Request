@@ -9,16 +9,21 @@ const PasoCorreo = ({ siguiente, datos, actualizar }) => {
 
     const [correo, setCorreo] = useState(datos.correo || '')
     const [errorEmail, setErrorEmail] = useState('')
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     const verificarEmail = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/usuarios/verificarEmail?correo=${correo}`);
+            const res = await axios.get(`${API_BASE_URL}/api/usuarios/verificarEmail?correo=${correo}`);
             if (res.data.existe) {
-                setErrorEmail(res.data.mensaje); 
+                setErrorEmail(res.data.mensaje);
                 return true;
             } else {
-                setErrorEmail(''); 
+                setErrorEmail('');
                 return false;
             }
         } catch (err) {
@@ -27,7 +32,7 @@ const PasoCorreo = ({ siguiente, datos, actualizar }) => {
             return false;
         }
     };
-    
+
 
     const handleEmailCode = async () => {
         if (!correo.trim()) {
@@ -42,7 +47,7 @@ const PasoCorreo = ({ siguiente, datos, actualizar }) => {
         }
 
         try {
-            const res = await axios.post('http://localhost:5000/api/validarEmail/handle-email', {
+            const res = await axios.post(`${API_BASE_URL}/api/validarEmail/handle-email`, {
                 correo
             }, {
                 headers: { 'Content-Type': 'application/json' }
@@ -57,13 +62,13 @@ const PasoCorreo = ({ siguiente, datos, actualizar }) => {
 
         } catch (err) {
             if (err.response && err.response.status === 400) {
-                setErrorEmail(err.response.data.message); 
+                setErrorEmail(err.response.data.message);
             } else {
                 setErrorEmail('Ocurrió un error al registrar.');
             }
         }
     }
-    
+
     const manejarEnvio = (e) => {
         e.preventDefault()
         handleEmailCode()

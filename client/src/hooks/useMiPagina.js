@@ -4,12 +4,19 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api/categorias/categorias";
-const API_URL2 = "http://localhost:5000/api/productos/productos";
-const API_URL3 = "http://localhost:5000/api/complementos/salsas";
-const API_URL4 = "http://localhost:5000/api/complementos/gaseosas";
-const API_EMPRESA = "http://localhost:5000/api/empresa/empresaPublic";
-const Api_textos = 'http://localhost:5000/api/textos-editables/find-text';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+
+const API_URL = `${API_BASE_URL}/api/categorias/categorias`;
+const API_URL2 = `${API_BASE_URL}/api/productos/productos`;
+const API_URL3 = `${API_BASE_URL}/api/complementos/salsas`;
+const API_URL4 = `${API_BASE_URL}/api/complementos/gaseosas`;
+const API_EMPRESA = `${API_BASE_URL}/api/empresa/empresaPublic`;
+const Api_textos = `${API_BASE_URL}/api/textos-editables/find-text`;
 
 export const useMiPagina = (initial = { NombreCliente: '', CorreoElectronico: '', mensaje: '', EstadoMensaje: 'pendiente' }) => {
   const [categorias, setCategorias] = useState([]);
@@ -102,7 +109,7 @@ export const useMiPagina = (initial = { NombreCliente: '', CorreoElectronico: ''
 
     try {
       await axios.post(
-        'http://localhost:5000/api/contactanos/enviar-mensaje',
+        `${API_BASE_URL}/api/contactanos/enviar-mensaje`,
         {
           NombreCliente: mensajeData.NombreCliente,
           CorreoElectronico: mensajeData.CorreoElectronico,

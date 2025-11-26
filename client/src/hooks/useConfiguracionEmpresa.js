@@ -4,7 +4,13 @@ import { authHeader } from "../helpers/authHeader";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 
-const API_URL = "http://localhost:5000/api/empresa";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+const API_URL = `${API_BASE_URL}/api/empresa`;
 
 export default function useConfiguracionEmpresa(initial) {
   const [userData, setUserData] = useState(initial);
@@ -172,7 +178,7 @@ export default function useConfiguracionEmpresa(initial) {
 
         setUserData(updatedUserData);
 
-        
+
         window.dispatchEvent(new CustomEvent('companyDatesUpdated', {
           detail: { companyDatesUpdated: updatedUserData }
         }));

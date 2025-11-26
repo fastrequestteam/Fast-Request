@@ -3,10 +3,16 @@ import { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/rol"
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+const API_URL = `${API_BASE_URL}/api/rol`
 
 
-export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
+export const useRol = (initial = { NombreRol: "", EstadoRol: "" }) => {
     const [formRolData, setFormRolData] = useState(initial)
     const [modalVisible, setModalVisible] = useState(false);
     const [isCreating, setIsCreating] = useState(false)
@@ -14,11 +20,11 @@ export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
     const [errores, setErrores] = useState({})
     const [roles, setRoles] = useState([])
 
-    useEffect(() =>{
+    useEffect(() => {
         cargarRol()
     }, [])
 
-    const cargarRol = async () =>{
+    const cargarRol = async () => {
         try {
             const res = await axios.get(API_URL, {
                 headers: authHeader()
@@ -65,86 +71,90 @@ export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
 
         // Validación en tiempo real
         const erroresTemp = { ...errores };
-            if (name === "NombreRol") {
-                if (!value.trim()) {
-                    erroresTemp.NombreRol = "El nombre es obligatorio";
-                } else if (!/^[A-Za-z]/.test(value)) {
-                    erroresTemp.NombreRol = "Nombre no valido";
-                } else if (
-                    roles.some((rol) =>
-                        rol.NombreRol.toLowerCase().trim() === value.toLowerCase().trim() &&
-                        rol.Id !== formRolData.Id
-                    )
-                ) {
-                    erroresTemp.NombreRol = "Este nombre de rol ya existe";
-                } else {
-                    delete erroresTemp.NombreRol;
-                }
+        if (name === "NombreRol") {
+            if (!value.trim()) {
+                erroresTemp.NombreRol = "El nombre es obligatorio";
+            } else if (!/^[A-Za-z]/.test(value)) {
+                erroresTemp.NombreRol = "Nombre no valido";
+            } else if (
+                roles.some((rol) =>
+                    rol.NombreRol.toLowerCase().trim() === value.toLowerCase().trim() &&
+                    rol.Id !== formRolData.Id
+                )
+            ) {
+                erroresTemp.NombreRol = "Este nombre de rol ya existe";
+            } else {
+                delete erroresTemp.NombreRol;
             }
+        }
 
-            if (name === "EstadoRol") {
-                if (!value) {
-                    erroresTemp.EstadoRol = "Selecciona un estado";
-                } else {
-                    delete erroresTemp.EstadoRol;
-                }
+        if (name === "EstadoRol") {
+            if (!value) {
+                erroresTemp.EstadoRol = "Selecciona un estado";
+            } else {
+                delete erroresTemp.EstadoRol;
             }
+        }
 
         setErrores(erroresTemp);
     };
 
     const guardarRol = async (permisosSeleccionados = []) => {
-    if (!validarFormulario()) {
-        Swal.fire({ 
-            title: "Datos no válidos", 
-            text: "Digita correctamente los datos", 
-            icon: "error", 
-            background: "#272727", 
-            color: "#c9c9c9" });
-        return;
-    }
+        if (!validarFormulario()) {
+            Swal.fire({
+                title: "Datos no válidos",
+                text: "Digita correctamente los datos",
+                icon: "error",
+                background: "#272727",
+                color: "#c9c9c9"
+            });
+            return;
+        }
 
-    const payload = {
-        ...formRolData,
-        Permisos: permisosSeleccionados  // enviar permisos aquí
+        const payload = {
+            ...formRolData,
+            Permisos: permisosSeleccionados  // enviar permisos aquí
+        };
+
+        try {
+            if (formRolData.Id) {
+                await axios.put(`${API_URL}/${formRolData.Id}`, payload, {
+                    headers: authHeader()
+                });
+                Swal.fire({
+                    title: "Actualizado",
+                    text: "Rol actualizado",
+                    icon: "success", background:
+                        "#272727",
+                    color: "#c9c9c9"
+                });
+            } else {
+                await axios.post(API_URL, payload, {
+                    headers: authHeader()
+                });
+                Swal.fire({
+                    title: "Creado",
+                    text: "Rol creado",
+                    icon: "success",
+                    background: "#272727",
+                    color: "#c9c9c9"
+                });
+            }
+            cargarRol();
+            closeModal();
+        } catch (error) {
+            console.error("Error al guardar rol:", error);
+            Swal.fire({
+                title: "Error",
+                text: "No se pudo guardar el rol",
+                icon: "error",
+                background: "#272727",
+                color: "#c9c9c9"
+            });
+        }
     };
 
-    try {
-        if (formRolData.Id) {
-            await axios.put(`${API_URL}/${formRolData.Id}`, payload, {
-                headers: authHeader()
-            });
-            Swal.fire({ 
-                title: "Actualizado", 
-                text: "Rol actualizado", 
-                icon: "success", background: 
-                "#272727", 
-                color: "#c9c9c9" });
-        } else {
-            await axios.post(API_URL, payload, {
-                headers: authHeader()
-            });
-            Swal.fire({ 
-                title: "Creado", 
-                text: "Rol creado", 
-                icon: "success", 
-                background: "#272727", 
-                color: "#c9c9c9" });
-        }
-        cargarRol();
-        closeModal();
-    } catch (error) {
-        console.error("Error al guardar rol:", error);
-        Swal.fire({ 
-            title: "Error", 
-            text: "No se pudo guardar el rol", 
-            icon: "error", 
-            background: "#272727", 
-            color: "#c9c9c9" });
-    }
-};
-
-    const eliminarRol = async (Id) =>{
+    const eliminarRol = async (Id) => {
         const result = await Swal.fire({
             title: "¿Estás seguro?",
             text: "Esto eliminará el Rol.",
@@ -155,7 +165,7 @@ export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
             color: "#c9c9c9"
         })
 
-        if (result.isConfirmed){
+        if (result.isConfirmed) {
             try {
                 await axios.delete(`${API_URL}/${Id}`, {
                     headers: authHeader()
@@ -192,12 +202,12 @@ export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
             color: "#c9c9c9",
         })
         try {
-            if (result.isConfirmed){
-                await axios.put(`${API_URL}/CambiarInactivo/${Id}`, 
-                    {}, 
-                {
-                    headers: authHeader()
-                })
+            if (result.isConfirmed) {
+                await axios.put(`${API_URL}/CambiarInactivo/${Id}`,
+                    {},
+                    {
+                        headers: authHeader()
+                    })
 
                 Swal.fire({
                     title: "¡Cambio de estado exitoso!",
@@ -220,7 +230,7 @@ export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
         }
     }
 
-    const editarRol = (rols) =>{
+    const editarRol = (rols) => {
         setFormRolData(rols);
         setIsCreating(false);
         setErrores({});
@@ -241,11 +251,11 @@ export const useRol = (initial = {NombreRol: "", EstadoRol: ""}) => {
         limpiarFormulario();
     }
 
-    const limpiarFormulario = () =>{
-        setFormRolData({NombreRol: "", EstadoRol: ""})
+    const limpiarFormulario = () => {
+        setFormRolData({ NombreRol: "", EstadoRol: "" })
     }
 
-    return{
+    return {
         roles,
         cargarRol,
         guardarRol,

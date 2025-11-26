@@ -4,10 +4,17 @@ import Swal from "sweetalert2";
 import { useCategorias } from "./useCategorias";
 import { authHeader } from "../helpers/authHeader";
 
-const API_URL = "http://localhost:5000/api/productos";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+const API_URL = `${API_BASE_URL}/api/productos`;
 
 
-export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", PrecioProducto: "", DescripcionProducto: "", EstadoProducto: ""  }) => {
+export const useProductos = (initial = { NombreProducto: "", IdCategoria: "", PrecioProducto: "", DescripcionProducto: "", EstadoProducto: "" }) => {
     const [formProductoData, setFormProductoData] = useState(initial)
     const [modalVisible, setModalVisible] = useState(false);
     const [isCreating, setIsCreating] = useState(false)
@@ -20,7 +27,7 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
     useEffect(() => {
         cargarProductos()
         cargarCategorias()
-    }, []); 
+    }, []);
 
     const cargarProductos = async () => {
         try {
@@ -36,13 +43,13 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
     const validarFormulario = () => {
         const erroresTemp = {};
 
-    // NombreProducto
+        // NombreProducto
         if (!formProductoData.NombreProducto.trim()) {
             erroresTemp.NombreProducto = "El nombre es obligatorio";
         } else if (!/^[A-Za-z\s]+$/.test(formProductoData.NombreProducto)) {
             erroresTemp.NombreProducto = "Nombre no válido";
         } else {
-            const nombreExiste = productos.some((producto) => 
+            const nombreExiste = productos.some((producto) =>
                 producto.NombreProducto.toLowerCase().trim() === formProductoData.NombreProducto.toLowerCase().trim() &&
                 producto.Id !== formProductoData.Id
             );
@@ -55,21 +62,21 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
             erroresTemp.IdCategoria = "Selecciona una categoría";
         }
 
-    // PrecioProducto
+        // PrecioProducto
         if (!formProductoData.PrecioProducto) {
             erroresTemp.PrecioProducto = "El precio es obligatorio";
         } else if (!/^\d+(\.\d{1,2})?$/.test(formProductoData.PrecioProducto)) {
             erroresTemp.PrecioProducto = "Precio no válido";
         }
 
-    // DescripcionProducto
+        // DescripcionProducto
         if (!formProductoData.DescripcionProducto.trim()) {
             erroresTemp.DescripcionProducto = "La descripción es obligatoria";
         } else if (!/^[A-Za-z0-9\s.,;:!?()-]+$/.test(formProductoData.DescripcionProducto)) {
             erroresTemp.DescripcionProducto = "Descripción no válida";
         }
 
-    // EstadoProducto
+        // EstadoProducto
         if (!formProductoData.EstadoProducto) {
             erroresTemp.EstadoProducto = "Selecciona un estado";
         }
@@ -79,80 +86,80 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
     };
 
     const onChangeInputs = ({ target }) => {
-    const { name, value } = target;
-    const nuevoEstado = {
-        ...formProductoData,
-        [name]: value
+        const { name, value } = target;
+        const nuevoEstado = {
+            ...formProductoData,
+            [name]: value
+        };
+
+        setFormProductoData(nuevoEstado);
+
+        const erroresTemp = { ...errores };
+
+        switch (name) {
+            case "NombreProducto":
+                if (!value.trim()) {
+                    erroresTemp.NombreProducto = "El nombre es obligatorio";
+                } else if (!/^[A-Za-z\s]+$/.test(value)) {
+                    erroresTemp.NombreProducto = "Nombre no válido";
+                } else if (
+                    productos.some((producto) =>
+                        producto.NombreProducto.toLowerCase().trim() === value.toLowerCase().trim() &&
+                        producto.Id !== formProductoData.Id
+                    )
+                ) {
+                    erroresTemp.NombreProducto = "Este nombre ya existe";
+                } else {
+                    delete erroresTemp.NombreProducto;
+                }
+                break;
+
+            case "IdCategoria":
+                if (!value) {
+                    erroresTemp.IdCategoria = "Selecciona una categoría";
+                } else {
+                    delete erroresTemp.IdCategoria;
+                }
+                break;
+
+            case "PrecioProducto":
+                if (!value) {
+                    erroresTemp.PrecioProducto = "El precio es obligatorio";
+                } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+                    erroresTemp.PrecioProducto = "Precio no válido";
+                } else {
+                    delete erroresTemp.PrecioProducto;
+                }
+                break;
+
+            case "DescripcionProducto":
+                if (!value.trim()) {
+                    erroresTemp.DescripcionProducto = "La descripción es obligatoria";
+                } else if (!/^[A-Za-z0-9\s.,;:!?()-]+$/.test(value)) {
+                    erroresTemp.DescripcionProducto = "Descripción no válida";
+                } else {
+                    delete erroresTemp.DescripcionProducto;
+                }
+                break;
+
+            case "EstadoProducto":
+                if (!value) {
+                    erroresTemp.EstadoProducto = "Selecciona un estado";
+                } else {
+                    delete erroresTemp.EstadoProducto;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        setErrores(erroresTemp);
     };
-
-    setFormProductoData(nuevoEstado);
-
-    const erroresTemp = { ...errores };
-
-    switch (name) {
-        case "NombreProducto":
-            if (!value.trim()) {
-                erroresTemp.NombreProducto = "El nombre es obligatorio";
-            } else if (!/^[A-Za-z\s]+$/.test(value)) {
-                erroresTemp.NombreProducto = "Nombre no válido";
-            } else if (
-                productos.some((producto) =>
-                    producto.NombreProducto.toLowerCase().trim() === value.toLowerCase().trim() &&
-                    producto.Id !== formProductoData.Id
-                )
-            ) {
-                erroresTemp.NombreProducto = "Este nombre ya existe";
-            } else {
-                delete erroresTemp.NombreProducto;
-            }
-            break;
-
-        case "IdCategoria":
-            if (!value) {
-                erroresTemp.IdCategoria = "Selecciona una categoría";
-            } else {
-                delete erroresTemp.IdCategoria;
-            }
-            break;
-
-        case "PrecioProducto":
-            if (!value) {
-                erroresTemp.PrecioProducto = "El precio es obligatorio";
-            } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
-                erroresTemp.PrecioProducto = "Precio no válido";
-            } else {
-                delete erroresTemp.PrecioProducto;
-            }
-            break;
-
-        case "DescripcionProducto":
-            if (!value.trim()) {
-                erroresTemp.DescripcionProducto = "La descripción es obligatoria";
-            } else if (!/^[A-Za-z0-9\s.,;:!?()-]+$/.test(value)) {
-                erroresTemp.DescripcionProducto = "Descripción no válida";
-            } else {
-                delete erroresTemp.DescripcionProducto;
-            }
-            break;
-
-        case "EstadoProducto":
-            if (!value) {
-                erroresTemp.EstadoProducto = "Selecciona un estado";
-            } else {
-                delete erroresTemp.EstadoProducto;
-            }
-            break;
-
-        default:
-            break;
-    }
-
-    setErrores(erroresTemp);
-};
 
 
     const guardarProducto = async () => {
-        if (!validarFormulario()){
+        if (!validarFormulario()) {
             Swal.fire({
                 title: "Datos no validos",
                 text: "Digita correctamente los datos del formulario",
@@ -165,7 +172,7 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
 
         try {
             if (formProductoData.Id) {
-                await axios.put(`${API_URL}/${formProductoData.Id}`, formProductoData, 
+                await axios.put(`${API_URL}/${formProductoData.Id}`, formProductoData,
                     {
                         headers: authHeader()
                     });
@@ -177,7 +184,7 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
                     color: "#c9c9c9"
                 });
             } else {
-                await axios.post(API_URL, formProductoData, 
+                await axios.post(API_URL, formProductoData,
                     {
                         headers: authHeader()
                     }
@@ -205,7 +212,7 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
         }
     };
 
-    const eliminarProducto = async (Id) =>{
+    const eliminarProducto = async (Id) => {
         const result = await Swal.fire({
             title: "¿Estás seguro?",
             text: "Esto eliminará el producto.",
@@ -216,9 +223,9 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
             color: "#c9c9c9"
         })
 
-        if (result.isConfirmed){
+        if (result.isConfirmed) {
             try {
-                await axios.delete(`${API_URL}/${Id}`, 
+                await axios.delete(`${API_URL}/${Id}`,
                     {
                         headers: authHeader()
                     }
@@ -244,7 +251,7 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
         }
     };
 
-    const cambiarEstadoProductoInactivo = async (Id) =>{
+    const cambiarEstadoProductoInactivo = async (Id) => {
         const result = await Swal.fire({
             title: "¿Estás seguro?",
             text: "Esto cambiará el estado del producto a inactiva.\nYa no se visualizará en el apartado principal.",
@@ -256,7 +263,7 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
         })
 
         try {
-            if (result.isConfirmed){
+            if (result.isConfirmed) {
                 await axios.put(`${API_URL}/CambiarInactivo/${Id}`,
                     {},
                     { headers: authHeader() }
@@ -283,13 +290,13 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
         }
     }
 
-    const editarProducto = (producto) =>{
+    const editarProducto = (producto) => {
         setFormProductoData(producto);
         setIsCreating(false);
         setErrores({});
         setModalVisible(true);
     }
-    
+
     const openModal = () => {
         limpiarFormulario();
         setIsCreating(true);
@@ -304,8 +311,8 @@ export const useProductos = (initial = {NombreProducto: "", IdCategoria: "", Pre
         limpiarFormulario();
     }
 
-    const limpiarFormulario = () =>{
-        setFormProductoData({NombreProducto: "", IdCategoria: "", PrecioProducto: "", DescripcionProducto: "", EstadoProducto: ""  })
+    const limpiarFormulario = () => {
+        setFormProductoData({ NombreProducto: "", IdCategoria: "", PrecioProducto: "", DescripcionProducto: "", EstadoProducto: "" })
     }
 
     return {

@@ -8,10 +8,16 @@ export const useProductosInactivos = () => {
 
     const navigate = useNavigate();
     const [productos, setProductos] = useState([]);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
 
     const visualizarProductosInactivos = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/productos/Productos-inactivos',  {
+            const res = await axios.get(`${API_BASE_URL}/api/productos/Productos-inactivos`, {
                 headers: authHeader(),
             })
             setProductos(res.data)
@@ -22,11 +28,11 @@ export const useProductosInactivos = () => {
 
     const cambiarEstadoProducto = async (Id) => {
         try {
-            await axios.put(`http://localhost:5000/api/productos/CambiarActivo/${Id}`,
-            {},
-            {
-                headers: authHeader()
-            })
+            await axios.put(`${API_BASE_URL}/api/productos/CambiarActivo/${Id}`,
+                {},
+                {
+                    headers: authHeader()
+                })
 
             Swal.fire({
                 title: '¡Cambio de estado exitoso!',

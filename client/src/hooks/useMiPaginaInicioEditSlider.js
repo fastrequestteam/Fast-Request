@@ -3,7 +3,14 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { authHeader } from "../helpers/authHeader";
 
-const API_EMPRESA = "http://localhost:5000/api/empresa";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+}
+
+
+const API_EMPRESA = `${API_BASE_URL}/api/empresa`;
 
 export const useMiPaginaInicioEditSlider = () => {
 

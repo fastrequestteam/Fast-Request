@@ -19,6 +19,12 @@ const useConfiguracionPerfilUsuario = (initial) => {
   const profileMenuRef = useRef(null);
   const fileInputRef = useRef(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+  }
+
 
   useEffect(() => {
     if (!document.getElementById("notification-styles")) {
@@ -43,7 +49,7 @@ const useConfiguracionPerfilUsuario = (initial) => {
       const usuarioId = decoded.id;
 
       const res = await axios.get(
-        `http://localhost:5000/api/perfil/getUser/${usuarioId}`,
+        `${API_BASE_URL}/api/perfil/getUser/${usuarioId}`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -112,7 +118,7 @@ const useConfiguracionPerfilUsuario = (initial) => {
       });
 
       const res = await axios.put(
-        `http://localhost:5000/api/perfil/update-perfil/${usuarioId}`,
+        `${API_BASE_URL}/api/perfil/update-perfil/${usuarioId}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

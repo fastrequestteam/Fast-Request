@@ -8,12 +8,17 @@ const useMnesajesDeClientesArchivados = () => {
     const [mensajes, setMensajes] = useState([])
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
 
     const obtenerMensajesArchivados = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(`http://localhost:5000/api/contactanos/mensajes-archivados`, { headers: authHeader() })
+            const res = await axios.get(`${API_BASE_URL}/api/contactanos/mensajes-archivados`, { headers: authHeader() })
             setMensajes(res.data.mensajesArchivados)
 
         } catch (err) {
@@ -23,7 +28,7 @@ const useMnesajesDeClientesArchivados = () => {
                 title: 'Error',
                 text: 'No se pudieron obtener los mensajes de los clientes archivados',
             })
-            
+
         }
         setLoading(false)
     }
@@ -31,7 +36,7 @@ const useMnesajesDeClientesArchivados = () => {
 
     const actualizarMensajeActivo = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
+            await axios.put(`${API_BASE_URL}/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
             Swal.fire({
                 title: "¡Cambio de estado exitoso!",
                 text: "El cambio de estado del mensaje ha sido exitoso",
@@ -68,7 +73,7 @@ const useMnesajesDeClientesArchivados = () => {
 
         try {
             if (result.isConfirmed) {
-                await axios.delete(`http://localhost:5000/api/contactanos/mensajesDelete/${id}`,
+                await axios.delete(`${API_BASE_URL}/api/contactanos/mensajesDelete/${id}`,
                     {
                         headers: authHeader()
                     }
@@ -103,7 +108,7 @@ const useMnesajesDeClientesArchivados = () => {
         obtenerMensajesArchivados()
     }, [])
 
-    return{
+    return {
         volverAlInicio,
         mensajes,
         eliminarMensajesArchivados,

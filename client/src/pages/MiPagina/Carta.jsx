@@ -18,6 +18,12 @@ const Carta = () => {
   const refSalsas = useRef(null);
   const refGaseosas = useRef(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  if (!API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL is not defined");
+  }
+
   const scrollToCategory = (id) => {
     if (id === "salsas" && refSalsas.current) {
       refSalsas.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -120,7 +126,7 @@ const Carta = () => {
                             produc.Imagen
                               ? (produc.Imagen.startsWith("http")
                                 ? produc.Imagen
-                                : `http://localhost:5000/${produc.Imagen}`
+                                : `${API_BASE_URL}/${produc.Imagen}`
                               )
                               : "https://placehold.co/250x200?text=Sin+Imagen"
                           }
@@ -152,7 +158,7 @@ const Carta = () => {
                           s.Imagen
                             ? (s.Imagen.startsWith("http")
                               ? s.Imagen
-                              : `http://localhost:5000/${s.Imagen}`
+                              : `${API_BASE_URL}/${s.Imagen}`
                             )
                             : "https://placehold.co/250x200?text=Sin+Imagen"
                         }
@@ -190,7 +196,7 @@ const Carta = () => {
                           g.Imagen
                             ? (g.Imagen.startsWith("http")
                               ? g.Imagen
-                              : `http://localhost:5000/${g.Imagen}`
+                              : `${API_BASE_URL}/${g.Imagen}`
                             )
                             : "https://placehold.co/250x200?text=Sin+Imagen"
                         }

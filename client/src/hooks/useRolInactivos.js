@@ -8,10 +8,16 @@ export const useRolInactivos = () => {
 
     const navigate = useNavigate();
     const [roles, setRoles] = useState([]);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
 
     const visualizarRolesInactivos = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/rol/Roles-inactivos', {
+            const res = await axios.get(`${API_BASE_URL}/api/rol/Roles-inactivos`, {
                 headers: authHeader()
             })
             setRoles(res.data)
@@ -22,7 +28,7 @@ export const useRolInactivos = () => {
 
     const cambiarEstadoRol = async (Id) => {
         try {
-            await axios.put(`http://localhost:5000/api/rol/CambiarActivo/${Id}`, {}, 
+            await axios.put(`${API_BASE_URL}/api/rol/CambiarActivo/${Id}`, {},
                 {
                     headers: authHeader()
                 }

@@ -9,11 +9,15 @@ const PasoCorreoRecuperar = ({ siguiente, datos, actualizar }) => {
 
     const [correo, setCorreo] = useState(datos.correo || '')
     const [errorEmail, setErrorEmail] = useState('')
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     const verificarEmail = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/recuperarCuenta/recuperar/verificar-email?correo=${correo}`);
+            const res = await axios.get(`${API_BASE_URL}/api/recuperarCuenta/recuperar/verificar-email?correo=${correo}`);
             if (res.data.existe) {
                 setErrorEmail(res.data.mensaje); 
                 return true;
@@ -43,7 +47,7 @@ const PasoCorreoRecuperar = ({ siguiente, datos, actualizar }) => {
 
 
         try {
-            const res = await axios.post('http://localhost:5000/api/recuperarCuenta/recuperar/enviar-email', {
+            const res = await axios.post(`${API_BASE_URL}/api/recuperarCuenta/recuperar/enviar-email`, {
                 correo
             }, {
                 headers: { 'Content-Type': 'application/json' }

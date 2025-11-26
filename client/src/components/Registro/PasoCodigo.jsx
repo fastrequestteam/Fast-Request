@@ -10,7 +10,11 @@ const PasoCodigo = ({ siguiente, anterior, datos, actualizar }) => {
 
     const [codigo, setCodigo] = useState(datos.codigo || '');
     const [error, setError] = useState('');
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     const handleVerificar = async () => {
 
@@ -20,7 +24,7 @@ const PasoCodigo = ({ siguiente, anterior, datos, actualizar }) => {
         }
 
         try {
-            const res = await axios.post('http://localhost:5000/api/validarEmail/verify-code', {
+            const res = await axios.post(`${API_BASE_URL}/api/validarEmail/verify-code`, {
                 correo: datos.correo,
                 codigo
             }, {

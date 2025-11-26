@@ -20,7 +20,7 @@ export const useEstadisticas = () => {
     const [periodoIngresosTotales, setPeriodoIngresosTotales] = useState('dia')
     const [periodoVentasTotales, setPeriodoVentasTotales] = useState('dia')
     const [periodonuevosClientes, setPeriodonuevosClientes] = useState('dia')
-    const [periodopromedioVenta , setPeriodopromedioVenta ] = useState('dia')
+    const [periodopromedioVenta, setPeriodopromedioVenta] = useState('dia')
 
 
     const onChangeInputIngresosTotales = ({ target }) => {
@@ -54,8 +54,14 @@ export const useEstadisticas = () => {
         return `${num.toFixed(0)}`;
     };
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    const API_URL = 'http://localhost:5000/api/estadisticas'
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
+
+    const API_URL = `${API_BASE_URL}/api/estadisticas`
 
     const Api_ingresosTotales = async () => {
         try {

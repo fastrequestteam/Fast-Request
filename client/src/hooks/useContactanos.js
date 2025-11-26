@@ -8,14 +8,18 @@ export const useContactanos = () => {
 
     const [mensajes, setMensajes] = useState([])
     const [loading, setLoading] = useState(false)
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
 
     const obtenermensajes = async () => {
         setLoading(true)
         try {
 
-            const res = await axios.get('http://localhost:5000/api/contactanos/mensajes', { headers: authHeader() })
+            const res = await axios.get(`${API_BASE_URL}/api/contactanos/mensajes`, { headers: authHeader() })
             setMensajes(res.data.mensajesPendientes)
         }
 
@@ -33,7 +37,7 @@ export const useContactanos = () => {
 
     const actualizarMensajeActivo = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
+            await axios.put(`${API_BASE_URL}/api/contactanos/mensajes-vistos/${id}`, {}, { headers: authHeader() })
             Swal.fire({
                 title: "¡Cambio de estado exitoso!",
                 text: "El cambio de estado del mensaje ha sido exitoso",
@@ -69,7 +73,7 @@ export const useContactanos = () => {
         try {
 
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/contactanos/mensajes-archivados/${id}`,
+                await axios.put(`${API_BASE_URL}/api/contactanos/mensajes-archivados/${id}`,
                     {},
                     {
                         headers: authHeader()

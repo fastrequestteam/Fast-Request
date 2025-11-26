@@ -69,9 +69,15 @@ const HacerPedidoDashboard = ({ onClose }) => {
         if (nombreClienteError || tipoProductoError || cantidadProductoError || municipioLocalidadError || direccionError || puntoDeReferenciaError || notasAdicionalesError) return;
     };
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
     const handleCrearPedido = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/pedidos/nuevoPedido', formPedidosData, {
+            const response = await axios.post(`${API_BASE_URL}/api/pedidos/nuevoPedido`, formPedidosData, {
                 headers: {
                     ...authHeader(),
                     'Content-Type': 'application/json',

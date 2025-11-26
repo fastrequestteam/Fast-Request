@@ -23,6 +23,13 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         precioGaseosa: "",
     })
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
+
     const formRef = useRef(null);
 
     const onChangeInputs = async ({ target }) => {
@@ -59,7 +66,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
 
     const resApiSalsas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/complementos/obtener-salsas', {
+            const res = await axios.get(`${API_BASE_URL}/api/complementos/obtener-salsas`, {
                 headers: authHeader()
             });
             setDataSalsas(res.data.salsas || res.data);
@@ -70,7 +77,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
 
     const resApiGaseosas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/complementos/obtener-gaseosas', {
+            const res = await axios.get(`${API_BASE_URL}/api/complementos/obtener-gaseosas`, {
                 headers: authHeader()
             });
             setDataGaseosas(res.data.gaseosas || res.data);
@@ -82,7 +89,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
     const ComplementosSalsas = async () => {
         try {
             if (forComplementosData.id) {
-                await axios.put(`http://localhost:5000/api/complementos/update-salsa/${forComplementosData.id}`,
+                await axios.put(`${API_BASE_URL}/api/complementos/update-salsa/${forComplementosData.id}`,
                     forComplementosData,
                     {
                         headers: authHeader()
@@ -91,7 +98,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
                 Swal.fire("Actualizado", "Salsa actualizada correctamente", "success");
             } else {
 
-                await axios.post('http://localhost:5000/api/complementos/create-salsa', forComplementosData,
+                await axios.post(`${API_BASE_URL}/api/complementos/create-salsa`, forComplementosData,
                     {
                         headers: authHeader()
                     });
@@ -111,7 +118,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         try {
             if (forComplementosData.id) {
 
-                await axios.put(`http://localhost:5000/api/complementos/update-gaseosa/${forComplementosData.id}`,
+                await axios.put(`${API_BASE_URL}/api/complementos/update-gaseosa/${forComplementosData.id}`,
                     forComplementosData,
                     {
                         headers: authHeader()
@@ -120,7 +127,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
                 Swal.fire("Actualizado", "Gaseosa actualizada correctamente", "success");
             } else {
 
-                await axios.post('http://localhost:5000/api/complementos/create-gaseosa', forComplementosData,
+                await axios.post(`${API_BASE_URL}/api/complementos/create-gaseosa`, forComplementosData,
                     {
                         headers: authHeader()
                     });
@@ -152,7 +159,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         try {
 
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/complementos/update-estado-inactivo-salsa/${id}`,
+                await axios.put(`${API_BASE_URL}/api/complementos/update-estado-inactivo-salsa/${id}`,
                     {},
                     {
                         headers: authHeader()
@@ -197,7 +204,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
         try {
 
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/complementos/update-estado-inactivo-gaseosa/${id}`,
+                await axios.put(`${API_BASE_URL}/api/complementos/update-estado-inactivo-gaseosa/${id}`,
                     {},
                     {
                         headers: authHeader()
@@ -233,7 +240,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
 
         try {
 
-            const url = `http://localhost:5000/api/complementos/${tipo === 'salsa' ? 'verify-duplicate-salsa' : 'verify-duplicate-gaseosa'}`
+            const url = `${API_BASE_URL}/api/complementos/${tipo === 'salsa' ? 'verify-duplicate-salsa' : 'verify-duplicate-gaseosa'}`
 
             const body = tipo === "salsa" ? { nombreSalsa: name }
                 : { nombreGaseosa: name };
@@ -296,7 +303,7 @@ export const useComplementos = (initialSalsas = { nombreSalsa: "", estadoSalsa: 
     };
 
     const limpiarFormulario = () => {
-        setForComplementosData({ nombreSalsa: "", estadoSalsa: "activo", nombreGaseosa: "", precioGaseosa: "",estadoGaseosa: "activo" });
+        setForComplementosData({ nombreSalsa: "", estadoSalsa: "activo", nombreGaseosa: "", precioGaseosa: "", estadoGaseosa: "activo" });
     };
 
     useEffect(() => {

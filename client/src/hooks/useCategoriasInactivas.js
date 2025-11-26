@@ -8,11 +8,16 @@ export const useCategoriasInactivas = () => {
 
     const navigate = useNavigate();
     const [categorias, setCategorias] = useState([]);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     // ✅ Obtener todas las categorías inactivas
     const visualizarCategoriasInactivas = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/categorias/Categorias-inactivas', {
+            const res = await axios.get(`${API_BASE_URL}/api/categorias/Categorias-inactivas`, {
                 headers: authHeader(),
             });
             setCategorias(res.data);
@@ -25,7 +30,7 @@ export const useCategoriasInactivas = () => {
     const cambiarEstadoCategoria = async (Id) => {
         try {
             await axios.put(
-                `http://localhost:5000/api/categorias/CambiarActivo/${Id}`,
+                `${API_BASE_URL}/api/categorias/CambiarActivo/${Id}`,
                 {},
                 { headers: authHeader() }
             );
@@ -61,7 +66,7 @@ export const useCategoriasInactivas = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5000/api/categorias/CategoriasInactivas/${Id}`, {
+                await axios.delete(`${API_BASE_URL}/api/categorias/CategoriasInactivas/${Id}`, {
                     headers: authHeader()
                 });
                 Swal.fire("Eliminado", "Categoría eliminada", "success");

@@ -10,10 +10,15 @@ const PedidosPorCliente = () => {
     const [pedidos, setPedidos] = useState([]);
     const navigate = useNavigate();
     const { clienteId } = useParams();
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
     const obtenerPedidos = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/pedidos/cliente-pedidos/${clienteId}`,
+            const response = await axios.get(`${API_BASE_URL}/api/pedidos/cliente-pedidos/${clienteId}`,
                 {
                     headers: authHeader()
                 }

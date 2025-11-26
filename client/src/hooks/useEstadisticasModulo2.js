@@ -54,11 +54,15 @@ export const useEstadisticasModulo2 = () => {
         setPeriodoClientes(value)
     }
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
 
 
-
-
-    const API_URL = 'http://localhost:5000/api/estadisticas'
+    const API_URL = `${API_BASE_URL}/api/estadisticas`
+    
 
 
     const API_Municipio = async () => {
@@ -119,7 +123,7 @@ export const useEstadisticasModulo2 = () => {
 
 
 
-    
+
     const API_ProductosMasVerndidos = async () => {
         try {
 

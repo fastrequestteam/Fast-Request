@@ -15,13 +15,19 @@ export const useContactanosEmpresas = (initial) => {
     }
 
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    if (!API_BASE_URL) {
+        throw new Error("VITE_API_BASE_URL is not defined");
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('http://localhost:5000/api/contactanos/enviar-mensaje-empresas', {
-                name: mensajesData.name, 
-                email: mensajesData.email, 
+            const res = await axios.post(`${API_BASE_URL}/api/contactanos/enviar-mensaje-empresas`, {
+                name: mensajesData.name,
+                email: mensajesData.email,
                 message: mensajesData.message
             })
             setMensajesData(res.data)
@@ -32,7 +38,7 @@ export const useContactanosEmpresas = (initial) => {
                 background: "#272727",
                 color: "#c9c9c9",
             })
-            
+
         } catch (err) {
             console.error(err)
             Swal.fire({
@@ -47,7 +53,7 @@ export const useContactanosEmpresas = (initial) => {
             email: '',
             message: ''
         })
-    
+
     }
 
 
