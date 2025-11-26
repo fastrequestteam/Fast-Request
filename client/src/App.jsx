@@ -18,14 +18,14 @@ import HacerPedidoDashboard from './pages/Dashboard/HacerPedidoDashboard';
 import ConditionalBootstrap from './components/ConditionalBootstrap';
 import Configuracion from './pages/Configuracion/configuracion';
 import Perfil from './pages/Configuracion/perfil';
-import Empresa from './pages/Configuracion/empresa';
+import Empresa from './pages/Configuracion/Empresa';
 import ClientesDashboard from './pages/Dashboard/ClientesDashboard';
 import PedidosPorCliente from './pages/Dashboard/pedidosPorCliente';
 import VisualizarInactividadDeClientes from './pages/Dashboard/visualizarClientesInactivos';
 import PedidoCompleto from './pages/Dashboard/PedidoCompleto';
 import MiPagina from './pages/MiPagina/miPagina';
 import CocinaDashboard from './pages/Dashboard/CocinaDashboard';
-import Complementos from './pages/Dashboard/complementos';
+import Complementos from './pages/Dashboard/Complementos';
 import ComplementosCompletos from './pages/Dashboard/complementosCompletos';
 import CategoriasInactivas from './pages/Dashboard/CategoriasInactivasDashboard';
 import ProductosInactivos from './pages/Dashboard/ProductosInactivosDashboard';
@@ -40,7 +40,7 @@ import VisualizarMensajesDeClientesArchivados from './pages/Dashboard/MensajesCl
 import MiPaginaEdicion from './pages/PaginaDeEdicion/HomeEdicion';
 import CartaPageEdit from './pages/PaginaDeEdicion/CartaEdicion';
 import ContactanosPageEdit from './pages/PaginaDeEdicion/contactanosEdicion';
-import MiPaginaLayout from './components/miPagina/layout';
+import MiPaginaLayout from './components/miPagina/Layout';
 
 const AppContent = () => {
 
