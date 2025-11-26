@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
-@CrossOrigin(origins = "*")
 public class ClienteController {
 
     private final ClienteService service;
@@ -18,9 +17,14 @@ public class ClienteController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<Cliente> getAll() {
-        return service.findAll();
+    @GetMapping("/activos")
+    public List<Cliente> getAllActivos() {
+        return service.findActivos();
+    }
+
+    @GetMapping("/inactivos")
+    public List<Cliente> getAllInactivos() {
+        return service.findInactivos();
     }
 
     @GetMapping("/{id}")
@@ -43,10 +47,30 @@ public class ClienteController {
         return ResponseEntity.ok(actualizado);
     }
 
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<?> cambiarEstado(@PathVariable Integer id) {
+        Cliente actualizado = service.cambiarEstado(id);
+        if (actualizado == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(actualizado);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         boolean deleted = service.delete(id);
         if (!deleted) return ResponseEntity.notFound().build();
         return ResponseEntity.ok("Cliente eliminado correctamente");
     }
+
+    @PostMapping("/verify-duplicate")
+    public ResponseEntity<?> verifyDuplicate(@RequestBody Cliente cliente) {
+        var resp = service.checkDuplicates(cliente);
+
+        if (resp.hasErrors()) {
+            return ResponseEntity.badRequest().body(resp.getErrors());
+        }
+
+        return ResponseEntity.ok(resp.getErrors());
+    }
+
 }

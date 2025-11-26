@@ -40,25 +40,22 @@ const ClientesDashboard = () => {
 
     const validaciones = async () => {
 
-        const nombreClienteError = validacionDeCampos('NombreCliente', formData.NombreCliente)
-        const NumeroDocumentoError = validacionDeCampos('NumeroDocumento', formData.NumeroDocumento)
-        const CorreoElectronicoError = validacionDeCampos('CorreoElectronico', formData.CorreoElectronico)
-        const NumeroContactoError = validacionDeCampos('NumeroContacto', formData.NumeroContacto)
+        const nombreClienteError = validacionDeCampos('nombreCliente', formData.nombreCliente)
+        const correoElectronicoError = validacionDeCampos('correoElectronico', formData.correoElectronico)
+        const numeroContactoError = validacionDeCampos('numeroContacto', formData.numeroContacto)
 
         let erroresTemp = {
-            NombreCliente: nombreClienteError,
-            NumeroDocumento: NumeroDocumentoError,
-            CorreoElectronico: CorreoElectronicoError,
-            NumeroContacto: NumeroContactoError
+            nombreCliente: nombreClienteError,
+            correoElectronico: correoElectronicoError,
+            numeroContacto: numeroContactoError
         }
 
-        if (!NumeroDocumentoError || !CorreoElectronicoError || !NumeroContactoError) {
+        if (!correoElectronicoError || !numeroContactoError) {
             const backendErrores = await validacionDeClientes()
             erroresTemp = {
                 ...erroresTemp,
-                NumeroDocumento: backendErrores?.NumeroDocumento || erroresTemp.NumeroDocumento,
-                CorreoElectronico: backendErrores?.CorreoElectronico || erroresTemp.CorreoElectronico,
-                NumeroContacto: backendErrores?.NumeroContacto || erroresTemp.NumeroContacto
+                correoElectronico: backendErrores?.correoElectronico || erroresTemp.correoElectronico,
+                numeroContacto: backendErrores?.numeroContacto || erroresTemp.numeroContacto
             }
             setErrores(erroresTemp)
         }
@@ -101,27 +98,27 @@ const ClientesDashboard = () => {
                     <thead className="tabladashb_thead">
                         <tr>
                             <th className="tabladashb_thead_th">Nombre  del Cliente<ion-icon name="chevron-expand-outline"></ion-icon></th>
-                            <th className="tabladashb_thead_th">Documento<ion-icon name="chevron-expand-outline"></ion-icon></th>
                             <th className="tabladashb_thead_th">Email<ion-icon name="chevron-expand-outline"></ion-icon></th>
                             <th className="tabladashb_thead_th">Numero de contacto<ion-icon name="chevron-expand-outline"></ion-icon></th>
+                            <th className="tabladashb_thead_th">Contraseña<ion-icon name="chevron-expand-outline"></ion-icon></th>
                             <th className="tabladashb_thead_th">Estado<ion-icon name="chevron-expand-outline"></ion-icon></th>
                             <th className="tabladashb_thead_th">Operaciones<ion-icon name="chevron-expand-outline"></ion-icon></th>
                         </tr>
                     </thead>
                     <tbody className="tabladashb_tbody">
                         {funtionFinally.map((customer) => (
-                            <tr className="tabladashb_tbody_tr" key={customer.Id}>
-                                <td className="tabladashb_tbody_tr_td">{customer.NombreCliente.toLowerCase()}</td>
-                                <td className="tabladashb_tbody_tr_td">{customer.NumeroDocumento.toLowerCase()}</td>
-                                <td className="tabladashb_tbody_tr_td">{customer.CorreoElectronico.toLowerCase()}</td>
-                                <td className="tabladashb_tbody_tr_td">{customer.NumeroContacto}</td>
-                                <td className="tabladashb_tbody_tr_td">{customer.EstadoCliente}</td>
+                            <tr className="tabladashb_tbody_tr" key={customer.id}>
+                                <td className="tabladashb_tbody_tr_td">{customer.nombreCliente.toLowerCase()}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.correoElectronico.toLowerCase()}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.numeroContacto}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.contrasena}</td>
+                                <td className="tabladashb_tbody_tr_td">{customer.estadoCliente}</td>
                                 <td className="tabladashb_tbody_tr_td">
                                     <a
                                         href="#"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            cambiarEstadoCliente(customer.Id);
+                                            cambiarEstadoCliente(customer.id);
                                         }}>
                                         <ion-icon id="iconosoperacionEliminar" name="ban"></ion-icon>
                                     </a>
@@ -130,7 +127,7 @@ const ClientesDashboard = () => {
                                         href="#"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            navigate(`/dashboard/pedidosPorCliente/${customer.Id}`)
+                                            navigate(`/dashboard/pedidosPorCliente/${customer.id}`)
                                         }}>
                                         <ion-icon id="iconosoperacionVisualizar" name="folder-open-outline"></ion-icon>
                                     </a>
@@ -181,60 +178,58 @@ const ClientesDashboard = () => {
                     </h2>
 
                     <div className="dashinputs_formulario">
-                        <label htmlFor="NombreCliente">Nombre completo del Cliente:</label>
+                        <label htmlFor="nombreCliente">Nombre completo del Cliente:</label>
                         <input
                             type="text"
-                            name="NombreCliente"
-                            id="NombreCliente"
+                            name="nombreCliente"
+                            id="nombreCliente"
                             className="dashinputs_formulario_Labels"
-                            value={formData.NombreCliente}
+                            value={formData.nombreCliente}
                             onChange={onChangeInputs}
                             required
                         />
-                        {errores.NombreCliente && <div style={{ color: 'red' }}>{errores.NombreCliente}</div>}
-                    </div>
-
-
-                    <div className="dashinputs_formulario">
-                        <label htmlFor="NumeroDocumento">Numero de Documento:</label>
-                        <input
-                            type="text"
-                            name="NumeroDocumento"
-                            id="NumeroDocumento"
-                            className="dashinputs_formulario_Labels"
-                            value={formData.NumeroDocumento}
-                            onChange={onChangeInputs}
-                            required
-                        />
-                        {errores.NumeroDocumento && <div style={{ color: 'red' }}>{errores.NumeroDocumento}</div>}
+                        {errores.nombreCliente && <div style={{ color: 'red' }}>{errores.nombreCliente}</div>}
                     </div>
 
                     <div className="dashinputs_formulario">
-                        <label htmlFor="CorreoElectronico">Correo Electronico:</label>
+                        <label htmlFor="correoElectronico">Correo Electronico:</label>
                         <input
                             type="email"
-                            name="CorreoElectronico"
-                            id="CorreoElectronico"
+                            name="correoElectronico"
+                            id="correoElectronico"
                             className="dashinputs_formulario_Labels"
-                            value={formData.CorreoElectronico}
+                            value={formData.correoElectronico}
                             onChange={onChangeInputs}
                             required
                         />
-                        {errores.CorreoElectronico && <div style={{ color: 'red' }}>{errores.CorreoElectronico}</div>}
+                        {errores.correoElectronico && <div style={{ color: 'red' }}>{errores.correoElectronico}</div>}
                     </div>
 
                     <div className="dashinputs_formulario">
-                        <label htmlFor="NumeroContacto">Numero de Contacto:</label>
+                        <label htmlFor="numeroContacto">Numero de Contacto:</label>
                         <input
                             type="text"
-                            name="NumeroContacto"
-                            id="NumeroContacto"
+                            name="numeroContacto"
+                            id="numeroContacto"
                             className="dashinputs_formulario_Labels"
-                            value={formData.NumeroContacto}
+                            value={formData.numeroContacto}
                             onChange={onChangeInputs}
                             required
                         />
-                        {errores.NumeroContacto && <div style={{ color: 'red' }}>{errores.NumeroContacto}</div>}
+                        {errores.numeroContacto && <div style={{ color: 'red' }}>{errores.numeroContacto}</div>}
+                    </div>
+
+                    <div className="dashinputs_formulario">
+                        <label htmlFor="contrasena">Contraseña:</label>
+                        <input
+                            type="text"
+                            name="contrasena"
+                            id="contrasena"
+                            className="dashinputs_formulario_Labels"
+                            value={formData.contrasena}
+                            onChange={onChangeInputs}
+                            required
+                        />
                     </div>
 
                     <div className="botones_formulario">

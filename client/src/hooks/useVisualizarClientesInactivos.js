@@ -12,7 +12,7 @@ export const useVisualizarClientesInactivos = () => {
 
     const visualizarClientesConEstadoInactivo = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/cliente/inactivos`,
+            const res = await axios.get(`http://localhost:8080/clientes/inactivos`,
                 {
                     headers: authHeader()
                 }
@@ -23,9 +23,9 @@ export const useVisualizarClientesInactivos = () => {
         }
     }
 
-    const cambioDeEstadoCliente = async (Id) => {
+    const cambioDeEstadoCliente = async (id) => {
         try {
-                await axios.put(`http://localhost:5000/api/cliente/activo/${Id}`,
+                await axios.put(`http://localhost:8080/clientes/${id}/estado`,
                     {},
                     {
                         headers: authHeader()

@@ -5,4 +5,5 @@ import com.example.java_services.model.Cliente;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     boolean existsByCorreoElectronico(String correoElectronico);
+    boolean existsByNumeroContacto(String numeroContacto);
 }
