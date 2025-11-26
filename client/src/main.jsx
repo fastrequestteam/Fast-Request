@@ -5,7 +5,7 @@ import App from './App';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/style.css';
-
+import Chart from 'chart.js/auto';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -1,7 +1,8 @@
+// CONTROLLER RECUPERAR CONTRASEÑA con SENDGRID
 const { Usuario, ValidarEmail } = require("../models");
-const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 const bcrypt = require('bcrypt');
+const sgMail = require("../config/email"); // SendGrid
 
 dotenv.config();
 
@@ -9,50 +10,46 @@ exports.enviarCodigoRecuperacion = async (req, res) => {
   try {
     const correo = req.body.correo.trim().toLowerCase();
     const usuario = await Usuario.findOne({ where: { correo } });
+
     if (!usuario) {
-      return res
-        .status(404)
-        .json({ message: "Este correo no está registrado." });
+      return res.status(404).json({ message: "Este correo no está registrado." });
     }
 
     const codigo = String(Math.floor(100000 + Math.random() * 900000)); // Código de 6 dígitos
 
+    // Guardar o actualizar registro del código
     await ValidarEmail.upsert({
       correo,
       codigo,
-      expiracion: new Date(Date.now() + 5 * 60 * 1000), // 5 minutos de vigencia
+      expiracion: new Date(Date.now() + 5 * 60 * 1000),
     });
 
-    const transporter = nodemailer.createTransport({
-      pool: true,
-      service: "gmail",
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const mensaje = {
-      from: `"Fast Request" <${process.env.EMAIL_USER}>`,
+    // Mensaje SendGrid
+    const msg = {
       to: correo,
+      from: process.env.EMAIL_FROM, // Tiene que estar verificado en SendGrid
       subject: "Recuperación de Contraseña - Fast Request",
       html: `
-                <h2>¡Hola!</h2>
-                <p>Has solicitado recuperar tu contraseña.</p>
-                <p>Tu código de recuperación es:</p>
-                <h1 style="color: #ff6200;">${codigo}</h1>
-                <p>Este código expirará en 5 minutos.</p>
-            `,
+        <div style="font-family: Arial, sans-serif; text-align:center;">
+          <h2>Recupera tu contraseña</h2>
+          <p>Tu código de recuperación es:</p>
+          <h1 style="color:#ff6200;">${codigo}</h1>
+          <p>Este código expirará en 5 minutos.</p>
+        </div>
+      `,
     };
 
-    await transporter.sendMail(mensaje);
+    await sgMail.send(msg);
 
     return res.status(200).json({ message: "Código enviado exitosamente." });
+
   } catch (error) {
     console.error("Error al enviar el código de recuperación:", error);
+
+    if (error.response) {
+      console.error("SendGrid:", error.response.body);
+    }
+
     return res.status(500).json({ error: "No se pudo enviar el código." });
   }
 };
