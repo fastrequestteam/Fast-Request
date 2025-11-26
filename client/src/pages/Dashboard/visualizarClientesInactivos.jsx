@@ -41,21 +41,21 @@ const VisualizarInactividadDeClientes = () => {
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Documento</th>
                             <th>Correo Electronico</th>
                             <th>Numero De Contacto</th>
+                            <th>Contraseña</th>
                             <th>Estado Actual</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {funtionFinally.map((cliente) => (
-                            <tr key={cliente.Id}>
-                                <td>{cliente.NombreCliente}</td>
-                                <td>{cliente.NumeroDocumento}</td>
-                                <td>{cliente.CorreoElectronico}</td>
-                                <td>{cliente.NumeroContacto}</td>
-                                <td>{cliente.EstadoCliente}</td>
+                            <tr key={cliente.id}>
+                                <td>{cliente.nombreCliente}</td>
+                                <td>{cliente.correoElectronico}</td>
+                                <td>{cliente.numeroContacto}</td>
+                                <td>{cliente.contrasena}</td>
+                                <td>{cliente.estadoCliente}</td>
                                 <td>
                                     <button
                                         className="btn-imprimir"
@@ -63,7 +63,7 @@ const VisualizarInactividadDeClientes = () => {
                                         aria-label={`Cambio de estado ${cliente.id}`}
                                         onClick={(e) => {
                                             e.preventDefault()
-                                            cambioDeEstadoCliente(cliente.Id)
+                                            cambioDeEstadoCliente(cliente.id)
                                         }}
                                     >
                                         <ion-icon name="checkmark-circle-outline"></ion-icon>

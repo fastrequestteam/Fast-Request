@@ -14,18 +14,18 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "NombreCliente", length = 100, nullable = false)
+    @Column(name = "nombre_cliente", length = 100, nullable = false)
     private String nombreCliente;
 
-    @Column(name = "CorreoElectronico", length = 100, nullable = false, unique = true)
+    @Column(name = "correo_electronico", length = 100, nullable = false, unique = true)
     private String correoElectronico;
 
-    @Column(name = "NumeroContacto", length = 30, nullable = false)
+    @Column(name = "numero_contacto", length = 30, nullable = false)
     private String numeroContacto;
 
-    @Column(name = "Contrasena", length = 100, nullable = false)
+    @Column(name = "contrasena", length = 100, nullable = false)
     private String contrasena;
 
-    @Column(name = "EstadoCliente", nullable = false)
+    @Column(name = "estado_cliente", nullable = false)
     private String estadoCliente = "activo";
 }

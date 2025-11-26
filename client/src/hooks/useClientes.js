@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { validacionDeCampos } from "../helpers/validacionDeCampos";
 import { authHeader } from "../helpers/authHeader";
 
-export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", CorreoElectronico: "", NumeroContacto: "", EstadoCliente: "activo" }) => {
+export const useClientes = (initial = { nombreCliente: "", correoElectronico: "", numeroContacto: "", contrasena: "", estadoCliente: "activo" }) => {
 
     const [modalVisible, SetmodalVisible] = useState(false)
     const [formData, setFormData] = useState(initial)
@@ -12,10 +12,10 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
     const [clientes, setClientes] = useState([]);
     const formRef = useRef(null);
     const [errores, setErrores] = useState({
-        NombreCliente: '',
-        NumeroDocumento: '',
-        CorreoElectronico: '',
-        NumeroContacto: '',
+        nombreCliente: '',
+        correoElectronico: '',
+        numeroContacto: '',
+        contrasena: '',
         repeated: '',
     })
 
@@ -35,7 +35,7 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
 
     const obtenerClientes = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/cliente/',
+            const res = await axios.get('http://localhost:8080/clientes/activos',
                 {
                     headers: authHeader()
                 }
@@ -49,7 +49,7 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
 
     const CrearCliente = async () => {
         try {
-            await axios.post('http://localhost:5000/api/cliente/', formData,
+            await axios.post('http://localhost:8080/clientes', formData,
                 {
                     headers: authHeader()
                 }
@@ -69,7 +69,7 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
         }
     }
 
-    const cambiarEstadoCliente = async (Id) => {
+    const cambiarEstadoCliente = async (id) => {
         const result = await Swal.fire({
             title: "¿Estás seguro?",
             text: "Esto cambiara el estado del cliente, \n ya no se visualizara en el apartado principal.",
@@ -81,7 +81,7 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
         });
         try {
             if (result.isConfirmed) {
-                await axios.put(`http://localhost:5000/api/cliente/inactivo/${Id}`,
+                await axios.put(`http://localhost:8080/clientes/${id}/estado`,
                     {},
                     {
                         headers: authHeader()
@@ -110,16 +110,15 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
     const validacionDeClientes = async () => {
         try {
 
-            const res = await axios.post(`http://localhost:5000/api/cliente/verify-duplicate`, formData,
+            const res = await axios.post(`http://localhost:8080/clientes/verify-duplicate`, formData,
                 {
                     headers: authHeader()
                 },
             )
 
             return {
-                NumeroDocumento: res.data.NumeroDocumento.mensaje || '',
-                CorreoElectronico: res.data.CorreoElectronico.mensaje || '',
-                NumeroContacto: res.data.NumeroContacto.mensaje || ''
+                correoElectronico: res.data.correoElectronico?.mensaje || '',
+                numeroContacto: res.data.numeroContacto?.mensaje || ''
             }
 
         } catch (error) {
@@ -139,7 +138,7 @@ export const useClientes = (initial = { NombreCliente: "", NumeroDocumento: "", 
 
 
     const limpiarFormulario = () => {
-        setFormData({ NombreCliente: "", NumeroDocumento: "", CorreoElectronico: "", NumeroContacto: "", EstadoCliente: "activo" });
+        setFormData({ nombreCliente: "", correoElectronico: "", numeroContacto: "", contrasena: "", estadoCliente: "activo" });
     };
 
 
