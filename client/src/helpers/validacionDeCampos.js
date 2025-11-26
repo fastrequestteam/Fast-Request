@@ -185,7 +185,7 @@ export const validacionDeCampos = (name, value) => {
     // Validaciones para en componente exactamente para el modal para crear un cliente
 
 
-    if (name === 'NombreCliente') {
+    if (name === 'nombreCliente') {
         const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/
         const trimmed = value.trim();
 
@@ -206,26 +206,7 @@ export const validacionDeCampos = (name, value) => {
         }
     }
 
-    if (name === 'NumeroDocumento') {
-        const regex = /^[0-9]+$/;
-        const trimmed = value.trim();
-
-        if (trimmed === '') {
-            errores = 'Este campo no puede estar vacío.';
-        } else if (value !== trimmed) {
-            errores = 'No debe haber espacios al inicio o al final.';
-        } else if (trimmed.length < 10) {
-            errores = 'Este valor es demasiado corto.';
-        } else if (trimmed.length > 30) {
-            errores = 'Este valor es demasiado largo.';
-        } else if (!regex.test(trimmed)) {
-            errores = 'Este campo solo debe contener números.';
-        } else {
-            errores = '';
-        }
-    }
-
-    if (name === 'CorreoElectronico') {
+    if (name === 'correoElectronico') {
         const regex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
         const trimmed = value.trim();
 
@@ -239,7 +220,7 @@ export const validacionDeCampos = (name, value) => {
     }
 
 
-    if (name === 'NumeroContacto') {
+    if (name === 'numeroContacto') {
         const regex = /^[0-9]+$/;
         const trimmed = value.trim();
 

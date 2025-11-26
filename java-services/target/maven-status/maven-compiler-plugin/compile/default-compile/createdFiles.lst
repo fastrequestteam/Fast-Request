@@ -1,0 +1,8 @@
+com\example\java_services\service\ClienteService.class
+com\example\java_services\config\CorsConfig.class
+com\example\java_services\repository\ClienteRepository.class
+com\example\java_services\config\CorsConfig$1.class
+com\example\java_services\JavaServicesApplication.class
+com\example\java_services\model\Cliente.class
+com\example\java_services\controller\ClienteController.class
+com\example\java_services\dto\DuplicateCheckResponse.class

@@ -17,7 +17,7 @@ export const useVisualizarClientesInactivos = () => {
 
     const visualizarClientesConEstadoInactivo = async () => {
         try {
-            const res = await axios.get(`${API_BASE_URL}/api/cliente/inactivos`,
+            const res = await axios.get(`http://localhost:8080/clientes/inactivos`,
                 {
                     headers: authHeader()
                 }
@@ -28,21 +28,21 @@ export const useVisualizarClientesInactivos = () => {
         }
     }
 
-    const cambioDeEstadoCliente = async (Id) => {
+    const cambioDeEstadoCliente = async (id) => {
         try {
-            await axios.put(`${API_BASE_URL}/api/cliente/activo/${Id}`,
-                {},
-                {
-                    headers: authHeader()
-                }
-            )
-            Swal.fire({
-                title: "¡Cambio de estado exitoso!",
-                text: "El cambio de estado del cliente a sido exitoso",
-                icon: "success",
-                background: "#272727",
-                color: "#c9c9c9",
-            });
+                await axios.put(`http://localhost:8080/clientes/${id}/estado`,
+                    {},
+                    {
+                        headers: authHeader()
+                    }
+                )
+                Swal.fire({
+                    title: "¡Cambio de estado exitoso!",
+                    text: "El cambio de estado del cliente a sido exitoso",
+                    icon: "success",
+                    background: "#272727",
+                    color: "#c9c9c9",
+                });
 
             visualizarClientesConEstadoInactivo()
 
